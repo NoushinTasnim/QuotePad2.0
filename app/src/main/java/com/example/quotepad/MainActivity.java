@@ -46,9 +46,9 @@ public class MainActivity extends Activity {
         image.setAnimation(topAnim);
         logo.setAnimation(bottomAnim);
 
-        image.animate().translationY(2400).setDuration(1000).setStartDelay(2000);
-        logo.animate().translationY(1400).setDuration(1000).setStartDelay(2000);
-        splash.animate().translationY(3800).setDuration(1000).setStartDelay(2000);
+        image.animate().translationY(2400).setDuration(1000).setStartDelay(2500);
+        logo.animate().translationY(1400).setDuration(1000).setStartDelay(2500);
+        splash.animate().translationY(3800).setDuration(1000).setStartDelay(2500);
 
         new Handler().postDelayed(new Runnable() {
             @Override

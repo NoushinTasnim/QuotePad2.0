@@ -1,10 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_shade"
+    android:background="@color/white"
     tools:context=".TabActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:transitionName="bg_col"
+            android:background="@color/main_color">
+
+            <ImageView
+                android:id="@+id/logo_tab"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:transitionName="logo_pic"
+                android:layout_marginVertical="20dp"
+                android:foregroundGravity="center"
+                android:src="@drawable/logo_main" />
+
+        </Toolbar>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_shade"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_google__g__logo"
+        android:layout_gravity="bottom|center"
+        app:tint="@null"
+        android:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        android:layout_marginBottom="40dp"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/sign_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginBottom="120dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout >
