@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
@@ -41,6 +42,8 @@ dependencies {
 
     //lottie animation
     implementation 'com.airbnb.android:lottie:5.2.0'
+    //country code picker
+    implementation 'com.hbb20:ccp:2.6.1'
     //pin view
     implementation 'io.github.chaosleung:pinview:1.4.4'
 }

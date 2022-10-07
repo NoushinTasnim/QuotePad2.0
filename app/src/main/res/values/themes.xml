@@ -27,8 +27,11 @@
     <style name="Theme.QuotePad.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
-    <style name="Theme.QuotePad.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.QuotePad.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
     <style name="Theme.QuotePad.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="NavTheme">

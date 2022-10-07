@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.hbb20.CountryCodePicker;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +40,7 @@ public class SignUpFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Button sign_up;
-    private TextInputLayout username, email, password, confirm;
+    private TextInputLayout name, username, email, phone, password, confirm;
 
     private ProgressBar progressBar;
 
@@ -92,8 +93,10 @@ public class SignUpFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        name = getActivity().findViewById(R.id.sign_up_name);
         username = getActivity().findViewById(R.id.sign_up_username);
         email = getActivity().findViewById(R.id.sign_up_mail);
+        phone = getActivity().findViewById(R.id.sign_up_phone);
         password = getActivity().findViewById(R.id.sign_up_pass);
         confirm = getActivity().findViewById(R.id.confirm_pass);
 
@@ -108,13 +111,15 @@ public class SignUpFragment extends Fragment {
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("users");
                 //Get all the values
+                String pname = name.getEditText().getText().toString().trim();
                 String user = username.getEditText().getText().toString().trim();
                 String mail = email.getEditText().getText().toString().trim();
+                String phone_num = (phone.getEditText().getText().toString().trim());
                 String pass = password.getEditText().getText().toString().trim();
                 String con_pass = confirm.getEditText().getText().toString().trim();
 
                 String noWhiteSpace = "\\A\\w{4,15}\\z";
-
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 String passwordVal = "^" +
                         "(?=.*[0-9])" +         //at least 1 digit
                         "(?=.*[a-z])" +         //at least 1 lower case letter
@@ -124,12 +129,19 @@ public class SignUpFragment extends Fragment {
                         ".{4,}" +               //at least 4 characters
                         "$";
 
+                name.setErrorEnabled(false);
                 username.setErrorEnabled(false);
                 email.setErrorEnabled(false);
+                phone.setErrorEnabled(false);
                 password.setErrorEnabled(false);
                 confirm.setErrorEnabled(false);
 
-                if(TextUtils.isEmpty(user))
+                if(TextUtils.isEmpty(pname))
+                {
+                    name.setError("Name field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
+                }
+                else if(TextUtils.isEmpty(user))
                 {
                     username.setError("Username field cannot be empty");
                     progressBar.setVisibility(View.GONE);
@@ -139,6 +151,7 @@ public class SignUpFragment extends Fragment {
                     email.setError("Email field cannot be empty");
                     progressBar.setVisibility(View.GONE);
                 }
+
                 else if(TextUtils.isEmpty(pass))
                 {
                     password.setError("Password field cannot be empty");
@@ -151,6 +164,10 @@ public class SignUpFragment extends Fragment {
                 }
                 else if (!user.matches(noWhiteSpace)) {
                     username.setError("Remove white spaces, length (4-15)");
+                    progressBar.setVisibility(View.GONE);
+                }
+                else if (!mail.matches(emailPattern)) {
+                    email.setError("Not valid mail address");
                     progressBar.setVisibility(View.GONE);
                 }
                 else if (!pass.matches(passwordVal)) {
@@ -174,7 +191,7 @@ public class SignUpFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
-                                UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
+                                UserHelperClass helperClass = new UserHelperClass(pname, user, mail, phone_num, pass);
                                 reference.child(user).setValue(helperClass);
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
