@@ -5,14 +5,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +89,7 @@ public class SignUpFragment extends Fragment {
 
         sign_up = getActivity().findViewById(R.id.sign_up_btn);
 
+
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,8 +100,37 @@ public class SignUpFragment extends Fragment {
                 String mail = email.getEditText().getText().toString();
                 String pass = password.getEditText().getText().toString();
                 String con_pass = confirm.getEditText().getText().toString();
-                UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
-                reference.child(mail).setValue(helperClass);
+
+                username.setErrorEnabled(false);
+                email.setErrorEnabled(false);
+                password.setErrorEnabled(false);
+                confirm.setErrorEnabled(false);
+
+                if(TextUtils.isEmpty(user))
+                {
+                    username.setError("Username field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(mail))
+                {
+                    email.setError("Email field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(pass))
+                {
+                    password.setError("Password field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(con_pass))
+                {
+                    confirm.setError("Rewrite your password");
+                }
+                else if(!pass.equals(con_pass))
+                {
+                    confirm.setError("Password does not match");
+                }
+                else
+                {
+                    UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
+                    reference.child(mail).setValue(helperClass);
+                }
             }
         });//Register Button method end
 
