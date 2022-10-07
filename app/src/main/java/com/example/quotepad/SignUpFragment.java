@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SignUpFragment#newInstance} factory method to
@@ -21,6 +25,12 @@ public class SignUpFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private Button sign_up;
+    private TextInputLayout username, email, password, confirm;
+
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -67,7 +77,27 @@ public class SignUpFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        Button btn1 = getActivity().findViewById(R.id.signed_up_btn);
+        username = getActivity().findViewById(R.id.sign_up_username);
+        email = getActivity().findViewById(R.id.sign_up_mail);
+        password = getActivity().findViewById(R.id.sign_up_pass);
+        confirm = getActivity().findViewById(R.id.confirm_pass);
+
+        sign_up = getActivity().findViewById(R.id.sign_up_btn);
+
+        sign_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("users");
+                //Get all the values
+                String user = username.getEditText().getText().toString();
+                String mail = email.getEditText().getText().toString();
+                String pass = password.getEditText().getText().toString();
+                String con_pass = confirm.getEditText().getText().toString();
+                UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
+                reference.child(mail).setValue(helperClass);
+            }
+        });//Register Button method end
 
     }
 }

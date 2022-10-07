@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "918199320496",
+    "project_id": "quotepad-3d42a",
+    "storage_bucket": "quotepad-3d42a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918199320496:android:7524f79046ff8964ee6075",
+        "android_client_info": {
+          "package_name": "com.example.quotepad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918199320496-jgbed9r7mdr49m91gd4ebkg0b99ukgnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpW0f6uHVy4NZxhrHCJndI6_Z8I5PwZ80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918199320496-jgbed9r7mdr49m91gd4ebkg0b99ukgnr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
