@@ -3,8 +3,10 @@ package com.example.quotepad;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,17 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +41,14 @@ public class SignInFragment extends Fragment {
 
     Animation leftAnim;
     Animation rightAnim;
+
+    private TextInputLayout user, password;
+    private Button sign_in;
+
+    ProgressBar progressBar;
+
+    DatabaseReference reference;
+    Query checkUser;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,9 +102,65 @@ public class SignInFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        Button btn1 = getActivity().findViewById(R.id.forgot_pass_btn);
+        user = getActivity().findViewById(R.id.sign_in_username);
+        password = getActivity().findViewById(R.id.sign_in_pass);
 
-        Button btn2 = getActivity().findViewById(R.id.signed_in);
+        sign_in = getActivity().findViewById(R.id.signed_in);
 
+        progressBar = getActivity().findViewById(R.id.sign_in_progress_bar);
+
+        sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Get all the values
+                String username = user.getEditText().getText().toString().trim();
+                String pass = password.getEditText().getText().toString().trim();
+
+                user.setErrorEnabled(false);
+                password.setErrorEnabled(false);
+
+                if(TextUtils.isEmpty(username))
+                {
+                    user.setError("Username field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(pass))
+                {
+                    password.setError("Password field cannot be empty");
+                }
+                else
+                {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    reference = FirebaseDatabase.getInstance().getReference("users");
+                    checkUser = reference.orderByChild("username").equalTo(username);
+
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String passwordFromDB = snapshot.child(username).child("password").getValue(String.class);
+                                if(passwordFromDB.equals(pass)){
+                                    Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                                else{
+                                    password.setError("Incorrect Password");
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                            else{
+                                user.setError("User not registered");
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+        });//Register Button method end
     }
 }

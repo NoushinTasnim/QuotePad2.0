@@ -23,11 +23,11 @@
             android:paddingHorizontal="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_in_mail"
+                android:id="@+id/sign_in_username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="Username"
                 android:paddingBottom="10dp"
                 android:textColorHint="#9f88F4FF"
                 app:boxCornerRadiusBottomEnd="100dp"
@@ -40,20 +40,20 @@
                 app:endIconMode="clear_text"
                 app:endIconTint="#88f4ff"
                 app:hintTextColor="@color/light_shade"
-                app:startIconDrawable="@drawable/ic_outline_email_24"
+                app:startIconDrawable="@drawable/ic_baseline_person_outline_24"
                 app:startIconTint="@color/main_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:textAlignment="center"
                     android:textColor="@color/main_color" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/Sign_in_pass"
+                android:id="@+id/sign_in_pass"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 app:endIconTint="#88f4ff"
                 app:hintTextColor="@color/light_shade"
                 app:startIconDrawable="@drawable/ic_outline_lock_24"
-                app:startIconTint="@color/light_accent">
+                app:startIconTint="@color/main_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -112,13 +112,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:layout_marginHorizontal="50dp"
-                android:layout_marginBottom="150dp"
+                android:layout_marginBottom="50dp"
                 android:background="@drawable/rounded_box_stroke"
                 android:text="Sign In"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/light_accent"
                 android:textSize="20sp" />
+
+            <ProgressBar
+                android:id="@+id/sign_in_progress_bar"
+                android:layout_width="wrap_content"
+                android:visibility="invisible"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 

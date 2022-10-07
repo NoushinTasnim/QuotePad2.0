@@ -3,6 +3,7 @@ package com.example.quotepad;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -10,11 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +40,8 @@ public class SignUpFragment extends Fragment {
 
     private Button sign_up;
     private TextInputLayout username, email, password, confirm;
+
+    private ProgressBar progressBar;
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
@@ -79,6 +88,7 @@ public class SignUpFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
 
+
     public void onStart(){
         super.onStart();
 
@@ -89,17 +99,30 @@ public class SignUpFragment extends Fragment {
 
         sign_up = getActivity().findViewById(R.id.sign_up_btn);
 
+        progressBar = getActivity().findViewById(R.id.sign_up_progress_bar);
 
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("users");
                 //Get all the values
-                String user = username.getEditText().getText().toString();
-                String mail = email.getEditText().getText().toString();
-                String pass = password.getEditText().getText().toString();
-                String con_pass = confirm.getEditText().getText().toString();
+                String user = username.getEditText().getText().toString().trim();
+                String mail = email.getEditText().getText().toString().trim();
+                String pass = password.getEditText().getText().toString().trim();
+                String con_pass = confirm.getEditText().getText().toString().trim();
+
+                String noWhiteSpace = "\\A\\w{4,15}\\z";
+
+                String passwordVal = "^" +
+                        "(?=.*[0-9])" +         //at least 1 digit
+                        "(?=.*[a-z])" +         //at least 1 lower case letter
+                        "(?=.*[A-Z])" +         //at least 1 upper case letter
+                        "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                        "(?=\\S+$)" +           //no white spaces
+                        ".{4,}" +               //at least 4 characters
+                        "$";
 
                 username.setErrorEnabled(false);
                 email.setErrorEnabled(false);
@@ -109,30 +132,62 @@ public class SignUpFragment extends Fragment {
                 if(TextUtils.isEmpty(user))
                 {
                     username.setError("Username field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                 }
                 else if(TextUtils.isEmpty(mail))
                 {
                     email.setError("Email field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                 }
                 else if(TextUtils.isEmpty(pass))
                 {
                     password.setError("Password field cannot be empty");
+                    progressBar.setVisibility(View.GONE);
                 }
                 else if(TextUtils.isEmpty(con_pass))
                 {
                     confirm.setError("Rewrite your password");
+                    progressBar.setVisibility(View.GONE);
+                }
+                else if (!user.matches(noWhiteSpace)) {
+                    username.setError("Remove white spaces, length (4-15)");
+                    progressBar.setVisibility(View.GONE);
+                }
+                else if (!pass.matches(passwordVal)) {
+                    password.setError("Too Weak Password");
+                    progressBar.setVisibility(View.GONE);
                 }
                 else if(!pass.equals(con_pass))
                 {
                     confirm.setError("Password does not match");
+                    progressBar.setVisibility(View.GONE);
                 }
                 else
                 {
-                    UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
-                    reference.child(mail).setValue(helperClass);
+                    Query checkUser = reference.orderByChild("username").equalTo(user);
+
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                username.setError("Username already in use");
+                                progressBar.setVisibility(View.GONE);
+                            }
+                            else{
+                                UserHelperClass helperClass = new UserHelperClass(user, mail,pass);
+                                reference.child(user).setValue(helperClass);
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         });//Register Button method end
-
     }
 }
