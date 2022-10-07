@@ -22,6 +22,7 @@ public class TabActivity extends AppCompatActivity {
     private TabLayout tabLayout;
 
     private SignInFragment signInFragment;
+    private SignUpFragment signUpFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,14 @@ public class TabActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_lay);
 
         signInFragment = new SignInFragment();
+        signUpFragment = new SignUpFragment();
 
         tabLayout.setupWithViewPager(viewPager);
 
         TabActivity.ViewPagerAdapter viewPagerAdapter = new TabActivity.ViewPagerAdapter(getSupportFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(signInFragment, "Sign In");
+        viewPagerAdapter.addFragment(signUpFragment, "Sign Up");
 
         viewPager.setAdapter(viewPagerAdapter);
 
