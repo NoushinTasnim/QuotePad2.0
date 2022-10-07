@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_shade"
+    tools:context=".SignInFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/sign_in_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="30dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sign_in_mail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:paddingBottom="10dp"
+                android:textColorHint="#9f88F4FF"
+                app:boxCornerRadiusBottomEnd="100dp"
+                app:boxCornerRadiusBottomStart="100dp"
+                app:boxCornerRadiusTopEnd="100dp"
+                app:boxCornerRadiusTopStart="100dp"
+                app:boxStrokeColor="@color/teal_700"
+                app:boxStrokeWidth="3dp"
+                app:boxStrokeWidthFocused="4dp"
+                app:endIconMode="clear_text"
+                app:endIconTint="#88f4ff"
+                app:hintTextColor="@color/light_shade"
+                app:startIconDrawable="@drawable/ic_outline_email_24"
+                app:startIconTint="@color/main_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textColor="@color/main_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/Sign_in_pass"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:textColorHint="#9f88F4FF"
+                app:boxCornerRadiusBottomEnd="100dp"
+                app:boxCornerRadiusBottomStart="100dp"
+                app:boxCornerRadiusTopEnd="100dp"
+                app:boxCornerRadiusTopStart="100dp"
+                app:boxStrokeColor="@color/teal_700"
+                app:boxStrokeWidth="3dp"
+                app:boxStrokeWidthFocused="4dp"
+                app:endIconMode="password_toggle"
+                app:endIconTint="#88f4ff"
+                app:hintTextColor="@color/light_shade"
+                app:startIconDrawable="@drawable/ic_outline_lock_24"
+                app:startIconTint="@color/light_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_accent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sign_in_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sign_in_layout"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="30dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/forgot_pass_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:text="Forgot password?"
+                android:textAlignment="viewEnd"
+                android:textAllCaps="false"
+                android:textColor="@color/main_color"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/signed_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginBottom="150dp"
+                android:background="@drawable/rounded_box_stroke"
+                android:text="Sign In"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/light_accent"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

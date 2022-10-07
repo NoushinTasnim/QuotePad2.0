@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/dark_shade"
     tools:context=".TabActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +33,7 @@
             android:id="@+id/tab_lay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_shade"/>
+            android:background="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,7 +52,7 @@
         android:id="@+id/sign_view_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/dark_shade"
         android:layout_marginBottom="120dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
