@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_shade"
+    tools:context=".ForgetPassword">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/verify_lottie"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginTop="50dp"
+            app:lottie_rawRes="@raw/forgot_password"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+        <TextView
+            android:id="@+id/verify_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/verify_lottie"
+            android:layout_marginTop="25dp"
+            android:padding="5dp"
+            android:text="Verify Email Address"
+            android:textAlignment="center"
+            android:textColor="@color/light_shade"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/verify_email_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/verify_text"
+            android:paddingHorizontal="30dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="30dp"
+            android:text="Enter the verification code that we have sent to your email"
+            android:textAlignment="center"
+            android:textColor="@color/dark_accent"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/verify_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/verify_email_text"
+            android:defaultFocusHighlightEnabled="false"
+            android:focusedByDefault="false"
+            android:orientation="vertical"
+            android:focusable="true" android:focusableInTouchMode="true"
+            android:paddingHorizontal="30dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/verify_otp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="OTP"
+                app:startIconDrawable="@drawable/ic_outline_email_24"
+                app:startIconTint="@color/light_accent"
+                android:paddingBottom="10dp"
+                android:textColorHint="@color/teal_200"
+                app:boxCornerRadiusBottomEnd="100dp"
+                app:boxCornerRadiusBottomStart="100dp"
+                app:boxCornerRadiusTopEnd="100dp"
+                app:boxCornerRadiusTopStart="100dp"
+                app:boxStrokeColor="@color/teal_700"
+                app:boxStrokeWidth="3dp"
+                app:boxStrokeWidthFocused="4dp"
+                app:endIconMode="clear_text"
+                app:endIconTint="#88f4ff"
+                app:hintTextColor="@color/light_shade">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_accent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/verify_phone_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/rounded_box_stroke"
+                android:text="Send"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/light_accent"
+                android:textSize="20sp" />
+
+            <ProgressBar
+                android:id="@+id/verify_pb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="50dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

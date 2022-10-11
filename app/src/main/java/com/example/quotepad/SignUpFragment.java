@@ -151,7 +151,6 @@ public class SignUpFragment extends Fragment {
                     email.setError("Email field cannot be empty");
                     progressBar.setVisibility(View.GONE);
                 }
-
                 else if(TextUtils.isEmpty(pass))
                 {
                     password.setError("Password field cannot be empty");
@@ -195,6 +194,10 @@ public class SignUpFragment extends Fragment {
                                 reference.child(user).setValue(helperClass);
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                                //Call the next activity and pass phone no with it
+                                Intent intent = new Intent(getActivity(), VerifyEmailActivity.class);
+                                intent.putExtra("phoneNo", phone_num);
+                                startActivity(intent);
                             }
                         }
 
