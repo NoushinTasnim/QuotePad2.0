@@ -42,6 +42,9 @@ public class SignInFragment extends Fragment {
     Animation leftAnim;
     Animation rightAnim;
 
+    Animation topAnim;
+    Animation bottomAnim;
+
     private TextInputLayout user, password;
     private Button sign_in;
 
@@ -95,7 +98,7 @@ public class SignInFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_sign_in, container, false);
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 

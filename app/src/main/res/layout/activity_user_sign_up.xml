@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/dark_shade"
-    tools:context=".SignUpFragment">
+    tools:context=".UserSignUpActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -84,97 +84,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_up_mail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:paddingBottom="10dp"
-                android:textColorHint="#9f88F4FF"
-                app:boxCornerRadiusBottomEnd="100dp"
-                app:boxCornerRadiusBottomStart="100dp"
-                app:boxCornerRadiusTopEnd="100dp"
-                app:boxCornerRadiusTopStart="100dp"
-                app:boxStrokeColor="@color/teal_700"
-                app:boxStrokeWidth="3dp"
-                app:boxStrokeWidthFocused="4dp"
-                app:endIconMode="clear_text"
-                app:endIconTint="#88f4ff"
-                app:hintTextColor="@color/teal_700"
-                app:startIconDrawable="@drawable/ic_outline_email_24"
-                app:startIconTint="@color/main_color">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textAlignment="center"
-                    android:textColor="#88F4FF" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_up_pass"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:paddingBottom="10dp"
-                android:textColorHint="#9f88F4FF"
-                app:boxCornerRadiusBottomEnd="100dp"
-                app:boxCornerRadiusBottomStart="100dp"
-                app:boxCornerRadiusTopEnd="100dp"
-                app:boxCornerRadiusTopStart="100dp"
-                app:boxStrokeColor="@color/teal_700"
-                app:boxStrokeWidth="3dp"
-                app:boxStrokeWidthFocused="4dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="#88f4ff"
-                app:helperTextTextColor="@color/light_accent"
-                app:hintTextColor="@color/teal_700"
-                app:startIconDrawable="@drawable/ic_outline_lock_24"
-                app:startIconTint="@color/main_color">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textPassword"
-                    android:textAlignment="center"
-                    android:textColor="#88F4FF" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confirm_pass"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Confirm Password"
-                android:paddingBottom="20dp"
-                android:textColorHint="#9f88F4FF"
-                app:boxCornerRadiusBottomEnd="100dp"
-                app:boxCornerRadiusBottomStart="100dp"
-                app:boxCornerRadiusTopEnd="100dp"
-                app:boxCornerRadiusTopStart="100dp"
-                app:boxStrokeColor="@color/teal_700"
-                app:boxStrokeWidth="3dp"
-                app:boxStrokeWidthFocused="4dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="#88f4ff"
-                app:hintTextColor="@color/teal_700"
-                app:startIconDrawable="@drawable/ic_outline_lock_24"
-                app:startIconTint="@color/main_color">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textPassword"
-                    android:textAlignment="center"
-                    android:textColor="#88F4FF" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sign_up_btn"
                 android:layout_width="match_parent"
@@ -183,6 +92,7 @@
                 android:background="@drawable/rounded_box_stroke"
                 android:text="Sign Up"
                 android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="20dp"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/light_accent"
@@ -191,7 +101,7 @@
             <ProgressBar
                 android:id="@+id/sign_up_progress_bar"
                 android:layout_width="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="50dp"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"/>

@@ -40,7 +40,7 @@ public class SignUpFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private Button sign_up;
-    private TextInputLayout name, username, email, phone, password, confirm;
+    private TextInputLayout name, username, email, password, confirm;
 
     private ProgressBar progressBar;
 
@@ -96,7 +96,6 @@ public class SignUpFragment extends Fragment {
         name = getActivity().findViewById(R.id.sign_up_name);
         username = getActivity().findViewById(R.id.sign_up_username);
         email = getActivity().findViewById(R.id.sign_up_mail);
-        phone = getActivity().findViewById(R.id.sign_up_phone);
         password = getActivity().findViewById(R.id.sign_up_pass);
         confirm = getActivity().findViewById(R.id.confirm_pass);
 
@@ -114,7 +113,6 @@ public class SignUpFragment extends Fragment {
                 String pname = name.getEditText().getText().toString().trim();
                 String user = username.getEditText().getText().toString().trim();
                 String mail = email.getEditText().getText().toString().trim();
-                String phone_num = (phone.getEditText().getText().toString().trim());
                 String pass = password.getEditText().getText().toString().trim();
                 String con_pass = confirm.getEditText().getText().toString().trim();
 
@@ -126,13 +124,12 @@ public class SignUpFragment extends Fragment {
                         "(?=.*[A-Z])" +         //at least 1 upper case letter
                         "(?=.*[@#$%^&+=])" +    //at least 1 special character
                         "(?=\\S+$)" +           //no white spaces
-                        ".{4,}" +               //at least 4 characters
+                        ".{6,}" +               //at least 6 characters
                         "$";
 
                 name.setErrorEnabled(false);
                 username.setErrorEnabled(false);
                 email.setErrorEnabled(false);
-                phone.setErrorEnabled(false);
                 password.setErrorEnabled(false);
                 confirm.setErrorEnabled(false);
 
@@ -170,7 +167,7 @@ public class SignUpFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 }
                 else if (!pass.matches(passwordVal)) {
-                    password.setError("Too Weak Password");
+                    password.setError("Password should contain at least 1 digit, 1 upper case letter, 1 lower case letter, 1 special character, no white spaces and at least 6 characters");
                     progressBar.setVisibility(View.GONE);
                 }
                 else if(!pass.equals(con_pass))
@@ -180,7 +177,7 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("username").equalTo(user);
+                    /*Query checkUser = reference.orderByChild("username").equalTo(user);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -190,22 +187,26 @@ public class SignUpFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
-                                UserHelperClass helperClass = new UserHelperClass(pname, user, mail, phone_num, pass);
+                                UserHelperClass helperClass = new UserHelperClass(pname, user, mail, pass);
                                 reference.child(user).setValue(helperClass);
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
                                 //Call the next activity and pass phone no with it
-                                Intent intent = new Intent(getActivity(), VerifyEmailActivity.class);
-                                intent.putExtra("phoneNo", phone_num);
+                                */Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
+                                intent.putExtra("name", pname);
+                                intent.putExtra("user", user);
+                                intent.putExtra("mail", mail);
+                                intent.putExtra("pass", pass);
+
                                 startActivity(intent);
-                            }
+                            /*}
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    });
+                    });*/
                 }
             }
         });//Register Button method end

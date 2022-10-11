@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_shade"
-    tools:context=".ForgetPassword">
+    tools:context=".PhoneNumberVerifyActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_below="@+id/verify_lottie"
             android:layout_marginTop="25dp"
             android:padding="5dp"
-            android:text="Verify Email Address"
+            android:text="Verify Phone Number"
             android:textAlignment="center"
             android:textColor="@color/light_shade"
             android:textSize="24sp" />
@@ -40,7 +40,7 @@
             android:paddingHorizontal="30dp"
             android:paddingTop="5dp"
             android:paddingBottom="30dp"
-            android:text="Enter the verification code that we have sent to your email"
+            android:text="Enter your phone number"
             android:textAlignment="center"
             android:textColor="@color/dark_accent"
             android:textSize="16sp" />
@@ -57,15 +57,13 @@
             android:paddingHorizontal="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/verify_otp"
+                android:id="@+id/sign_up_phone"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="OTP"
-                app:startIconDrawable="@drawable/ic_outline_email_24"
-                app:startIconTint="@color/light_accent"
+                android:hint="Phone Number"
                 android:paddingBottom="10dp"
-                android:textColorHint="@color/teal_200"
+                android:textColorHint="#9f88F4FF"
                 app:boxCornerRadiusBottomEnd="100dp"
                 app:boxCornerRadiusBottomStart="100dp"
                 app:boxCornerRadiusTopEnd="100dp"
@@ -75,35 +73,31 @@
                 app:boxStrokeWidthFocused="4dp"
                 app:endIconMode="clear_text"
                 app:endIconTint="#88f4ff"
-                app:hintTextColor="@color/light_shade">
+                app:hintTextColor="@color/teal_700"
+                app:startIconDrawable="@drawable/ic_baseline_call_24"
+                app:startIconTint="@color/main_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:textAlignment="center"
-                    android:textColor="@color/dark_accent" />
+                    android:textColor="#88F4FF" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/verify_phone_btn"
+                android:id="@+id/get_otp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/rounded_box_stroke"
-                android:text="Send"
+                android:text="Get OTP"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/light_accent"
                 android:textSize="20sp" />
 
-            <ProgressBar
-                android:id="@+id/verify_pb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="50dp"/>
         </LinearLayout>
 
     </RelativeLayout>
