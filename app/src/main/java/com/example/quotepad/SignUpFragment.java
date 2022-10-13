@@ -15,7 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +50,7 @@ public class SignUpFragment extends Fragment {
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    FirebaseAuth mAuth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -116,6 +121,8 @@ public class SignUpFragment extends Fragment {
                 String pass = password.getEditText().getText().toString().trim();
                 String con_pass = confirm.getEditText().getText().toString().trim();
 
+                mAuth = FirebaseAuth.getInstance();
+
                 String noWhiteSpace = "\\A\\w{4,15}\\z";
                 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 String passwordVal = "^" +
@@ -177,36 +184,51 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    /*Query checkUser = reference.orderByChild("username").equalTo(user);
+                    Query checkUser = reference.orderByChild("emal").equalTo(mail);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                username.setError("Username already in use");
+                                username.setError("Email already in use");
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
-                                UserHelperClass helperClass = new UserHelperClass(pname, user, mail, pass);
-                                reference.child(user).setValue(helperClass);
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
-                                //Call the next activity and pass phone no with it
-                                */Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                intent.putExtra("name", pname);
-                                intent.putExtra("user", user);
-                                intent.putExtra("mail", mail);
-                                intent.putExtra("pass", pass);
+                                mAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                startActivity(intent);
-                            /*}
+                                        if (task.isSuccessful()) {
+
+                                            Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+
+                                            Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
+                                            intent.putExtra("name", pname);
+                                            intent.putExtra("user", user);
+                                            intent.putExtra("mail", mail);
+                                            intent.putExtra("pass", pass);
+
+                                            startActivity(intent);
+                                        }
+                                        else {
+                                            try {
+                                                throw task.getException();
+                                            } catch (Exception e) {
+                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                progressBar.setVisibility(View.GONE);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    });*/
+                    });
                 }
             }
         });//Register Button method end

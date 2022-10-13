@@ -49,6 +49,10 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(PhoneNumberVerifyActivity.this, OTPVerifyActivity.class);
 
+                    intent.putExtra("pname", pname);
+                    intent.putExtra("user", user);
+                    intent.putExtra("mail", mail);
+                    intent.putExtra("pass", pass);
                     intent.putExtra("phone", phoneNo);
 
                     startActivity(intent);
