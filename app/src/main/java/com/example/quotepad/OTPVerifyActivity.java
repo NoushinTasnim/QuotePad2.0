@@ -179,9 +179,10 @@ public class OTPVerifyActivity extends AppCompatActivity {
                             //progressBar.setVisibility(View.GONE);
 
                             //Perform Your required action here to either let the user sign In or do something required
-                            Intent intent = new Intent(OTPVerifyActivity.this, UserProfileActivity.class);
+                            Intent intent = new Intent(OTPVerifyActivity.this, TabActivity.class);
                             //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+                            finish();
                             //finish();
                             //Log.i(TAG, task.getException().getMessage());
                         } else {

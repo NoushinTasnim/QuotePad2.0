@@ -54,8 +54,10 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
                     intent.putExtra("mail", mail);
                     intent.putExtra("pass", pass);
                     intent.putExtra("phone", phoneNo);
+                    intent.putExtra("from","phoneNumber");
 
                     startActivity(intent);
+                    finish();
                 }
             }
         });

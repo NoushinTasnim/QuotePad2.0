@@ -20,7 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +56,7 @@ public class SignInFragment extends Fragment {
 
     DatabaseReference reference;
     Query checkUser;
+    FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -136,20 +141,41 @@ public class SignInFragment extends Fragment {
 
                     reference = FirebaseDatabase.getInstance().getReference("users");
                     checkUser = reference.orderByChild("username").equalTo(username);
+                    mAuth = FirebaseAuth.getInstance();
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
+                                String email = snapshot.child(username).child("email").getValue(String.class);
                                 String passwordFromDB = snapshot.child(username).child("password").getValue(String.class);
-                                if(passwordFromDB.equals(pass)){
+
+                                mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                            startActivity(new Intent(getActivity(),QuoteActivity.class));
+                                        } else {
+                                            password.setError("Incorrect Password");
+                                            progressBar.setVisibility(View.GONE);
+                                            try {
+                                                throw task.getException();
+                                            } catch (Exception e) {
+                                                Toast.makeText(getActivity(), "Wrong Credential. Please try again.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                });
+                                /*if(passwordFromDB.equals(pass)){
                                     Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                 }
                                 else{
                                     password.setError("Incorrect Password");
                                     progressBar.setVisibility(View.GONE);
-                                }
+                                }*/
                             }
                             else{
                                 user.setError("User not registered");

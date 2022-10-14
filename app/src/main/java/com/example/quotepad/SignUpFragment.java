@@ -184,7 +184,7 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("emal").equalTo(mail);
+                    Query checkUser = reference.orderByChild("email").equalTo(mail);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
