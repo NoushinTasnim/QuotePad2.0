@@ -16,9 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:layout_margin="30dp"
             app:lottie_rawRes="@raw/verify" />
 
         <LinearLayout

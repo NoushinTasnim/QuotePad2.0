@@ -45,13 +45,14 @@ public class OTPVerifyActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView tv;
 
-    String pname, user, mail, pass, phoneNo;
+    String pname, user, mail, pass, phoneNo, from;
 
     private String verifyCode;
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,11 @@ public class OTPVerifyActivity extends AppCompatActivity {
         mail = getIntent().getStringExtra("mail");
         pass = getIntent().getStringExtra("pass");
         phoneNo = getIntent().getStringExtra("phone");
+        from = getIntent().getStringExtra("from");
 
-        Log.i(TAG, "onCreate: "+user);
+        Log.i(TAG, "onCreate: "+ mail+" "+ pass+" "+phoneNo+ " "+ pname);
+
+        //Log.i(TAG, "onCreate: "+user);
 
         btn = findViewById(R.id.verify_pass_code);
         //pinView = findViewById(R.id.pin_view);
@@ -101,7 +105,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(firebaseAuth)
                         .setPhoneNumber("+88" + phoneNo)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
                         .setActivity(this)                 // Activity (for callback binding)
                         .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                         .build();
@@ -123,7 +127,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                 @Override
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                     String code = phoneAuthCredential.getSmsCode();
-                    Log.d(TAG, "onVerificationCompleted:" + phoneAuthCredential);
+                    //Log.d(TAG, "onVerificationCompleted:" + phoneAuthCredential);
                     if (code != null) {
                         progressBar.setVisibility(View.GONE);
                         otp.getEditText().setText(code);
@@ -159,12 +163,54 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                    Log.i(TAG, "user is "+ mail);
+                                    //Log.i(TAG, "user is "+ mail);
 
-                                    UserHelperClass helperClass = new UserHelperClass(pname, user, mail, pass,phoneNo);
-                                    reference.child(user).setValue(helperClass);
-                                    progressBar.setVisibility(View.GONE);
-                                    Toast.makeText(OTPVerifyActivity.this, "Signed Up", Toast.LENGTH_SHORT).show();
+                                    if(from.equals("phoneNumber"))
+                                    {
+                                        UserHelperClass helperClass = new UserHelperClass(pname, user, mail, pass,phoneNo);
+                                        reference.child(user).setValue(helperClass);
+                                        progressBar.setVisibility(View.GONE);
+
+                                        mAuth = FirebaseAuth.getInstance();
+
+                                        mAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                                if (task.isSuccessful()) {
+
+                                                    //Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
+                                                    progressBar.setVisibility(View.GONE);
+
+                                                    Toast.makeText(OTPVerifyActivity.this, "Signed Up", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(OTPVerifyActivity.this, TabActivity.class);
+                                                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                                else {
+                                                    try {
+                                                        throw task.getException();
+                                                    } catch (Exception e) {
+                                                        Toast.makeText(OTPVerifyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        progressBar.setVisibility(View.GONE);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else if(from.equals("forgotPass"))
+                                    {
+                                        Log.i(TAG, "onDataChange: "+mail+" "+pass);
+                                        Toast.makeText(OTPVerifyActivity.this, "Verified", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(OTPVerifyActivity.this, ForgotPassResetActivity.class);
+                                        intent.putExtra("user",user);
+                                        intent.putExtra("mail",mail);
+                                        intent.putExtra("pass",pass);
+                                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
 
                                 @Override
@@ -179,10 +225,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                             //progressBar.setVisibility(View.GONE);
 
                             //Perform Your required action here to either let the user sign In or do something required
-                            Intent intent = new Intent(OTPVerifyActivity.this, TabActivity.class);
-                            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
+
                             //finish();
                             //Log.i(TAG, task.getException().getMessage());
                         } else {

@@ -17,6 +17,9 @@
         android:theme="@style/Theme.QuotePad"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPassResetActivity"
+            android:exported="false" />
+        <activity
             android:name=".QuoteActivity"
             android:exported="false" />
         <activity

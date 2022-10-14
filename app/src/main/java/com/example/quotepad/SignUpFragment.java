@@ -184,43 +184,23 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("email").equalTo(mail);
+                    Query checkUser = reference.orderByChild("username").equalTo(user);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                username.setError("Email already in use");
+                                username.setError("Username already in use");
                                 progressBar.setVisibility(View.GONE);
                             }
                             else{
-                                mAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
+                                intent.putExtra("name", pname);
+                                intent.putExtra("user", user);
+                                intent.putExtra("mail", mail);
+                                intent.putExtra("pass", pass);
 
-                                        if (task.isSuccessful()) {
-
-                                            Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
-                                            progressBar.setVisibility(View.GONE);
-
-                                            Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                            intent.putExtra("name", pname);
-                                            intent.putExtra("user", user);
-                                            intent.putExtra("mail", mail);
-                                            intent.putExtra("pass", pass);
-
-                                            startActivity(intent);
-                                        }
-                                        else {
-                                            try {
-                                                throw task.getException();
-                                            } catch (Exception e) {
-                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                progressBar.setVisibility(View.GONE);
-                                            }
-                                        }
-                                    }
-                                });
+                                startActivity(intent);
                             }
                         }
 

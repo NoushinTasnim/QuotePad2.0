@@ -50,7 +50,7 @@ public class SignInFragment extends Fragment {
     Animation bottomAnim;
 
     private TextInputLayout user, password;
-    private Button sign_in;
+    private Button sign_in, forgot;
 
     ProgressBar progressBar;
 
@@ -114,8 +114,16 @@ public class SignInFragment extends Fragment {
         password = getActivity().findViewById(R.id.sign_in_pass);
 
         sign_in = getActivity().findViewById(R.id.signed_in);
+        forgot = getActivity().findViewById(R.id.forgot_password_btn);
 
         progressBar = getActivity().findViewById(R.id.sign_in_progress_bar);
+
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),ForgetPassword.class));
+            }
+        });
 
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,14 +176,6 @@ public class SignInFragment extends Fragment {
                                         }
                                     }
                                 });
-                                /*if(passwordFromDB.equals(pass)){
-                                    Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                                else{
-                                    password.setError("Incorrect Password");
-                                    progressBar.setVisibility(View.GONE);
-                                }*/
                             }
                             else{
                                 user.setError("User not registered");

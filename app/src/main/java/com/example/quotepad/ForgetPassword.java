@@ -3,6 +3,7 @@ package com.example.quotepad;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,6 +27,7 @@ public class ForgetPassword extends AppCompatActivity {
 
     private Button btn;
     private TextInputLayout til;
+    private ProgressDialog progressDialog;
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
@@ -35,14 +37,21 @@ public class ForgetPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-        /*btn = findViewById(R.id.forgot_pass_btn);
+        btn = findViewById(R.id.forgot_pass_btn);
         til = findViewById(R.id.forgot_pass_user);
+
+        progressDialog = new ProgressDialog(this);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("users");
+
+                progressDialog.setMessage("Please wait while we get your information");
+                progressDialog.setTitle("Log In");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
                 //Get all the values
 
                 String user = til.getEditText().getText().toString().trim();
@@ -55,43 +64,31 @@ public class ForgetPassword extends AppCompatActivity {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("emal").equalTo(email);
+                    reference = FirebaseDatabase.getInstance().getReference("users");
+                    Query checkUser = reference.orderByChild("username").equalTo(user);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                username.setError("Email already in use");
-                                progressBar.setVisibility(View.GONE);
+                                String phone = snapshot.child(user).child("phone").getValue(String.class);
+                                String pass = snapshot.child(user).child("password").getValue(String.class);
+                                String mail = snapshot.child(user).child("email").getValue(String.class);
+                                String name = snapshot.child(user).child("name").getValue(String.class);
+                                Intent intent = new Intent(ForgetPassword.this, OTPVerifyActivity.class);
+
+                                intent.putExtra("user", user);
+                                intent.putExtra("pname", name);
+                                intent.putExtra("phone", phone);
+                                intent.putExtra("mail", mail);
+                                intent.putExtra("pass", pass);
+                                intent.putExtra("from","forgotPass");
+
+                                startActivity(intent);
+                                finish();
                             }
                             else{
-                                mAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                        if (task.isSuccessful()) {
-
-                                            Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
-                                            progressBar.setVisibility(View.GONE);
-
-                                            Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                            intent.putExtra("name", pname);
-                                            intent.putExtra("user", user);
-                                            intent.putExtra("mail", mail);
-                                            intent.putExtra("pass", pass);
-
-                                            startActivity(intent);
-                                        }
-                                        else {
-                                            try {
-                                                throw task.getException();
-                                            } catch (Exception e) {
-                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                progressBar.setVisibility(View.GONE);
-                                            }
-                                        }
-                                    }
-                                });
+                                til.setError("User not found");
                             }
                         }
 
@@ -102,6 +99,6 @@ public class ForgetPassword extends AppCompatActivity {
                     });
                 }
             }
-        });*/
+        });
     }
 }
