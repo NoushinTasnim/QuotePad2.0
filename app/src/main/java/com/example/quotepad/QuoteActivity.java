@@ -72,6 +72,10 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
+        loadFragment(new TabFragment()
+
+        );
+
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,6 +139,11 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                     case R.id.contact_btn:
                         navigationView.setCheckedItem(R.id.contact_btn);
                         loadFragment(new ContactUsFragment());
+                        break;
+
+                    case R.id.nav_home:
+                        navigationView.setCheckedItem(R.id.nav_home);
+                        loadFragment(new TabFragment());
                         break;
 
                     case R.id.sign_out:
