@@ -33,10 +33,10 @@
             android:name=".PhoneNumberVerifyActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPassword"
+            android:name=".ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".TabActivity"
+            android:name=".UserActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -10,9 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,12 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +43,7 @@ public class SignInFragment extends Fragment {
     Animation topAnim;
     Animation bottomAnim;
 
-    private TextInputLayout user, password;
+    private TextInputLayout mail, password;
     private Button sign_in, forgot;
 
     ProgressBar progressBar;
@@ -110,7 +104,7 @@ public class SignInFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        user = getActivity().findViewById(R.id.sign_in_username);
+        mail = getActivity().findViewById(R.id.sign_in_email);
         password = getActivity().findViewById(R.id.sign_in_pass);
 
         sign_in = getActivity().findViewById(R.id.signed_in);
@@ -121,23 +115,32 @@ public class SignInFragment extends Fragment {
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ForgetPassword.class));
+                startActivity(new Intent(getActivity(), ForgetPasswordActivity.class));
             }
         });
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            mail.getEditText().setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        }
+        else
+        {
+            mail.getEditText().setText(null);
+            password.getEditText().setText(null);
+        }
 
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Get all the values
-                String username = user.getEditText().getText().toString().trim();
+                String email = mail.getEditText().getText().toString().trim();
                 String pass = password.getEditText().getText().toString().trim();
 
-                user.setErrorEnabled(false);
+                mail.setErrorEnabled(false);
                 password.setErrorEnabled(false);
 
-                if(TextUtils.isEmpty(username))
+                if(TextUtils.isEmpty(email))
                 {
-                    user.setError("Username field cannot be empty");
+                    mail.setError("Email field cannot be empty");
                 }
                 else if(TextUtils.isEmpty(pass))
                 {
@@ -147,45 +150,32 @@ public class SignInFragment extends Fragment {
                 {
                     progressBar.setVisibility(View.VISIBLE);
 
-                    reference = FirebaseDatabase.getInstance().getReference("users");
-                    checkUser = reference.orderByChild("username").equalTo(username);
                     mAuth = FirebaseAuth.getInstance();
 
-                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                String email = snapshot.child(username).child("email").getValue(String.class);
-                                String passwordFromDB = snapshot.child(username).child("password").getValue(String.class);
-
-                                mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
-                                            progressBar.setVisibility(View.GONE);
-                                            startActivity(new Intent(getActivity(),QuoteActivity.class));
-                                        } else {
-                                            password.setError("Incorrect Password");
-                                            progressBar.setVisibility(View.GONE);
-                                            try {
-                                                throw task.getException();
-                                            } catch (Exception e) {
-                                                Toast.makeText(getActivity(), "Wrong Credential. Please try again.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                            else{
-                                user.setError("User not registered");
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
                                 progressBar.setVisibility(View.GONE);
+                                /*if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
+                                {
+                                    Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getActivity(),QuoteActivity.class));
+                                }
+                                else
+                                {
+                                    Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
+                                }*/
+                                startActivity(new Intent(getActivity(),QuoteActivity.class));
+
+                            } else {
+                                Toast.makeText(getActivity(), "Incorrect Email/ Password", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                try {
+                                    throw task.getException();
+                                } catch (Exception e) {
+                                }
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                 }

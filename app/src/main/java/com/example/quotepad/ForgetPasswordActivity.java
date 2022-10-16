@@ -9,13 +9,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class ForgetPassword extends AppCompatActivity {
+public class ForgetPasswordActivity extends AppCompatActivity {
 
     private Button btn;
     private TextInputLayout til;
@@ -75,7 +70,7 @@ public class ForgetPassword extends AppCompatActivity {
                                 String pass = snapshot.child(user).child("password").getValue(String.class);
                                 String mail = snapshot.child(user).child("email").getValue(String.class);
                                 String name = snapshot.child(user).child("name").getValue(String.class);
-                                Intent intent = new Intent(ForgetPassword.this, OTPVerifyActivity.class);
+                                Intent intent = new Intent(ForgetPasswordActivity.this, OTPVerifyActivity.class);
 
                                 intent.putExtra("user", user);
                                 intent.putExtra("pname", name);

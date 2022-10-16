@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:iconTint="@color/dark_shade"
+            android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"/>
+
+        <item
+            android:iconTint="@color/dark_shade"
+            android:id="@+id/tune_feed"
+            android:title="Tune Feed"
+            android:icon="@drawable/ic_baseline_group_work_24" />
+
+        <item
+            android:iconTint="@color/dark_shade"
+            android:id="@+id/subitem5"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="Favourite Quotes"/>
+
+        <item
+            android:id="@+id/sign_out"
+            android:icon="@drawable/ic_baseline_person_remove_24"
+            android:iconTint="@color/dark_shade"
+            android:title="Sign Out"/>
+
+        <item
+            android:iconTint="@color/dark_shade"
+            android:id="@+id/item2"
+            android:title="Settings"
+            android:icon="@drawable/ic_baseline_settings_24" />
+
+        <item
+            android:id="@+id/who_are_we_btn"
+            android:icon="@drawable/ic_baseline_group_24"
+            android:iconTint="@color/dark_shade"
+            android:title="Who are we?"/>
+
+        <item
+            android:id="@+id/contact_btn"
+            android:icon="@drawable/ic_baseline_local_phone_24"
+            android:iconTint="@color/dark_shade"
+            android:title="Contact Us"/>
+
+    </group>
+</menu>

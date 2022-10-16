@@ -195,7 +195,7 @@ public class SignUpFragment extends Fragment {
                             }
                             else{
                                 Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                intent.putExtra("name", pname);
+                                intent.putExtra("pname", pname);
                                 intent.putExtra("user", user);
                                 intent.putExtra("mail", mail);
                                 intent.putExtra("pass", pass);

@@ -126,7 +126,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                                         }
                                                     });
                                             Toast.makeText(ForgotPassResetActivity.this, "Done", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(ForgotPassResetActivity.this,TabActivity.class));
+                                            startActivity(new Intent(ForgotPassResetActivity.this, UserActivity.class));
                                             finish();
                                         } else {
                                             try {

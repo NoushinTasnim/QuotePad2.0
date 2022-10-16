@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "918199320496",
+    "firebase_url": "https://quotepad-3d42a-default-rtdb.firebaseio.com",
     "project_id": "quotepad-3d42a",
     "storage_bucket": "quotepad-3d42a.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "918199320496-v6hrk1kfd451anon0r05k2dfoum4eu2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quotepad",
+            "certificate_hash": "f07ef3401a9a1c08fef0953e86d235ec520bcce4"
+          }
+        },
         {
           "client_id": "918199320496-jgbed9r7mdr49m91gd4ebkg0b99ukgnr.apps.googleusercontent.com",
           "client_type": 3

@@ -16,13 +16,18 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private SignInFragment signInFragment;
     private SignUpFragment signUpFragment;
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class TabActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        TabActivity.ViewPagerAdapter viewPagerAdapter = new TabActivity.ViewPagerAdapter(getSupportFragmentManager(), 0);
+        UserActivity.ViewPagerAdapter viewPagerAdapter = new UserActivity.ViewPagerAdapter(getSupportFragmentManager(), 0);
 
         viewPagerAdapter.addFragment(signInFragment, "Sign In");
         viewPagerAdapter.addFragment(signUpFragment, "Sign Up");

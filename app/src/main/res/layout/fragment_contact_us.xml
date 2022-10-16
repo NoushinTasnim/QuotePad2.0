@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_accent"
+    tools:context=".ContactUsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="50dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_json"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginVertical="50dp"
+            app:lottie_rawRes="@raw/contact_us"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/call_us_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_accent"
+            android:background="@drawable/rounded_box_fill"
+            android:elevation="50dp"
+            android:padding="15dp"
+            android:textSize="18sp"
+            android:text="Call Us"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mail_us_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_accent"
+            android:background="@drawable/rounded_box_fill"
+            android:elevation="50dp"
+            android:layout_marginTop="20dp"
+            android:padding="15dp"
+            android:textSize="18sp"
+            android:text="Mail Us"/>
+
+    </LinearLayout>
+
+</FrameLayout>

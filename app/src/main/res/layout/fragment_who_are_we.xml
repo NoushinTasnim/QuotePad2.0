@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_accent"
+    tools:context=".WhoAreWeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="50dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/who_are_we_json"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginVertical="50dp"
+            app:lottie_rawRes="@raw/members"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/t_voew"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:layout_marginVertical="15dp"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Member 1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    android:text="Hasib Rayhan Dewan Akash"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:text="Session- 2019-20"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:text="Department of Computer Science and Engineering"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textStyle="bold"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="18sp"
+                    android:text="Member 2"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textStyle="italic"
+                    android:textSize="18sp"
+                    android:text="Noushin Tasnim"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:text="Session- 2019-20"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_shade"
+                    android:elevation="50dp"
+                    android:textSize="18sp"
+                    android:text="Department of Computer Science and Engineering"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

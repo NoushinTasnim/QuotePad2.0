@@ -24,11 +24,11 @@
             android:paddingHorizontal="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_in_username"
+                android:id="@+id/sign_in_email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="Email"
                 android:paddingBottom="10dp"
                 android:textColorHint="#9f88F4FF"
                 app:boxCornerRadiusBottomEnd="100dp"
@@ -40,16 +40,16 @@
                 app:boxStrokeWidthFocused="4dp"
                 app:endIconMode="clear_text"
                 app:endIconTint="#88f4ff"
-                app:hintTextColor="@color/light_shade"
-                app:startIconDrawable="@drawable/ic_baseline_person_outline_24"
+                app:hintTextColor="@color/teal_700"
+                app:startIconDrawable="@drawable/ic_outline_email_24"
                 app:startIconTint="@color/main_color">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:textAlignment="center"
-                    android:textColor="@color/main_color" />
+                    android:textColor="#88F4FF" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
+                android:paddingBottom="10dp"
                 android:textColorHint="#9f88F4FF"
                 app:boxCornerRadiusBottomEnd="100dp"
                 app:boxCornerRadiusBottomStart="100dp"
@@ -69,7 +70,8 @@
                 app:boxStrokeWidthFocused="4dp"
                 app:endIconMode="password_toggle"
                 app:endIconTint="#88f4ff"
-                app:hintTextColor="@color/light_shade"
+                app:helperTextTextColor="@color/light_accent"
+                app:hintTextColor="@color/teal_700"
                 app:startIconDrawable="@drawable/ic_outline_lock_24"
                 app:startIconTint="@color/main_color">
 
@@ -78,7 +80,7 @@
                     android:layout_height="match_parent"
                     android:inputType="textPassword"
                     android:textAlignment="center"
-                    android:textColor="@color/dark_accent" />
+                    android:textColor="#88F4FF" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,9 +100,10 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/forgot_password_btn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
+                android:layout_gravity="end"
                 android:text="Forgot password?"
                 android:textAlignment="viewEnd"
                 android:textAllCaps="false"
