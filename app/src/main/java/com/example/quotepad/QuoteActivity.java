@@ -16,13 +16,13 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -38,7 +38,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private CoordinatorLayout coordinatorLayout;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -58,8 +57,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_quote);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        coordinatorLayout = findViewById(R.id.quote_coordinator);
-
         drawerLayout = findViewById(R.id.quote_drawer_layout);
         navigationView = findViewById(R.id.quote_navigation_view);
         menuIcon = findViewById(R.id.quote_menu_icon);
@@ -72,9 +69,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
-        loadFragment(new TabFragment()
-
-        );
+        //loadFragment(new HomeTabFragment());
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -132,42 +127,66 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+                int it = -1;
+                Menu menu = navigationView.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem item = menu.getItem(i);
+                    if (item.isChecked()) {
+                        it = item.getItemId();
+                    }
+                }
                 menuItem.setChecked(false);
                 int id = menuItem.getItemId();
 
-                switch (id) {
-                    case R.id.contact_btn:
-                        navigationView.setCheckedItem(R.id.contact_btn);
-                        loadFragment(new ContactUsFragment());
-                        break;
+                Log.i(TAG, "onNavigationItemSelected: " + it + " " + id);
 
-                    case R.id.nav_home:
-                        navigationView.setCheckedItem(R.id.nav_home);
-                        loadFragment(new TabFragment());
-                        break;
 
-                    case R.id.sign_out:
-                        navigationView.setCheckedItem(R.id.sign_out);
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(QuoteActivity.this, UserActivity.class));
-                        break;
-
-                    case R.id.who_are_we_btn:
-                        navigationView.setCheckedItem(R.id.who_are_we_btn);
-                        loadFragment(new WhoAreWeFragment());
-                        break;
-
-                    case R.id.tune_feed:
-                        navigationView.setCheckedItem(R.id.tune_feed);
-                        break;
-
-                    default:
-                        break;
+                if(it==id)
+                {
+                    menuItem.setChecked(true);
+                    return false;
                 }
-                menuItem.setChecked(true);
-                setTitle(menuItem.getTitle());
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+                else
+                {
+                    switch (id) {
+                        case R.id.contact_btn:
+                            navigationView.setCheckedItem(R.id.contact_btn);
+                            loadFragment(new ContactUsFragment());
+                            break;
+
+                        case R.id.my_quotes_btn:
+                            navigationView.setCheckedItem(R.id.my_quotes_btn);
+                            loadFragment(new MyQuotesTabFragment());
+                            break;
+
+                        case R.id.nav_home:
+                            navigationView.setCheckedItem(R.id.nav_home);
+                            loadFragment(new HomeTabFragment());
+                            break;
+
+                        case R.id.sign_out:
+                            navigationView.setCheckedItem(R.id.sign_out);
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(QuoteActivity.this, UserActivity.class));
+                            break;
+
+                        case R.id.who_are_we_btn:
+                            navigationView.setCheckedItem(R.id.who_are_we_btn);
+                            loadFragment(new WhoAreWeFragment());
+                            break;
+
+                        case R.id.tune_feed:
+                            navigationView.setCheckedItem(R.id.tune_feed);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    menuItem.setChecked(true);
+                    setTitle(menuItem.getTitle());
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                }
             }
         });
 
@@ -193,11 +212,14 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         moveTaskToBack(true);
     }
     private void loadFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        if(getCurrentFragment() != fragment){
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
 
-        ft.replace(R.id.frag_container, fragment);
-        ft.commit();
+            ft.replace(R.id.frag_container, fragment);
+            //ft.commit();
+            ft.commitNow();
+        }
     }
 
     @Override

@@ -18,9 +18,9 @@
 
         <item
             android:iconTint="@color/dark_shade"
-            android:id="@+id/subitem5"
-            android:icon="@drawable/ic_baseline_favorite_24"
-            android:title="Favourite Quotes"/>
+            android:id="@+id/my_quotes_btn"
+            android:icon="@drawable/ic_baseline_format_quote_24"
+            android:title="My Quotes"/>
 
         <item
             android:id="@+id/sign_out"

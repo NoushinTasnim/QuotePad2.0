@@ -7,11 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.text.SpannableString;
@@ -23,19 +21,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TabFragment#newInstance} factory method to
+ * Use the {@link HomeTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabFragment extends Fragment {
+public class HomeTabFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,16 +44,11 @@ public class TabFragment extends Fragment {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private CoordinatorLayout coordinatorLayout;
 
     private UploadQuoteFragment uploadQuoteFragment;
     private RandomQuotesFragment randomQuotesFragment;
 
-    NavigationView navigationView;
-    ImageView menuIcon;
-    LinearLayout contentView;
-
-    public TabFragment() {
+    public HomeTabFragment() {
         // Required empty public constructor
     }
 
@@ -70,8 +61,8 @@ public class TabFragment extends Fragment {
      * @return A new instance of fragment TabFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TabFragment newInstance(String param1, String param2) {
-        TabFragment fragment = new TabFragment();
+    public static HomeTabFragment newInstance(String param1, String param2) {
+        HomeTabFragment fragment = new HomeTabFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,16 +83,15 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        return inflater.inflate(R.layout.fragment_home_tab, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        viewPager = getActivity().findViewById(R.id.view_pager);
-        tabLayout = getActivity().findViewById(R.id.tabs);
-        coordinatorLayout = getActivity().findViewById(R.id.coordinator);
+        viewPager = getActivity().findViewById(R.id.home_view_pager);
+        tabLayout = getActivity().findViewById(R.id.home_tabs);
 
         tabLayout.setupWithViewPager(viewPager);
 
