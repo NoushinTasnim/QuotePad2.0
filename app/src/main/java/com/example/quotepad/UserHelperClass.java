@@ -1,9 +1,13 @@
 package com.example.quotepad;
 
 public class UserHelperClass {
-    String name, phone, username, email,password;
+    String name, phone, username, email,password, quote;
 
     public UserHelperClass() {
+    }
+
+    public UserHelperClass(String quote){
+        this.quote = quote;
     }
     public UserHelperClass(String name, String username, String email,String password, String phone) {
         this.name = name;
@@ -11,6 +15,14 @@ public class UserHelperClass {
         this.email = email;
         this.password = password;
         this.phone = phone;
+    }
+
+    public String getQuote() {
+        return quote;
+    }
+
+    public void setQuote(String quote) {
+        this.quote = quote;
     }
 
     public String getName() {

@@ -120,7 +120,7 @@ public class SignInFragment extends Fragment {
         });
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            mail.getEditText().setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            startActivity(new Intent(getActivity(),QuoteActivity.class));
         }
         else
         {

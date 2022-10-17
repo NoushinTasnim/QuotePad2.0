@@ -11,52 +11,70 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="50dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upload A New Quote"
-            android:textSize="36sp"
-            android:layout_marginVertical="20dp"
-            android:textColor="@color/light_accent"
-            android:textStyle="bold"/>
+        android:layout_marginVertical="30dp"
+        android:layout_marginHorizontal="50dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/upload_quote"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Quote"
+            android:hint="Type Your Quote"
+            app:counterEnabled="true"
+            app:counterMaxLength="150"
+            app:counterTextColor="@color/main_color"
             android:layout_marginTop="30dp"
             android:paddingBottom="10dp"
+            android:textAlignment="center"
             android:textColorHint="#9f88F4FF"
-            app:boxCornerRadiusBottomEnd="100dp"
-            app:boxCornerRadiusBottomStart="100dp"
-            app:boxCornerRadiusTopEnd="100dp"
-            app:boxCornerRadiusTopStart="100dp"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
             app:boxStrokeColor="@color/teal_700"
             app:boxStrokeWidth="3dp"
             app:boxStrokeWidthFocused="4dp"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/teal_700">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textAllCaps="true"
-            android:textAlignment="center"
-            android:textColor="#88F4FF" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:inputType="text|textMultiLine"
+                android:maxHeight="250dp"
+                android:maxLength="150"
+                android:maxLines="9"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#88F4FF" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/autoCompleteTextView"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_box_stroke"
-            android:layout_marginVertical="20dp"/>
+            android:layout_width="match_parent"
+            android:layout_marginVertical="10dp"
+            android:hint="Genre"
+            android:paddingBottom="10dp"
+            android:textAlignment="center"
+            android:textColorHint="#9f88F4FF"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxStrokeColor="@color/teal_700"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="4dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/quoteType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/upload_btn"
