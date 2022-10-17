@@ -31,7 +31,8 @@
                 android:id="@+id/my_quotes_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_shade"/>
+                android:elevation="15dp"
+                android:background="@color/white"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +40,7 @@
             android:id="@+id/my_quotes_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_accent"
+            android:background="@color/light_shade"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

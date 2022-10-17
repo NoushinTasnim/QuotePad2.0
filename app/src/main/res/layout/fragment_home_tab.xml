@@ -29,9 +29,10 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/home_tabs"
+                android:elevation="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_shade"/>
+                android:background="@color/white"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +40,7 @@
             android:id="@+id/home_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_accent"
+            android:background="@color/light_shade"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

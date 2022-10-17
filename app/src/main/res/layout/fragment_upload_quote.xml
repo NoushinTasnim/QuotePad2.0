@@ -39,8 +39,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:inputType="text|textMultiLine"
+                android:layout_height="wrap_content"
+                android:inputType="text"
                 android:maxHeight="250dp"
                 android:maxLength="150"
                 android:maxLines="9"

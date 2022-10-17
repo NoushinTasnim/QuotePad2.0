@@ -69,7 +69,10 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
-        //loadFragment(new HomeTabFragment());
+        loadFragment(new HomeTabFragment());
+        Menu menu = navigationView.getMenu();
+        MenuItem item1 = menu.getItem(0);
+        item1.setChecked(true);
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -140,7 +143,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
 
                 Log.i(TAG, "onNavigationItemSelected: " + it + " " + id);
 
-
                 if(it==id)
                 {
                     menuItem.setChecked(true);
@@ -149,9 +151,20 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 else
                 {
                     switch (id) {
+
                         case R.id.contact_btn:
                             navigationView.setCheckedItem(R.id.contact_btn);
                             loadFragment(new ContactUsFragment());
+                            break;
+
+                        case R.id.tune_feed:
+                            navigationView.setCheckedItem(R.id.tune_feed);
+                            loadFragment(new TuneFeedFragment());
+                            break;
+
+                        case R.id.settings_nav:
+                            navigationView.setCheckedItem(R.id.settings_nav);
+                            loadFragment(new SettingsFragment());
                             break;
 
                         case R.id.my_quotes_btn:
@@ -173,10 +186,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                         case R.id.who_are_we_btn:
                             navigationView.setCheckedItem(R.id.who_are_we_btn);
                             loadFragment(new WhoAreWeFragment());
-                            break;
-
-                        case R.id.tune_feed:
-                            navigationView.setCheckedItem(R.id.tune_feed);
                             break;
 
                         default:

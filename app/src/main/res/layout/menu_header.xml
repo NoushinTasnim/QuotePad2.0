@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="horizontal"
-    android:background="@color/light_accent">
+    android:background="@color/dark_shade">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/dark_shade"
+            android:textColor="@color/light_accent"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/dark_shade"
+            android:textColor="@color/light_accent"
             android:textSize="18sp"
             android:textStyle="italic" />
 
@@ -48,8 +48,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo_main"
-            app:tint="@color/dark_shade" />
+            android:src="@drawable/logo_dark" />
 
     </LinearLayout>
 

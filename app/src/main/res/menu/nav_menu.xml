@@ -30,7 +30,7 @@
 
         <item
             android:iconTint="@color/dark_shade"
-            android:id="@+id/item2"
+            android:id="@+id/settings_nav"
             android:title="Settings"
             android:icon="@drawable/ic_baseline_settings_24" />
 
