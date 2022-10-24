@@ -3,30 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".nav_frags.QuoteOfTheDayFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="50dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:gravity="center_horizontal"
-            android:text="Quote Of The Day"
-            android:textSize="36sp"
-            android:textStyle="bold" />
+        android:layout_margin="50dp"
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/today_quote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="The quote"
-            android:layout_marginTop="50dp"
+            android:gravity="center"
             android:textSize="20sp"
+            android:textColor="@color/dark_shade"
             android:textStyle="italic"/>
 
         <TextView
@@ -34,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
+            android:textColor="@color/dark_accent"
             android:text="author"
             android:gravity="right"
             android:textSize="16sp"

@@ -29,14 +29,22 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.quotepad.R;
 import com.example.quotepad.SwipeToDeleteCallback;
+import com.example.quotepad.SwipeToFav;
 import com.example.quotepad.adapter.RandomQuotesAdapter;
+import com.example.quotepad.model.RandomModel;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +68,8 @@ public class RandomQuotesFragment extends Fragment {
     ArrayList arrayList2 = new ArrayList<>();
     RandomQuotesAdapter randomQuotesAdapter;
     CoordinatorLayout coordinatorLayout;
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
 
     public RandomQuotesFragment() {
         // Required empty public constructor
@@ -125,13 +135,11 @@ public class RandomQuotesFragment extends Fragment {
 
         swipeRefreshLayout.setRefreshing(true);
 
-        //Toast.makeText(getActivity(), "Fetching Data...", Toast.LENGTH_SHORT).show();
-
-
         PlayOn();
 
         swipeRefreshLayout.setRefreshing(false);
         enableSwipeToDeleteAndUndo();
+        enableSwipeFav();
     }
 
     private void enableSwipeToDeleteAndUndo() {
@@ -139,13 +147,11 @@ public class RandomQuotesFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
                 final String item = randomQuotesAdapter.getQuotes().get(position);
                 final String item2 = randomQuotesAdapter.getAuthors().get(position);
 
                 randomQuotesAdapter.removeItem(position);
-
 
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
@@ -165,6 +171,39 @@ public class RandomQuotesFragment extends Fragment {
         };
 
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void enableSwipeFav() {
+        SwipeToFav swipeToFav = new SwipeToFav(getActivity()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                final int position = viewHolder.getAdapterPosition();
+                final String item = randomQuotesAdapter.getQuotes().get(position);
+                final String item2 = randomQuotesAdapter.getAuthors().get(position);
+
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference();
+                String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateTime = sdf.format(new Date());
+
+                RandomModel helperClass = new RandomModel(item,item2);
+                reference.child("users").child(currentuser).child("fav").child(currentDateTime).setValue(helperClass);
+
+                randomQuotesAdapter.removeItem(position);
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Added to favourites.", Snackbar.LENGTH_LONG);
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToFav);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
