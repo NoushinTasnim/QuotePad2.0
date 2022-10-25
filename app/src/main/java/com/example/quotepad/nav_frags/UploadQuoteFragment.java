@@ -1,10 +1,14 @@
 package com.example.quotepad.nav_frags;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +19,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
+import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.model.UserModel;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,31 +104,30 @@ public class UploadQuoteFragment extends Fragment {
         upload_btn = getActivity().findViewById(R.id.upload_btn);
         upload_quote = getActivity().findViewById(R.id.upload_quote);
 
+        autoCompleteTextView = getActivity().findViewById(R.id.quoteType);
+
+        //We will use this data to inflate the drop-down items
+        String[] Subjects = new String[]{   "Happy", "Gloomy", "Romantic", "Inspiring",
+                "Past", "Death", "Fear", "Success", "Failure",
+                "Future", "Loneliness", "Confidence"};
+
+        // create an array adapter and pass the required parameter
+        // in our case pass the context, drop down layout , and array.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, Subjects);
+        autoCompleteTextView.setAdapter(adapter);
+
+        //to get selected value add item click listener
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type = autoCompleteTextView.getText().toString().trim();
+                //Toast.makeText(getActivity(), "" + autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                autoCompleteTextView = getActivity().findViewById(R.id.quoteType);
-
-                //We will use this data to inflate the drop-down items
-                String[] Subjects = new String[]{   "Happy", "Gloomy", "Romantic", "Inspiring",
-                                                    "Past", "Death", "Fear", "Success", "Failure",
-                                                    "Future", "Loneliness", "Confidence"};
-
-                // create an array adapter and pass the required parameter
-                // in our case pass the context, drop down layout , and array.
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, Subjects);
-                autoCompleteTextView.setAdapter(adapter);
-
-                //to get selected value add item click listener
-                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        type = autoCompleteTextView.getText().toString().trim();
-                        //Toast.makeText(getActivity(), "" + autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("users");
                 //Get all the values
@@ -139,16 +147,33 @@ public class UploadQuoteFragment extends Fragment {
                 }
                 else
                 {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd LLLL,yyyy HH:mm:ss", Locale.getDefault());
                     String currentDateTime = sdf.format(new Date());
 
                     rootNode = FirebaseDatabase.getInstance();
                     reference = rootNode.getReference();
                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    Query checkUser = rootNode.getReference("users").orderByChild("id").equalTo(currentuser);
 
-                    UserModel helperClass = new UserModel(quote);
-                    reference.child("users").child(currentuser).child("quote").child(type).child(currentDateTime).setValue(helperClass);
-                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String username = snapshot.child(currentuser).child("username").getValue(String.class);
+                                QuotesModel helperClass = new QuotesModel("\"" +quote + "\"","-"+username,currentDateTime,type);
+                                reference.child("users").child(currentuser).child("quote").child(currentDateTime).setValue(helperClass);
+                                //reference.child("quotes").child(currentuser).child(currentDateTime).setValue(helperClass);
+                                Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         });//Register Button method end

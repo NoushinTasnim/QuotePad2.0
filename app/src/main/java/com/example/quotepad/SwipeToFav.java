@@ -83,7 +83,7 @@ public abstract class SwipeToFav extends ItemTouchHelper.Callback {
         c.drawRect(left, top, right, bottom, mClearPaint);
 
     }
-    
+
     @Override
     public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
         return 0.7f;

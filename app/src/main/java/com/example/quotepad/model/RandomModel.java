@@ -4,6 +4,10 @@ public class RandomModel {
     String quote;
     String author;
 
+    RandomModel(){
+
+    }
+
     public RandomModel(String quote, String author) {
         this.quote = quote;
         this.author = author;

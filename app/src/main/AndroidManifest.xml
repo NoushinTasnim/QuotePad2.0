@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.quotepad">
+    package="com.example.quotepad" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,9 +15,9 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuotePad"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".ForgotPassResetActivity"
+            android:name=".forgot_pass.ForgotPassResetActivity"
             android:exported="false" />
         <activity
             android:name=".QuoteActivity"
@@ -26,22 +26,22 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".OTPVerifyActivity"
+            android:name=".verification.OTPVerifyActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".PhoneNumberVerifyActivity"
+            android:name=".verification.PhoneNumberVerifyActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".forgot_pass.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".UserActivity"
+            android:name=".user.UserActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

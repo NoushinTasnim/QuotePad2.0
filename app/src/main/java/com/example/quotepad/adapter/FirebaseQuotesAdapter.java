@@ -46,6 +46,7 @@ public class FirebaseQuotesAdapter extends FirebaseRecyclerAdapter<QuotesModel, 
     @Override
     protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull QuotesModel quotesModel) {
         holder.tv1.setText(quotesModel.getQuotes());
+        Log.i(TAG, "onBindViewHolder: "+ quotesModel.getQuotes());
         holder.tv2.setText(quotesModel.getUser());
         holder.tv3.setText(quotesModel.getType());
         Log.d(TAG, "onBindViewHolder: " + quotesModel.getQuotes() + " " + quotesModel.getUser());
