@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start"
+    android:background="@color/white"
     android:id="@+id/quote_drawer_layout"
     tools:context=".QuoteActivity">
 

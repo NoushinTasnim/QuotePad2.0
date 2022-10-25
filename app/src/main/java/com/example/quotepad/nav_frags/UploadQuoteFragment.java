@@ -153,27 +153,10 @@ public class UploadQuoteFragment extends Fragment {
                     rootNode = FirebaseDatabase.getInstance();
                     reference = rootNode.getReference();
                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    Query checkUser = rootNode.getReference("users").orderByChild("id").equalTo(currentuser);
 
-                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                String username = snapshot.child(currentuser).child("username").getValue(String.class);
-                                QuotesModel helperClass = new QuotesModel("\"" +quote + "\"","-"+username,currentDateTime,type);
-                                reference.child("users").child(currentuser).child("quote").child(currentDateTime).setValue(helperClass);
-                                //reference.child("quotes").child(currentuser).child(currentDateTime).setValue(helperClass);
-                                Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    QuotesModel helperClass = new QuotesModel("\"" + quote + "\"",type,currentDateTime);
+                    reference.child("users").child(currentuser).child("quote").child(currentDateTime).setValue(helperClass);
+                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
                 }
             }
         });//Register Button method end

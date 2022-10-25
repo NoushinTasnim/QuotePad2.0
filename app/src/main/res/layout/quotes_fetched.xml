@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
         android:padding="10dp">
 
         <TextView
@@ -21,21 +22,11 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="author"
-            android:textStyle="bold"
-            android:layout_gravity="right"
-            android:textColor="#000"
-            android:textSize="15sp" />
-
-        <TextView
             android:id="@+id/genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="genre"
-            android:layout_gravity="left"
+            android:layout_gravity="right"
             android:textStyle="bold"
             android:textColor="#000"
             android:textSize="14sp" />
@@ -45,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="date"
-            android:layout_gravity="left"
+            android:layout_gravity="right"
             android:textColor="#000"
             android:textSize="12sp" />
 
