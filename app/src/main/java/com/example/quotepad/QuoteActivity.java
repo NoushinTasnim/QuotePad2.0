@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.quotepad.forgot_pass.ForgetPasswordActivity;
+import com.example.quotepad.nav_frags.UpdatePasswordFragment;
 import com.example.quotepad.nav_frags.UploadedQuotesFragment;
 import com.example.quotepad.nav_frags.UploadQuoteFragment;
 import com.example.quotepad.user.UserActivity;
@@ -94,7 +96,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                     String name = snapshot.child(uid).child("name").getValue(String.class);
                     nav_user_name.setText(username );
                     nav_name.setText(name);
-                    Log.i(TAG, "onDataChange: "+username);
+                    Log.i(TAG, "onDataChange: " + username);
                 }
                 else{
                     nav_user_name.setText("Anonymous");
@@ -204,6 +206,12 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             tv.setText("Favourite Quotes");
                             navigationView.setCheckedItem(R.id.nav_fav);
                             loadFragment(new FavouriteQuotesFragment());
+                            break;
+
+                        case R.id.change_pass:
+                            tv.setText("");
+                            navigationView.setCheckedItem(R.id.change_pass);
+                            loadFragment(new UpdatePasswordFragment());
                             break;
 
                         case R.id.nav_up:

@@ -109,7 +109,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
 
                                 reference.child(user).child("password").setValue(res_pass);
                                 mAuth = FirebaseAuth.getInstance();
-                                Toast.makeText(ForgotPassResetActivity.this, "Hu", Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "onDataChange: password on realtime updated");
 
                                 mAuth.signInWithEmailAndPassword(mail, ex_pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
@@ -128,8 +128,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                                         }
                                                     });
                                             Toast.makeText(ForgotPassResetActivity.this, "Done", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(ForgotPassResetActivity.this, UserActivity.class));
-                                            finish();
+
                                         } else {
                                             try {
                                                 throw task.getException();
@@ -139,10 +138,14 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(ForgotPassResetActivity.this, UserActivity.class));
+                                finish();
+
                             }
                             else{
 
-                                Toast.makeText(ForgotPassResetActivity.this, "Noiu", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ForgotPassResetActivity.this, "Could Not Process your request", Toast.LENGTH_SHORT).show();
 
                             }
                         }

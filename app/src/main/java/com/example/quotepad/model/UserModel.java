@@ -1,28 +1,32 @@
 package com.example.quotepad.model;
 
 public class UserModel {
-    String name, phone, username, email,password, quote;
+    String name, phone, username, email,password, id;
 
     public UserModel() {
     }
 
-    public UserModel(String quote){
-        this.quote = quote;
+    public UserModel(String email, String password, String username) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
     }
-    public UserModel(String name, String username, String email, String password, String phone) {
+
+    public UserModel(String name, String username, String email, String password, String phone, String id) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.id = id;
     }
 
-    public String getQuote() {
-        return quote;
+    public String getId() {
+        return id;
     }
 
-    public void setQuote(String quote) {
-        this.quote = quote;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

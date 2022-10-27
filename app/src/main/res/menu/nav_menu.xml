@@ -61,9 +61,15 @@
                     android:title="Sign Out"/>
 
                 <item
+                    android:id="@+id/change_pass"
+                    android:icon="@drawable/ic_outline_lock_24"
+                    android:iconTint="@color/dark_shade"
+                    android:title="Change Password"/>
+
+                <item
                     android:iconTint="@color/dark_shade"
                     android:id="@+id/settings_nav"
-                    android:title="Settings"
+                    android:title="User Profile"
                     android:icon="@drawable/ic_baseline_settings_24" />
 
             </menu>

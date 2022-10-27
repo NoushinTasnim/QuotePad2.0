@@ -57,7 +57,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
                 if(TextUtils.isEmpty(user))
                 {
-                    til.setError(" Enter username");
+                    til.setError(" Enter email");
                 }
                 else
                 {

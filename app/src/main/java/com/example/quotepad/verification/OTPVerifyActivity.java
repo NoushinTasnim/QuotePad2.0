@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OTPVerifyActivity extends AppCompatActivity {
 
-    private Button btn;
+    private Button btn, btn2;
     //private PinView pinView;
     private TextInputLayout otp;
     private ProgressBar progressBar;
@@ -69,6 +69,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
 
         //Log.i(TAG, "onCreate: "+user);
 
+        btn2 = findViewById(R.id.resend_code);
         btn = findViewById(R.id.verify_pass_code);
         //pinView = findViewById(R.id.pin_view);
         otp = findViewById(R.id.otp_verify);
@@ -94,6 +95,13 @@ public class OTPVerifyActivity extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 verifyCode(code);
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendVerificationCodeToUser(phoneNo);
             }
         });
     }
@@ -187,8 +195,11 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                                 progressBar.setVisibility(View.GONE);
                                                                 String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                                                UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo);
+                                                                UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo,currentuser);
                                                                 reference.child(currentuser).setValue(helperClass);
+
+                                                                UserModel helperClass2 = new UserModel(mail, pass, user);
+                                                                rootNode.getReference("emails").child(user).setValue(helperClass2);
                                                                 progressBar.setVisibility(View.GONE);
 
                                                                 /*FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
