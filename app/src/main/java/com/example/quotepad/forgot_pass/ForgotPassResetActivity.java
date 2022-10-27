@@ -107,18 +107,24 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
 
-                                reference.child(user).child("password").setValue(res_pass);
                                 mAuth = FirebaseAuth.getInstance();
                                 Log.i(TAG, "onDataChange: password on realtime updated");
+                                if(FirebaseAuth.getInstance().getCurrentUser() != null)
+                                {
+                                    FirebaseAuth.getInstance().signOut();
+                                }
 
                                 mAuth.signInWithEmailAndPassword(mail, ex_pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
 
-                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                                            user.updatePassword(res_pass)
+                                            reference.child(currentUser.getUid()).child("password").setValue(res_pass);
+                                            rootNode.getReference("emails").child(user).child("password").setValue(res_pass);
+
+                                            currentUser.updatePassword(res_pass)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {

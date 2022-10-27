@@ -125,17 +125,36 @@ public class UpdatePasswordFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                String pass = snapshot.child(uid).child("password").getValue(String.class);
+                                String username = snapshot.child(uid).child("username").getValue(String.class);
 
-                                Log.i(TAG, "onDataChange: " + pass);
+                                Log.i(TAG, "onDataChange: " + username);
 
-                                if(oldie.equals(pass)){
-                                    startActivity(new Intent(getActivity(), ForgotPassResetActivity.class));
-                                }
-                                else
-                                {
-                                    textInputLayout.setError("Wrong Password");
-                                }
+                                DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("emails");
+                                Query checkUser1 = reference1.orderByChild("username").equalTo(username);
+
+                                checkUser1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                                        if(snapshot1.exists()){
+                                            String pass = snapshot1.child(username).child("password").getValue(String.class);
+
+                                            Log.i(TAG, "onDataChange: " + pass);
+
+                                            if(oldie.equals(pass)){
+                                                startActivity(new Intent(getActivity(), ForgotPassResetActivity.class));
+                                            }
+                                            else
+                                            {
+                                                textInputLayout.setError("Wrong Password");
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                             }
                         }
 
