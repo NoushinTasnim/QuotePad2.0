@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.quotepad.R;
+import com.example.quotepad.UserProfileActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class PhoneNumberVerifyActivity extends AppCompatActivity {
@@ -17,6 +18,18 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
     private TextInputLayout phone;
     private Button btn;
     private TextView tv, tv2;
+    String from;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if(from.equals("settings"))
+        {
+            startActivity(new Intent(PhoneNumberVerifyActivity.this, UserProfileActivity.class));
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +45,7 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
         String user = getIntent().getStringExtra("user");
         String mail = getIntent().getStringExtra("mail");
         String pass = getIntent().getStringExtra("pass");
-        String from = getIntent().getStringExtra("set");
+        from = getIntent().getStringExtra("set");
 
         if(from.equals("settings"))
         {

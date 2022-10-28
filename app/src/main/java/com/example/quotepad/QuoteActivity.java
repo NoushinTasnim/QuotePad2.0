@@ -160,9 +160,9 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                     if(item.hasSubMenu())
                     {
                         Log.i(TAG, "onNavigationItemSelected: haass " + item);
-                        menu = item.getSubMenu();
-                        for (int ij = 0; ij < menu.size(); ij++) {
-                            MenuItem item2 = menu.getItem(ij);
+                        Menu menu2 = item.getSubMenu();
+                        for (int ij = 0; ij < menu2.size(); ij++) {
+                            MenuItem item2 = menu2.getItem(ij);
                             Log.i(TAG, "onNavigationItemSelected: jgifs " + item2);
                             if (item2.isChecked()) {
                                 it = item2.getItemId();
@@ -217,12 +217,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             loadFragment(new FavouriteQuotesFragment());
                             break;
 
-                        case R.id.change_pass:
-                            tv.setText("");
-                            navigationView.setCheckedItem(R.id.change_pass);
-                            loadFragment(new UpdatePasswordFragment());
-                            break;
-
                         case R.id.nav_up:
                             tv.setText("Upload Quote");
                             navigationView.setCheckedItem(R.id.nav_up);
@@ -235,52 +229,14 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             loadFragment(new UploadedQuotesFragment());
                             break;
 
-                        case R.id.settings_nav:
-                            tv.setText("User Profile");
-                            navigationView.setCheckedItem(R.id.settings_nav);
-                            loadFragment(new SettingsFragment());
-                            break;
-
-                        case R.id.nav_phone:
-                            navigationView.setCheckedItem(R.id.nav_phone);
-
-                            Intent intent  = new Intent(QuoteActivity.this, PhoneNumberVerifyActivity.class);
-                            intent.putExtra("pname",name);
-                            intent.putExtra("mail",em);
-                            intent.putExtra("user",username);
-                            intent.putExtra("pass",pass);
-                            intent.putExtra("set","settings");
-
-                            Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
-                            startActivity(intent);
-
-                            break;
+                        case R.id.nav_user_profile:
+                             navigationView.setCheckedItem(R.id.nav_user_profile);
+                             startActivity(new Intent(QuoteActivity.this,UserProfileActivity.class));
+                             break;
 
                         case R.id.sign_out:
                             navigationView.setCheckedItem(R.id.sign_out);
                             FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(QuoteActivity.this, UserActivity.class));
-                            break;
-
-
-                        case R.id.delete_user:
-                            navigationView.setCheckedItem(R.id.delete_user);
-                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
-                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                            user.delete()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "User account deleted.");
-                                            }
-                                        }
-                                    });
-                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
-                                FirebaseAuth.getInstance().signOut();
-                            }
                             startActivity(new Intent(QuoteActivity.this, UserActivity.class));
                             break;
 
