@@ -67,7 +67,6 @@ public class FavouritesAdapter extends FirebaseRecyclerAdapter<RandomModel, Favo
             author = itemView.findViewById(R.id.random_author);
         }
     }
-
     public void removeItem(int position) {
         fav_quote.remove(position);
         fav_author.remove(position);
