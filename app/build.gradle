@@ -32,7 +32,7 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.firebase:firebase-database:20.1.0'
@@ -51,4 +51,13 @@ dependencies {
     implementation 'com.hbb20:ccp:2.6.1'
     //pin view
     implementation 'io.github.chaosleung:pinview:1.4.4'
+    //swiper refresh layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //volley
+    implementation 'com.android.volley:volley:1.2.1'
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+    // FirebaseUI for Firebase Auth
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
 }
+

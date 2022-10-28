@@ -1,59 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="20dp"
-    android:scrollbars="vertical"
-    app:cardCornerRadius="20dp">
-
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin = "20dp">
-
+        android:background="@color/white"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/quote_from_firebase"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:text="Last name:"
-            android:textAlignment="textEnd"
-            android:layout_gravity="end"
-            android:textStyle="italic" />
+            android:text="Name"
+            android:textStyle="italic"
+            android:textColor="#000"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:text="Genre:"
+            android:text="genre"
+            android:layout_gravity="right"
             android:textStyle="bold"
-            android:textAlignment="textEnd"
-            android:layout_gravity="end" />
+            android:textColor="#000"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:text="Date:"
-            android:textAlignment="textEnd"
-            android:layout_gravity="end" />
+            android:text="date"
+            android:layout_gravity="right"
+            android:textColor="#000"
+            android:textSize="12sp" />
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start"
+    android:background="@color/white"
     android:id="@+id/quote_drawer_layout"
     tools:context=".QuoteActivity">
 
@@ -27,6 +28,14 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/logo_dark"/>
+
+                <TextView
+                    android:id="@+id/quote_tab_name"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
 
             </Toolbar>
 

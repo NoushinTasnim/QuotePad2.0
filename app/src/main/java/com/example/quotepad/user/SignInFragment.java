@@ -1,5 +1,7 @@
 package com.example.quotepad.user;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,7 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -21,13 +26,18 @@ import android.widget.Toast;
 import com.example.quotepad.QuoteActivity;
 import com.example.quotepad.R;
 import com.example.quotepad.forgot_pass.ForgetPasswordActivity;
+import com.example.quotepad.nav_frags.QuoteOfTheDayFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +56,7 @@ public class SignInFragment extends Fragment {
     Animation topAnim;
     Animation bottomAnim;
 
-    private TextInputLayout mail, password;
+    private TextInputLayout user, password;
     private Button sign_in, forgot;
 
     ProgressBar progressBar;
@@ -95,6 +105,8 @@ public class SignInFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +119,7 @@ public class SignInFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-        mail = getActivity().findViewById(R.id.sign_in_email);
+        user = getActivity().findViewById(R.id.sign_in_user);
         password = getActivity().findViewById(R.id.sign_in_pass);
 
         sign_in = getActivity().findViewById(R.id.signed_in);
@@ -127,7 +139,7 @@ public class SignInFragment extends Fragment {
         }
         else
         {
-            mail.getEditText().setText(null);
+            user.getEditText().setText(null);
             password.getEditText().setText(null);
         }
 
@@ -135,15 +147,15 @@ public class SignInFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Get all the values
-                String email = mail.getEditText().getText().toString().trim();
+                String username = user.getEditText().getText().toString().trim();
                 String pass = password.getEditText().getText().toString().trim();
 
-                mail.setErrorEnabled(false);
+                user.setErrorEnabled(false);
                 password.setErrorEnabled(false);
 
-                if(TextUtils.isEmpty(email))
+                if(TextUtils.isEmpty(username))
                 {
-                    mail.setError("Email field cannot be empty");
+                    user.setError("Username field cannot be empty");
                 }
                 else if(TextUtils.isEmpty(pass))
                 {
@@ -155,11 +167,22 @@ public class SignInFragment extends Fragment {
 
                     mAuth = FirebaseAuth.getInstance();
 
-                    mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    Query checkUser = FirebaseDatabase.getInstance().getReference("emails").orderByChild("username").equalTo(username);
+
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                progressBar.setVisibility(View.GONE);
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String email = snapshot.child(username).child("email").getValue(String.class);
+                                //String pass_from_db = snapshot.child("password").getValue(String.class);
+
+                                Log.i(TAG, "onDataChange: " + username + " " + email);
+
+                                mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            progressBar.setVisibility(View.GONE);
                                 /*if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
                                 {
                                     Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
@@ -169,16 +192,29 @@ public class SignInFragment extends Fragment {
                                 {
                                     Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                 }*/
-                                startActivity(new Intent(getActivity(),QuoteActivity.class));
+                                            startActivity(new Intent(getActivity(),QuoteActivity.class));
 
-                            } else {
-                                Toast.makeText(getActivity(), "Incorrect Email/ Password", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                                try {
-                                    throw task.getException();
-                                } catch (Exception e) {
-                                }
+                                        } else {
+                                            password.setError("Wrong password");
+                                            Toast.makeText(getActivity(), "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                            try {
+                                                throw task.getException();
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    }
+                                });
                             }
+                            else{
+                                progressBar.setVisibility(View.GONE);
+                                user.setError("Username not registered");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
                 }

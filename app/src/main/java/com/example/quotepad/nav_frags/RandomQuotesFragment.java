@@ -1,7 +1,5 @@
 package com.example.quotepad.nav_frags;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.quotepad.R;
-import com.example.quotepad.SwipeToDeleteCallback;
-import com.example.quotepad.SwipeToFav;
+import com.example.quotepad.swipe.SwipeToDeleteCallback;
+import com.example.quotepad.swipe.SwipeToFav;
 import com.example.quotepad.adapter.RandomQuotesAdapter;
 import com.example.quotepad.model.RandomModel;
 import com.google.android.material.snackbar.Snackbar;

@@ -1,4 +1,4 @@
-package com.example.quotepad;
+package com.example.quotepad.swipe;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class SwipeToFav extends ItemTouchHelper.Callback {
+import com.example.quotepad.R;
+
+abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     Context mContext;
     private Paint mClearPaint;
@@ -26,13 +28,13 @@ public abstract class SwipeToFav extends ItemTouchHelper.Callback {
     private int intrinsicHeight;
 
 
-    protected SwipeToFav(Context context) {
+    protected SwipeToDeleteCallback(Context context) {
         mContext = context;
         mBackground = new ColorDrawable();
-        backgroundColor = Color.parseColor("#12eaea");
+        backgroundColor = Color.parseColor("#b80f0a");
         mClearPaint = new Paint();
         mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_baseline_favorite_24);
+        deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.ic_baseline_delete_24);
         intrinsicWidth = deleteDrawable.getIntrinsicWidth();
         intrinsicHeight = deleteDrawable.getIntrinsicHeight();
     }
@@ -40,7 +42,7 @@ public abstract class SwipeToFav extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0, ItemTouchHelper.RIGHT);
+        return makeMovementFlags(0, ItemTouchHelper.LEFT);
     }
 
     @Override
@@ -64,26 +66,29 @@ public abstract class SwipeToFav extends ItemTouchHelper.Callback {
         }
 
         mBackground.setColor(backgroundColor);
-        mBackground.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + (int) dX, itemView.getBottom());
+        mBackground.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
         mBackground.draw(c);
 
         int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
         int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int deleteIconLeft = itemView.getLeft() + deleteIconMargin;
-        int deleteIconRight = itemView.getLeft() + deleteIconMargin + intrinsicWidth;
+        int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+        int deleteIconRight = itemView.getRight() - deleteIconMargin;
         int deleteIconBottom = deleteIconTop + intrinsicHeight;
+
 
         deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
         deleteDrawable.draw(c);
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+
     }
 
     private void clearCanvas(Canvas c, Float left, Float top, Float right, Float bottom) {
         c.drawRect(left, top, right, bottom, mClearPaint);
 
     }
-    
+
     @Override
     public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
         return 0.7f;

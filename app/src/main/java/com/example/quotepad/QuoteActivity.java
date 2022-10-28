@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -24,9 +23,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.quotepad.forgot_pass.ForgetPasswordActivity;
+import com.example.quotepad.nav_frags.UpdatePasswordFragment;
+import com.example.quotepad.nav_frags.UploadedQuotesFragment;
+import com.example.quotepad.nav_frags.UploadQuoteFragment;
+import com.example.quotepad.user.UserActivity;
+import com.example.quotepad.nav_frags.ContactUsFragment;
+import com.example.quotepad.nav_frags.FavouriteQuotesFragment;
+import com.example.quotepad.nav_frags.QuoteOfTheDayFragment;
+import com.example.quotepad.nav_frags.RandomQuotesFragment;
+import com.example.quotepad.nav_frags.SettingsFragment;
+import com.example.quotepad.nav_frags.WhoAreWeFragment;
+import com.example.quotepad.verification.PhoneNumberVerifyActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,10 +58,13 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
     TextView nav_user_name, nav_name;
     ImageView menuIcon;
     LinearLayout contentView;
+    TextView tv;
 
     FirebaseAuth mAuth;
     DatabaseReference reference;
     Query checkUser;
+
+    String name, em, username, ph, pass, uid;
 
     static final float END_SCALE = 0.7f;
 
@@ -61,28 +78,34 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         navigationView = findViewById(R.id.quote_navigation_view);
         menuIcon = findViewById(R.id.quote_menu_icon);
 
+        tv = findViewById(R.id.quote_tab_name);
+
         View headerView = navigationView.getHeaderView(0);
         nav_user_name = (TextView) headerView.findViewById(R.id.nav_header_user_name);
         nav_name = (TextView) headerView.findViewById(R.id.nav_header_name);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
-        loadFragment(new HomeTabFragment());
+        loadFragment(new QuoteOfTheDayFragment());
         Menu menu = navigationView.getMenu();
         MenuItem item1 = menu.getItem(0);
+        tv.setText("Quote of the day");
         item1.setChecked(true);
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    String username = snapshot.child(uid).child("username").getValue(String.class);
-                    String name = snapshot.child(uid).child("name").getValue(String.class);
+                    username = snapshot.child(uid).child("username").getValue(String.class);
+                    name = snapshot.child(uid).child("name").getValue(String.class);
+                    em = snapshot.child(uid).child("email").getValue(String.class);
+                    ph = snapshot.child(uid).child("phone").getValue(String.class);
+                    pass = snapshot.child(uid).child("password").getValue(String.class);
                     nav_user_name.setText(username );
                     nav_name.setText(name);
-                    Log.i(TAG, "onDataChange: "+username);
+                    Log.i(TAG, "onDataChange: " + username);
                 }
                 else{
                     nav_user_name.setText("Anonymous");
@@ -134,14 +157,33 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 Menu menu = navigationView.getMenu();
                 for (int i = 0; i < menu.size(); i++) {
                     MenuItem item = menu.getItem(i);
-                    if (item.isChecked()) {
-                        it = item.getItemId();
+                    if(item.hasSubMenu())
+                    {
+                        Log.i(TAG, "onNavigationItemSelected: haass " + item);
+                        Menu menu2 = item.getSubMenu();
+                        for (int ij = 0; ij < menu2.size(); ij++) {
+                            MenuItem item2 = menu2.getItem(ij);
+                            Log.i(TAG, "onNavigationItemSelected: jgifs " + item2);
+                            if (item2.isChecked()) {
+                                it = item2.getItemId();
+                                item2.setChecked(false);
+                                Log.i(TAG, "onNavigationItemSelected: selft " + it);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (item.isChecked()) {
+                            Log.i(TAG, "onNavigationItemSelected: nopes " + item);
+                            it = item.getItemId();
+                            item.setChecked(false);
+                        }
                     }
                 }
                 menuItem.setChecked(false);
                 int id = menuItem.getItemId();
 
-                Log.i(TAG, "onNavigationItemSelected: " + it + " " + id);
+                Log.i(TAG, "onNavigationItemSelected: " + it + " " + menuItem);
 
                 if(it==id)
                 {
@@ -151,31 +193,46 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 else
                 {
                     switch (id) {
+                        case R.id.nav_q_o_day:
+                            navigationView.setCheckedItem(R.id.nav_q_o_day);
+                            tv.setText("Quote Of The Day");
+                            loadFragment(new QuoteOfTheDayFragment());
+                            break;
+
+                        case R.id.nav_ran:
+                            navigationView.setCheckedItem(R.id.nav_ran);
+                            tv.setText("Random Quotes");
+                            loadFragment(new RandomQuotesFragment());
+                            break;
 
                         case R.id.contact_btn:
                             navigationView.setCheckedItem(R.id.contact_btn);
+                            tv.setText("Contact Us");
                             loadFragment(new ContactUsFragment());
                             break;
 
-                        case R.id.tune_feed:
-                            navigationView.setCheckedItem(R.id.tune_feed);
-                            loadFragment(new TuneFeedFragment());
+                        case R.id.nav_fav:
+                            tv.setText("Favourite Quotes");
+                            navigationView.setCheckedItem(R.id.nav_fav);
+                            loadFragment(new FavouriteQuotesFragment());
                             break;
 
-                        case R.id.settings_nav:
-                            navigationView.setCheckedItem(R.id.settings_nav);
-                            loadFragment(new SettingsFragment());
+                        case R.id.nav_up:
+                            tv.setText("Upload Quote");
+                            navigationView.setCheckedItem(R.id.nav_up);
+                            loadFragment(new UploadQuoteFragment());
                             break;
 
-                        case R.id.my_quotes_btn:
-                            navigationView.setCheckedItem(R.id.my_quotes_btn);
-                            loadFragment(new MyQuotesTabFragment());
+                        case R.id.nav_my_quotes:
+                            tv.setText("My Quotes");
+                            navigationView.setCheckedItem(R.id.nav_my_quotes);
+                            loadFragment(new UploadedQuotesFragment());
                             break;
 
-                        case R.id.nav_home:
-                            navigationView.setCheckedItem(R.id.nav_home);
-                            loadFragment(new HomeTabFragment());
-                            break;
+                        case R.id.nav_user_profile:
+                             navigationView.setCheckedItem(R.id.nav_user_profile);
+                             startActivity(new Intent(QuoteActivity.this,UserProfileActivity.class));
+                             break;
 
                         case R.id.sign_out:
                             navigationView.setCheckedItem(R.id.sign_out);
@@ -184,6 +241,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             break;
 
                         case R.id.who_are_we_btn:
+                            tv.setText("Who Are We?");
                             navigationView.setCheckedItem(R.id.who_are_we_btn);
                             loadFragment(new WhoAreWeFragment());
                             break;
@@ -224,6 +282,11 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         if(getCurrentFragment() != fragment){
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
+
+            if(getCurrentFragment()!=null)
+            {
+                fm.beginTransaction().remove(getCurrentFragment()).commit();
+            }
 
             ft.replace(R.id.frag_container, fragment);
             //ft.commit();

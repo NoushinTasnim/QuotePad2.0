@@ -2,13 +2,23 @@ package com.example.quotepad.nav_frags;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quotepad.R;
+import com.example.quotepad.adapter.UploadedAdapter;
+import com.example.quotepad.model.QuotesModel;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +36,10 @@ public class UploadedQuotesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    RecyclerView rv;
+    UploadedAdapter uploadedAdapter;
+    DatabaseReference reference;
+
     public UploadedQuotesFragment() {
         // Required empty public constructor
     }
@@ -36,7 +50,7 @@ public class UploadedQuotesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment UploadedQuotesFragment.
+     * @return A new instance of fragment Discover.
      */
     // TODO: Rename and change types and number of parameters
     public static UploadedQuotesFragment newInstance(String param1, String param2) {
@@ -62,5 +76,41 @@ public class UploadedQuotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_uploaded_quotes, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        reference = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("quote");
+
+        rv = getActivity().findViewById(R.id.discover_rv);
+
+        // To display the Recycler view linearly
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // It is a class provide by the FirebaseUI to make a
+        // query in the database to fetch appropriate data
+        FirebaseRecyclerOptions<QuotesModel> options
+                = new FirebaseRecyclerOptions.Builder<QuotesModel>()
+                .setQuery(reference, QuotesModel.class)
+                .build();
+        // Connecting object of required Adapter class to
+        // the Adapter class itself
+        uploadedAdapter = new UploadedAdapter(options);
+        // Connecting Adapter class with the Recycler view*/
+        rv.setAdapter(uploadedAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        uploadedAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        uploadedAdapter.stopListening();
     }
 }

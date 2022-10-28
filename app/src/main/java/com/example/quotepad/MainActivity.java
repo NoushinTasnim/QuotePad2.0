@@ -10,9 +10,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.quotepad.user.UserActivity;
+
 public class MainActivity extends Activity {
 
-    private static int Splash_Screen = 3000;
+    private static int Splash_Screen = 2200;
     ImageView image;
     TextView logo;
     ImageView splash;

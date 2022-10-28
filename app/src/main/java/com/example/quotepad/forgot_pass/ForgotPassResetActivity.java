@@ -46,12 +46,11 @@ public class ForgotPassResetActivity extends AppCompatActivity {
 
         user = getIntent().getStringExtra("user");
         mail = getIntent().getStringExtra("mail");
-        //user = "noushin";
-        //mail = "noushi@sna.xi";
         ex_pass = getIntent().getStringExtra("pass");
-        Log.i(TAG, "ex "+ex_pass);
-        Log.i(TAG, "user "+user);
-        Log.i(TAG, "mail "+mail);
+
+        Log.i(TAG, "ex "+ ex_pass);
+        Log.i(TAG, "user "+ user);
+        Log.i(TAG, "mail "+ mail);
 
         btn = findViewById(R.id.password_change_btn);
         pass = (TextInputLayout)findViewById(R.id.res_pass);
@@ -107,18 +106,24 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
 
-                                reference.child(user).child("password").setValue(res_pass);
                                 mAuth = FirebaseAuth.getInstance();
-                                Toast.makeText(ForgotPassResetActivity.this, "Hu", Toast.LENGTH_SHORT).show();
+                                Log.i(TAG, "onDataChange: password on realtime updated");
+                                if(FirebaseAuth.getInstance().getCurrentUser() != null)
+                                {
+                                    FirebaseAuth.getInstance().signOut();
+                                }
 
                                 mAuth.signInWithEmailAndPassword(mail, ex_pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
 
-                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                                            user.updatePassword(res_pass)
+                                            reference.child(currentUser.getUid()).child("password").setValue(res_pass);
+                                            rootNode.getReference("emails").child(user).child("password").setValue(res_pass);
+
+                                            currentUser.updatePassword(res_pass)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -128,8 +133,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                                         }
                                                     });
                                             Toast.makeText(ForgotPassResetActivity.this, "Done", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(ForgotPassResetActivity.this, UserActivity.class));
-                                            finish();
+
                                         } else {
                                             try {
                                                 throw task.getException();
@@ -139,10 +143,14 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(ForgotPassResetActivity.this, UserActivity.class));
+                                finish();
+
                             }
                             else{
 
-                                Toast.makeText(ForgotPassResetActivity.this, "Noiu", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ForgotPassResetActivity.this, "Could Not Process your request", Toast.LENGTH_SHORT).show();
 
                             }
                         }
