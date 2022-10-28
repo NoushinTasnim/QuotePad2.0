@@ -1,14 +1,40 @@
 package com.example.quotepad.nav_frags;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quotepad.R;
+import com.example.quotepad.model.UserModel;
+import com.example.quotepad.user.UserActivity;
+import com.example.quotepad.verification.OTPVerifyActivity;
+import com.example.quotepad.verification.PhoneNumberVerifyActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +51,9 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    TextInputLayout name,username, email;
+    Button btn;
+    String na, em, us, ph, pass;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -62,5 +91,134 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setTitle("Fetching Data...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        btn = getActivity().findViewById(R.id.up_btn);
+
+        name = getActivity().findViewById(R.id.up_name);
+        email = getActivity().findViewById(R.id.up_mail);
+        username = getActivity().findViewById(R.id.up_username);
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Query check = FirebaseDatabase.getInstance().getReference("users").orderByChild("id").equalTo(uid);
+
+        check.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    na = snapshot.child(uid).child("name").getValue(String.class);
+                    em = snapshot.child(uid).child("email").getValue(String.class);
+                    us = snapshot.child(uid).child("username").getValue(String.class);
+                    ph = snapshot.child(uid).child("phone").getValue(String.class);
+                    pass = snapshot.child(uid).child("password").getValue(String.class);
+
+                    name.getEditText().setText(na);
+                    email.getEditText().setText(em);
+                    username.getEditText().setText(us);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressDialog.dismiss();
+            }
+        });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String pname = name.getEditText().getText().toString().trim();
+                String user = username.getEditText().getText().toString().trim();
+                String mail = email.getEditText().getText().toString().trim();
+
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+                String noWhiteSpace = "\\A\\w{4,15}\\z";
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+                name.setErrorEnabled(false);
+                username.setErrorEnabled(false);
+                email.setErrorEnabled(false);
+
+                if(TextUtils.isEmpty(pname))
+                {
+                    name.setError("Name field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(user))
+                {
+                    username.setError("Username field cannot be empty");
+                }
+                else if(TextUtils.isEmpty(mail))
+                {
+                    email.setError("Email field cannot be empty");
+                }
+                else if (!user.matches(noWhiteSpace)) {
+                    username.setError("Remove white spaces, length (4-15)");
+                }
+                else if (!mail.matches(emailPattern)) {
+                    email.setError("Not valid mail address");
+                }
+                else if(pname.equals(na) && user.equals(us) && mail.equals(em))
+                {
+                    Toast.makeText(getActivity(), "Nothing to Change", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Query checkUser = FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(user);
+
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                username.setError("Username already in use");
+                            }
+                            else{
+                                mAuth.signInWithEmailAndPassword(em, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                                            String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                            UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
+                                            FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
+
+                                            UserModel helperClass2 = new UserModel(mail, pass, user);
+                                            FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
+                                        }
+                                        else {
+                                            try {
+                                                throw task.getException();
+                                            } catch (Exception e) {
+                                                Toast.makeText(getActivity(), "Sorry, Could not change.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                });
+                                Toast.makeText(getActivity(), "Changed Prof", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+        });
+
     }
 }

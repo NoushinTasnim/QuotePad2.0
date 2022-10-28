@@ -89,9 +89,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upload"
-            android:textColor="@color/dark_accent"
+            android:textColor="@color/white"
             android:paddingHorizontal="80dp"
-            android:background="@drawable/rounded_bright"
+            android:background="@drawable/rounded_box_fill"
+            android:backgroundTint="@color/dark_shade"
             android:layout_gravity="center"/>
 
     </LinearLayout>

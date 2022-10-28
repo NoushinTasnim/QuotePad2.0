@@ -33,14 +33,14 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/verify_email_text"
+            android:id="@+id/verify_ph_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/verify_text"
             android:paddingHorizontal="30dp"
             android:paddingTop="5dp"
             android:paddingBottom="30dp"
-            android:text="Enter your phone number"
+            android:text="Enter phone number"
             android:textAlignment="center"
             android:textColor="@color/dark_accent"
             android:textSize="16sp" />
@@ -49,7 +49,7 @@
             android:id="@+id/verify_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/verify_email_text"
+            android:layout_below="@+id/verify_ph_txt"
             android:defaultFocusHighlightEnabled="false"
             android:focusedByDefault="false"
             android:orientation="vertical"

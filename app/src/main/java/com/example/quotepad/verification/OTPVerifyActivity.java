@@ -54,6 +54,15 @@ public class OTPVerifyActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            FirebaseAuth.getInstance().signOut();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otpverify);
@@ -65,7 +74,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
         phoneNo = getIntent().getStringExtra("phone");
         from = getIntent().getStringExtra("from");
 
-        Log.i(TAG, "onCreate: "+ mail+" "+ pass+" "+phoneNo+ " "+ pname);
+        Log.i(TAG, "onCreate: "+ mail+" "+ pass+" "+phoneNo+ " "+ pname + from);
 
         //Log.i(TAG, "onCreate: "+user);
 
@@ -175,12 +184,10 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                    //Log.i(TAG, "user is "+ mail);
+                                    mAuth = FirebaseAuth.getInstance();
 
                                     if(from.equals("phoneNumber"))
                                     {
-                                        mAuth = FirebaseAuth.getInstance();
-
                                         mAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -253,6 +260,52 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }
+                                    else if(from.equals("changeNumber"))
+                                    {
+                                        FirebaseAuth.getInstance().signOut();
+                                        mAuth.signInWithEmailAndPassword(mail, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(OTPVerifyActivity.this, "Signed Up", Toast.LENGTH_SHORT).show();
+                                                    progressBar.setVisibility(View.GONE);
+                                                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                                    UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo,currentuser);
+                                                    reference.child(currentuser).setValue(helperClass);
+
+                                                    UserModel helperClass2 = new UserModel(mail, pass, user);
+                                                    rootNode.getReference("emails").child(user).setValue(helperClass2);
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
+                                                else {
+                                                    progressBar.setVisibility(View.GONE);
+                                                    try {
+                                                        throw task.getException();
+                                                    } catch (Exception e) {
+                                                        Toast.makeText(OTPVerifyActivity.this, "Sorry, Could not sign up.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                        //Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.GONE);
+
+                                        Toast.makeText(OTPVerifyActivity.this, "Changed Phone Number", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(OTPVerifyActivity.this, UserActivity.class);
+                                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else {
+                                        try {
+                                            throw task.getException();
+                                        } catch (Exception e) {
+                                            Toast.makeText(OTPVerifyActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -260,16 +313,6 @@ public class OTPVerifyActivity extends AppCompatActivity {
 
                                 }
                             });
-
-
-                            //Toast.makeText(OTPVerifyActivity.this, "Your Account has been created successfully!", Toast.LENGTH_SHORT).show();
-
-                            //progressBar.setVisibility(View.GONE);
-
-                            //Perform Your required action here to either let the user sign In or do something required
-
-                            //finish();
-                            //Log.i(TAG, task.getException().getMessage());
                         } else {
                             Toast.makeText(OTPVerifyActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);

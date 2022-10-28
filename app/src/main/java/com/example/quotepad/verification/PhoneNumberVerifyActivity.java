@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.quotepad.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -15,7 +16,7 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
 
     private TextInputLayout phone;
     private Button btn;
-
+    private TextView tv, tv2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +25,20 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
 
         phone = findViewById(R.id.sign_up_phone);
         btn = findViewById(R.id.get_otp);
+        tv = findViewById(R.id.verify_text);
+        tv2 = findViewById(R.id.verify_ph_txt);
 
         String pname = getIntent().getStringExtra("pname");
         String user = getIntent().getStringExtra("user");
         String mail = getIntent().getStringExtra("mail");
         String pass = getIntent().getStringExtra("pass");
+        String from = getIntent().getStringExtra("set");
 
+        if(from.equals("settings"))
+        {
+            tv.setText("Enter New Phone Number");
+            tv2.setText("");
+        }
         phone.setErrorEnabled(false);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +56,15 @@ public class PhoneNumberVerifyActivity extends AppCompatActivity {
                     intent.putExtra("mail", mail);
                     intent.putExtra("pass", pass);
                     intent.putExtra("phone", phoneNo);
-                    intent.putExtra("from","phoneNumber");
+
+                    if(from.equals("settings"))
+                    {
+                        intent.putExtra("from","changeNumber");
+                    }
+                    else
+                    {
+                        intent.putExtra("from","phoneNumber");
+                    }
 
                     startActivity(intent);
                     finish();

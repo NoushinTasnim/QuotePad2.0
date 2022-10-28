@@ -137,11 +137,17 @@ public class UpdatePasswordFragment extends Fragment {
                                     public void onDataChange(@NonNull DataSnapshot snapshot1) {
                                         if(snapshot1.exists()){
                                             String pass = snapshot1.child(username).child("password").getValue(String.class);
+                                            String mail = snapshot1.child(username).child("email").getValue(String.class);
 
                                             Log.i(TAG, "onDataChange: " + pass);
 
                                             if(oldie.equals(pass)){
-                                                startActivity(new Intent(getActivity(), ForgotPassResetActivity.class));
+                                                Log.i(TAG, "onDataChange: " + username + " " + mail + " " + pass);
+                                                Intent intent = new Intent(getActivity(),ForgotPassResetActivity.class);
+                                                intent.putExtra("user",username);
+                                                intent.putExtra("mail",mail);
+                                                intent.putExtra("pass",pass);
+                                                startActivity(intent);
                                             }
                                             else
                                             {

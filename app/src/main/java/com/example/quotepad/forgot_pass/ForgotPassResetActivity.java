@@ -46,12 +46,11 @@ public class ForgotPassResetActivity extends AppCompatActivity {
 
         user = getIntent().getStringExtra("user");
         mail = getIntent().getStringExtra("mail");
-        //user = "noushin";
-        //mail = "noushi@sna.xi";
         ex_pass = getIntent().getStringExtra("pass");
-        Log.i(TAG, "ex "+ex_pass);
-        Log.i(TAG, "user "+user);
-        Log.i(TAG, "mail "+mail);
+
+        Log.i(TAG, "ex "+ ex_pass);
+        Log.i(TAG, "user "+ user);
+        Log.i(TAG, "mail "+ mail);
 
         btn = findViewById(R.id.password_change_btn);
         pass = (TextInputLayout)findViewById(R.id.res_pass);

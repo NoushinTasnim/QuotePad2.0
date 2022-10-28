@@ -55,10 +55,10 @@
 
             <menu>
                 <item
-                    android:id="@+id/sign_out"
-                    android:icon="@drawable/ic_baseline_person_remove_24"
                     android:iconTint="@color/dark_shade"
-                    android:title="Sign Out"/>
+                    android:id="@+id/settings_nav"
+                    android:title="User Profile"
+                    android:icon="@drawable/ic_outline_person_24" />
 
                 <item
                     android:id="@+id/change_pass"
@@ -68,9 +68,15 @@
 
                 <item
                     android:iconTint="@color/dark_shade"
-                    android:id="@+id/settings_nav"
-                    android:title="User Profile"
-                    android:icon="@drawable/ic_baseline_settings_24" />
+                    android:id="@+id/nav_phone"
+                    android:title="Change Phone Number"
+                    android:icon="@drawable/ic_baseline_local_phone_24" />
+
+                <item
+                    android:id="@+id/sign_out"
+                    android:icon="@drawable/ic_baseline_person_remove_24"
+                    android:iconTint="@color/dark_shade"
+                    android:title="Sign Out"/>
 
             </menu>
         </item>

@@ -34,6 +34,7 @@ import com.example.quotepad.nav_frags.QuoteOfTheDayFragment;
 import com.example.quotepad.nav_frags.RandomQuotesFragment;
 import com.example.quotepad.nav_frags.SettingsFragment;
 import com.example.quotepad.nav_frags.WhoAreWeFragment;
+import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,6 +60,8 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
     FirebaseAuth mAuth;
     DatabaseReference reference;
     Query checkUser;
+
+    String name, em, username, ph, pass;
 
     static final float END_SCALE = 0.7f;
 
@@ -92,8 +95,11 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    String username = snapshot.child(uid).child("username").getValue(String.class);
-                    String name = snapshot.child(uid).child("name").getValue(String.class);
+                    username = snapshot.child(uid).child("username").getValue(String.class);
+                    name = snapshot.child(uid).child("name").getValue(String.class);
+                    em = snapshot.child(uid).child("email").getValue(String.class);
+                    ph = snapshot.child(uid).child("phone").getValue(String.class);
+                    pass = snapshot.child(uid).child("password").getValue(String.class);
                     nav_user_name.setText(username );
                     nav_name.setText(name);
                     Log.i(TAG, "onDataChange: " + username);
@@ -220,16 +226,32 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             loadFragment(new UploadQuoteFragment());
                             break;
 
+                        case R.id.nav_my_quotes:
+                            tv.setText("My Quotes");
+                            navigationView.setCheckedItem(R.id.nav_my_quotes);
+                            loadFragment(new UploadedQuotesFragment());
+                            break;
+
                         case R.id.settings_nav:
                             tv.setText("Settings");
                             navigationView.setCheckedItem(R.id.settings_nav);
                             loadFragment(new SettingsFragment());
                             break;
 
-                        case R.id.nav_my_quotes:
-                            tv.setText("My Quotes");
-                            navigationView.setCheckedItem(R.id.nav_my_quotes);
-                            loadFragment(new UploadedQuotesFragment());
+                        case R.id.nav_phone:
+                            tv.setText("Settings");
+                            navigationView.setCheckedItem(R.id.nav_phone);
+
+                            Intent intent  = new Intent(QuoteActivity.this, PhoneNumberVerifyActivity.class);
+                            intent.putExtra("pname",name);
+                            intent.putExtra("mail",em);
+                            intent.putExtra("user",username);
+                            intent.putExtra("pass",pass);
+                            intent.putExtra("set","settings");
+
+                            Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
+                            startActivity(intent);
+
                             break;
 
                         case R.id.sign_out:
