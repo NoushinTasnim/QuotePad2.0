@@ -101,7 +101,7 @@ public class SettingsFragment extends Fragment {
         progressDialog.setMessage("Please Wait");
         progressDialog.setTitle("Fetching Data...");
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        //progressDialog.show();
 
         btn = getActivity().findViewById(R.id.up_btn);
 
@@ -139,9 +139,36 @@ public class SettingsFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.setCanceledOnTouchOutside(false);
+                //progressDialog.show();
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                Query check = FirebaseDatabase.getInstance().getReference("users").orderByChild("id").equalTo(uid);
+
+                check.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            na = snapshot.child(uid).child("name").getValue(String.class);
+                            em = snapshot.child(uid).child("email").getValue(String.class);
+                            us = snapshot.child(uid).child("username").getValue(String.class);
+                            ph = snapshot.child(uid).child("phone").getValue(String.class);
+                            pass = snapshot.child(uid).child("password").getValue(String.class);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
+                    }
+                });
+
                 String pname = name.getEditText().getText().toString().trim();
                 String user = username.getEditText().getText().toString().trim();
                 String mail = email.getEditText().getText().toString().trim();
+
+                Log.i(TAG, "onClick: " + na + " " + us + " " + em);
+                Log.i(TAG, "onClick: " + pname + " " + user + " " + mail);
 
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -182,32 +209,20 @@ public class SettingsFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                username.setError("Username already in use");
+                                if(user.equals(us))
+                                {
+                                    Log.i(TAG, "onDataChange: exists");
+                                    changeUser(pname,user,mail);
+                                }
+                                else
+                                {
+                                    username.setError("Username already in use");
+                                }
                             }
-                            else{
-                                mAuth.signInWithEmailAndPassword(em, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
-                                            String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                                            UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
-                                            FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
-
-                                            UserModel helperClass2 = new UserModel(mail, pass, user);
-                                            FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
-                                        }
-                                        else {
-                                            try {
-                                                throw task.getException();
-                                            } catch (Exception e) {
-                                                Toast.makeText(getActivity(), "Sorry, Could not change.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }
-                                });
-                                Toast.makeText(getActivity(), "Changed Prof", Toast.LENGTH_SHORT).show();
+                            else
+                            {
+                                FirebaseDatabase.getInstance().getReference("emails").child(us).removeValue();
+                                changeUser(pname,user,mail);
                             }
                         }
 
@@ -220,5 +235,90 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+    }
+
+    private void getData(ProgressDialog progressDialog) {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Query check = FirebaseDatabase.getInstance().getReference("users").orderByChild("id").equalTo(uid);
+
+        check.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    na = snapshot.child(uid).child("name").getValue(String.class);
+                    em = snapshot.child(uid).child("email").getValue(String.class);
+                    us = snapshot.child(uid).child("username").getValue(String.class);
+                    ph = snapshot.child(uid).child("phone").getValue(String.class);
+                    pass = snapshot.child(uid).child("password").getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void changeUser(String pname, String user, String mail) {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.getInstance().signOut();
+        mAuth.signInWithEmailAndPassword(em, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    //Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    if(!mail.equals(em))
+                    {
+                        FirebaseAuth.getInstance().getCurrentUser().updateEmail(mail)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User mail updated.");
+                                            UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
+                                            FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
+
+                                            us = user;
+                                            na = pname;
+                                            em = mail;
+
+                                            UserModel helperClass2 = new UserModel(mail, pass, user);
+                                            FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
+                                        }
+                                        else{
+                                            Log.i(TAG, "onComplete: " + task.getException().toString());
+                                        }
+                                    }
+                                });
+                    }
+                    else
+                    {
+                        Log.i(TAG, "onComplete: " + pname + " " + user + " " + mail);
+                        UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
+                        FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
+
+                        us = user;
+                        na = pname;
+                        em = mail;
+
+                        UserModel helperClass2 = new UserModel(mail, pass, user);
+                        FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
+                    }
+                }
+                else {
+                    try {
+                        throw task.getException();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Sorry, Could not change." + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        Toast.makeText(getActivity(), "Changed Profile", Toast.LENGTH_SHORT).show();
     }
 }

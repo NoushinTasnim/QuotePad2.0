@@ -192,6 +192,7 @@ public class SignUpFragment extends Fragment {
                                 intent.putExtra("user", user);
                                 intent.putExtra("mail", mail);
                                 intent.putExtra("pass", pass);
+                                intent.putExtra("set", "sign");
 
                                 startActivity(intent);
                             }
