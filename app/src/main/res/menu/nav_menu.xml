@@ -78,6 +78,12 @@
                     android:iconTint="@color/dark_shade"
                     android:title="Sign Out"/>
 
+                <item
+                    android:id="@+id/delete_user"
+                    android:icon="@drawable/ic_baseline_delete_24"
+                    android:iconTint="@color/dark_shade"
+                    android:title="Delete Account"/>
+
             </menu>
         </item>
 

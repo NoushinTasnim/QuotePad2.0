@@ -35,9 +35,12 @@ import com.example.quotepad.nav_frags.RandomQuotesFragment;
 import com.example.quotepad.nav_frags.SettingsFragment;
 import com.example.quotepad.nav_frags.WhoAreWeFragment;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +64,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
     DatabaseReference reference;
     Query checkUser;
 
-    String name, em, username, ph, pass;
+    String name, em, username, ph, pass, uid;
 
     static final float END_SCALE = 0.7f;
 
@@ -81,7 +84,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         nav_user_name = (TextView) headerView.findViewById(R.id.nav_header_user_name);
         nav_name = (TextView) headerView.findViewById(R.id.nav_header_name);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
@@ -233,13 +236,12 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             break;
 
                         case R.id.settings_nav:
-                            tv.setText("Settings");
+                            tv.setText("User Profile");
                             navigationView.setCheckedItem(R.id.settings_nav);
                             loadFragment(new SettingsFragment());
                             break;
 
                         case R.id.nav_phone:
-                            tv.setText("Settings");
                             navigationView.setCheckedItem(R.id.nav_phone);
 
                             Intent intent  = new Intent(QuoteActivity.this, PhoneNumberVerifyActivity.class);
@@ -257,6 +259,28 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                         case R.id.sign_out:
                             navigationView.setCheckedItem(R.id.sign_out);
                             FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(QuoteActivity.this, UserActivity.class));
+                            break;
+
+
+                        case R.id.delete_user:
+                            navigationView.setCheckedItem(R.id.delete_user);
+                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
+                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                            user.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User account deleted.");
+                                            }
+                                        }
+                                    });
+                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                                FirebaseAuth.getInstance().signOut();
+                            }
                             startActivity(new Intent(QuoteActivity.this, UserActivity.class));
                             break;
 
