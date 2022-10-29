@@ -53,9 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="always"
-        android:background="@color/light_shade"
+        android:background="@color/light_accent"
         app:menu="@menu/nav_menu"
         android:theme="@style/NavTheme"
+        app:subheaderColor="@color/dark_accent"
         app:headerLayout="@layout/menu_header"
         android:layout_gravity="start"/>
 

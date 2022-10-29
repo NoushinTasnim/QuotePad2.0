@@ -1,4 +1,4 @@
-package com.example.quotepad;
+package com.example.quotepad.nav_frags.profile;
 
 import static android.content.ContentValues.TAG;
 
@@ -23,18 +23,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.quotepad.nav_frags.UploadedQuotesFragment;
-import com.example.quotepad.nav_frags.UploadQuoteFragment;
-import com.example.quotepad.nav_frags.profile.UserProfileActivity;
+import com.example.quotepad.QuoteActivity;
+import com.example.quotepad.R;
 import com.example.quotepad.user.UserActivity;
-import com.example.quotepad.nav_frags.contact.ContactUsFragment;
-import com.example.quotepad.nav_frags.FavouriteQuotesFragment;
-import com.example.quotepad.nav_frags.QuoteOfTheDayFragment;
-import com.example.quotepad.nav_frags.RandomQuotesFragment;
-import com.example.quotepad.nav_frags.contact.WhoAreWeFragment;
+import com.example.quotepad.verification.PhoneNumberVerifyActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class QuoteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -65,14 +63,14 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quote);
+        setContentView(R.layout.activity_user_profile);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        drawerLayout = findViewById(R.id.quote_drawer_layout);
-        navigationView = findViewById(R.id.quote_navigation_view);
-        menuIcon = findViewById(R.id.quote_menu_icon);
+        drawerLayout = findViewById(R.id.prof_drawer);
+        navigationView = findViewById(R.id.prof_navigation_view);
+        menuIcon = findViewById(R.id.prof_menu_icon);
 
-        tv = findViewById(R.id.quote_tab_name);
+        tv = findViewById(R.id.prof_tab_name);
 
         View headerView = navigationView.getHeaderView(0);
         nav_user_name = (TextView) headerView.findViewById(R.id.nav_header_user_name);
@@ -82,10 +80,10 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
 
-        loadFragment(new QuoteOfTheDayFragment());
+        loadFragment(new SettingsFragment());
         Menu menu = navigationView.getMenu();
-        MenuItem item1 = menu.getItem(0);
-        tv.setText("Quote of the day");
+        MenuItem item1 = menu.getItem(1);
+        tv.setText("User Profile");
         item1.setChecked(true);
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -113,18 +111,6 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
             }
         });
 
-        this.getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    public void onBackStackChanged() {
-                        Fragment current = getCurrentFragment();
-                        if (current instanceof ContactUsFragment) {
-                            navigationView.setCheckedItem(R.id.contact_btn);
-                        } else {
-                            navigationView.setCheckedItem(R.id.who_are_we_btn);
-                        }
-                    }
-                });
-
         naviagtionDrawer();
     }
 
@@ -151,27 +137,10 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 Menu menu = navigationView.getMenu();
                 for (int i = 0; i < menu.size(); i++) {
                     MenuItem item = menu.getItem(i);
-                    if(item.hasSubMenu())
-                    {
-                        Log.i(TAG, "onNavigationItemSelected: haass " + item);
-                        Menu menu2 = item.getSubMenu();
-                        for (int ij = 0; ij < menu2.size(); ij++) {
-                            MenuItem item2 = menu2.getItem(ij);
-                            Log.i(TAG, "onNavigationItemSelected: jgifs " + item2);
-                            if (item2.isChecked()) {
-                                it = item2.getItemId();
-                                item2.setChecked(false);
-                                Log.i(TAG, "onNavigationItemSelected: selft " + it);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (item.isChecked()) {
+                    if (item.isChecked()) {
                             Log.i(TAG, "onNavigationItemSelected: nopes " + item);
                             it = item.getItemId();
                             item.setChecked(false);
-                        }
                     }
                 }
                 menuItem.setChecked(false);
@@ -187,57 +156,60 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 else
                 {
                     switch (id) {
-                        case R.id.nav_q_o_day:
-                            navigationView.setCheckedItem(R.id.nav_q_o_day);
-                            tv.setText("Quote Of The Day");
-                            loadFragment(new QuoteOfTheDayFragment());
+
+                        case R.id.change_pass:
+                            tv.setText("");
+                            navigationView.setCheckedItem(R.id.change_pass);
+                            loadFragment(new UpdatePasswordFragment());
                             break;
 
-                        case R.id.nav_ran:
-                            navigationView.setCheckedItem(R.id.nav_ran);
-                            tv.setText("Random Quotes");
-                            loadFragment(new RandomQuotesFragment());
+
+                        case R.id.settings_nav:
+                            tv.setText("User Profile");
+                            navigationView.setCheckedItem(R.id.settings_nav);
+                            loadFragment(new SettingsFragment());
                             break;
 
-                        case R.id.contact_btn:
-                            navigationView.setCheckedItem(R.id.contact_btn);
-                            tv.setText("Contact Us");
-                            loadFragment(new ContactUsFragment());
+                        case R.id.nav_phone:
+                            navigationView.setCheckedItem(R.id.nav_phone);
+
+                            Intent intent  = new Intent(UserProfileActivity.this, PhoneNumberVerifyActivity.class);
+                            intent.putExtra("pname",name);
+                            intent.putExtra("mail",em);
+                            intent.putExtra("user",username);
+                            intent.putExtra("pass",pass);
+                            intent.putExtra("set","settings");
+
+                            Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
+                            startActivity(intent);
+
                             break;
 
-                        case R.id.nav_fav:
-                            tv.setText("Favourite Quotes");
-                            navigationView.setCheckedItem(R.id.nav_fav);
-                            loadFragment(new FavouriteQuotesFragment());
+                        case R.id.nav_user_home:
+                            navigationView.setCheckedItem(R.id.nav_user_home);
+                            startActivity(new Intent(UserProfileActivity.this, QuoteActivity.class));
                             break;
 
-                        case R.id.nav_up:
-                            tv.setText("Upload Quote");
-                            navigationView.setCheckedItem(R.id.nav_up);
-                            loadFragment(new BirthFragment());
-                            break;
 
-                        case R.id.nav_my_quotes:
-                            tv.setText("My Quotes");
-                            navigationView.setCheckedItem(R.id.nav_my_quotes);
-                            loadFragment(new UploadedQuotesFragment());
-                            break;
+                        case R.id.delete_user:
+                            navigationView.setCheckedItem(R.id.delete_user);
+                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
+                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                        case R.id.nav_user_profile:
-                             navigationView.setCheckedItem(R.id.nav_user_profile);
-                             startActivity(new Intent(QuoteActivity.this, UserProfileActivity.class));
-                             break;
-
-                        case R.id.sign_out:
-                            navigationView.setCheckedItem(R.id.sign_out);
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(QuoteActivity.this, UserActivity.class));
-                            break;
-
-                        case R.id.who_are_we_btn:
-                            tv.setText("Who Are We?");
-                            navigationView.setCheckedItem(R.id.who_are_we_btn);
-                            loadFragment(new WhoAreWeFragment());
+                            user.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User account deleted.");
+                                            }
+                                        }
+                                    });
+                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                                FirebaseAuth.getInstance().signOut();
+                            }
+                            startActivity(new Intent(UserProfileActivity.this, UserActivity.class));
                             break;
 
                         default:
@@ -282,7 +254,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                 fm.beginTransaction().remove(getCurrentFragment()).commit();
             }
 
-            ft.replace(R.id.frag_container, fragment);
+            ft.replace(R.id.prof_container, fragment);
             //ft.commit();
             ft.commitNow();
         }

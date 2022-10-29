@@ -1,24 +1,44 @@
 package com.example.quotepad.nav_frags;
 
+import static android.content.ContentValues.TAG;
+import static java.lang.Math.log;
+import static java.lang.Math.min;
+
+import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.quotepad.R;
-import com.example.quotepad.adapter.FavouritesAdapter;
+import com.example.quotepad.adapter.QuoteAdapter;
 import com.example.quotepad.model.RandomModel;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.example.quotepad.swipe.SwipeToDeleteCallback;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +57,13 @@ public class FavouriteQuotesFragment extends Fragment {
     private String mParam2;
     RecyclerView recyclerView;
     DatabaseReference reference;
-    FavouritesAdapter adapter;
+    QuoteAdapter adapter;
+    CoordinatorLayout coordinatorLayout;
+    ArrayList<RandomModel> list=new ArrayList<>();
+    String[] array = new String[10000];
+    int i = 0;
+    int x = 0;
+    int min = 0;
 
     public FavouriteQuotesFragment() {
         // Required empty public constructor
@@ -78,37 +104,73 @@ public class FavouriteQuotesFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reference = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("fav");
 
         recyclerView = getActivity().findViewById(R.id.fav_rv);
+        coordinatorLayout = getActivity().findViewById(R.id.coordinator);
+
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setTitle("Fetching Data...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        adapter = new QuoteAdapter(getContext(),list);
 
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
 
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
-        FirebaseRecyclerOptions<RandomModel> options
-                = new FirebaseRecyclerOptions.Builder<RandomModel>()
-                .setQuery(reference, RandomModel.class)
-                .build();
-        // Connecting object of required Adapter class to
-        // the Adapter class itself
-        adapter = new FavouritesAdapter(options);
-        // Connecting Adapter class with the Recycler view*/
-        recyclerView.setAdapter(adapter);
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("fav")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        list.clear();
+                        //Log.i(TAG, "onDataChange: 1 " + snapshot);
+                        for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                        {
+                            //Log.i(TAG, "onDataChange: " + dataSnapshot);
+                            RandomModel notification=dataSnapshot.getValue(RandomModel.class);
+
+                            list.add(notification);
+                        }
+                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
+
+
+        enableSwipeToDeleteAndUndo();
     }
+
+
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                final RandomModel item = adapter.getQuotes().get(position);
+                Log.i(TAG, "onSwiped: " + item.getQuote());
+
+                adapter.removeItem(item, position);
+
+                Toast.makeText(getActivity(), "Item was removed from the list.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+    }
+
 }

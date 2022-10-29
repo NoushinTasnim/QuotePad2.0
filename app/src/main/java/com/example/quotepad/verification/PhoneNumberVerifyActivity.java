@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.quotepad.R;
-import com.example.quotepad.UserProfileActivity;
+import com.example.quotepad.nav_frags.profile.UserProfileActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class PhoneNumberVerifyActivity extends AppCompatActivity {

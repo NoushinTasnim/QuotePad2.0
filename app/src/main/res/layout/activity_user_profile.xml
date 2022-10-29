@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="always"
-        android:background="@color/light_shade"
+        android:background="@color/light_accent"
         app:menu="@menu/user_menu"
         android:theme="@style/NavTheme"
         app:headerLayout="@layout/menu_header"

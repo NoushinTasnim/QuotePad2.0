@@ -1,5 +1,6 @@
 package com.example.quotepad.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.example.quotepad.model.RandomModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import java.util.ArrayList;
+
 public class FavouritesAdapter extends FirebaseRecyclerAdapter<RandomModel, FavouritesAdapter.FavViewHolder> {
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -21,6 +24,23 @@ public class FavouritesAdapter extends FirebaseRecyclerAdapter<RandomModel, Favo
      *
      * @param options
      */
+
+    ArrayList<String> fav_quote;
+    ArrayList<String> fav_author;
+    Context context;
+
+    public FavouritesAdapter(@NonNull FirebaseRecyclerOptions<RandomModel> options, ArrayList<String> fav_quote, ArrayList<String> fav_author, Context context) {
+        super(options);
+        this.fav_quote = fav_quote;
+        this.fav_author = fav_author;
+        this.context = context;
+    }
+
+    public FavouritesAdapter(@NonNull FirebaseRecyclerOptions<RandomModel> options, Context context) {
+        super(options);
+        this.context = context;
+    }
+
     public FavouritesAdapter(@NonNull FirebaseRecyclerOptions<RandomModel> options) {
         super(options);
     }
@@ -46,5 +66,24 @@ public class FavouritesAdapter extends FirebaseRecyclerAdapter<RandomModel, Favo
             quote = itemView.findViewById(R.id.random_quote);
             author = itemView.findViewById(R.id.random_author);
         }
+    }
+    public void removeItem(int position) {
+        fav_quote.remove(position);
+        fav_author.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(String item, String item2, int position) {
+        fav_quote.add(position, item);
+        fav_author.add(position,item2);
+        notifyItemInserted(position);
+    }
+
+    public ArrayList<String> getQuotes() {
+        return fav_quote;
+    }
+
+    public ArrayList<String> getAuthors() {
+        return fav_author;
     }
 }
