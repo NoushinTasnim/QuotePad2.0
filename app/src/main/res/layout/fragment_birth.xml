@@ -12,7 +12,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/birth_rv"
-            android:layout_marginTop="50dp"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

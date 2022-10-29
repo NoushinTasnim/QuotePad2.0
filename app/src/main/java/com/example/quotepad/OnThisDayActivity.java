@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -29,6 +30,15 @@ public class OnThisDayActivity extends AppCompatActivity {
 
     private BirthFragment birthFragment;
     private DeathFragment deathFragment;
+    private EventsFragment eventsFragment;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(OnThisDayActivity.this,QuoteActivity.class));
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +60,14 @@ public class OnThisDayActivity extends AppCompatActivity {
         // Initialize main fragment
         birthFragment = new BirthFragment();
         deathFragment = new DeathFragment();
+        eventsFragment = new EventsFragment();
 
         Bundle bundle=new Bundle();
+        bundle.putString("title","Events");
+        eventsFragment.setArguments(bundle);
+        adapter.addFragment(eventsFragment,"Events");
+
+        bundle=new Bundle();
         bundle.putString("title","One");
         birthFragment.setArguments(bundle);
         adapter.addFragment(birthFragment,"Birth");
@@ -73,6 +89,7 @@ public class OnThisDayActivity extends AppCompatActivity {
         int[] imageList={
                 R.drawable.ic_baseline_favorite_24,
                 R.drawable.ic_baseline_home_24,
+                R.drawable.ic_baseline_home_24
         };
 
         // Create constructor
