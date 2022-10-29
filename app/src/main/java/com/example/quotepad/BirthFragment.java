@@ -64,6 +64,7 @@ public class BirthFragment extends Fragment {
     ArrayList arrayList2 = new ArrayList<>();
     ArrayList arrayList3 = new ArrayList<>();
     BirthAdapter birthAdapter;
+    String name;
 
     public BirthFragment() {
         // Required empty public constructor
@@ -121,8 +122,12 @@ public class BirthFragment extends Fragment {
         progressDialog.setTitle("Fetching Data...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+        String currentDateTime = sdf.format(new Date());
+        Log.i(TAG, "PlayOn: " + currentDateTime);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://today.zenquotes.io/api/29/10";
+        String url = "https://today.zenquotes.io/api/" + currentDateTime;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
@@ -135,12 +140,11 @@ public class BirthFragment extends Fragment {
                     jsonObject = jsonObject.getJSONObject("data");
                     Log.i(TAG, "onResponse: " + jsonObject);
                     jsonArray = jsonObject.getJSONArray("Births");
-
+                    arrayList3.clear();
+                    arrayList2.clear();
+                    arrayList.clear();
                     int s = jsonArray.length();
-                    if(s>50)
-                    {
-                        s = 50;
-                    }
+
                     for(int n = 0; n < s; n++)
                     {
                         jsonObject = jsonArray.getJSONObject(n);
@@ -149,14 +153,26 @@ public class BirthFragment extends Fragment {
                         Log.i(TAG, "onResponse: " + separated[0]);
                         String born = separated[0];
                         currentString = separated[1];
-                        separated = currentString.split(";");
+                        separated = currentString.split("; ");
                         Log.i(TAG, "onResponse: " +  separated[1]);
                         currentString = separated[1];
-                        separated = currentString.split("\\(d.");
-                        String name = separated[0];
-                        currentString = separated[1];
-                        separated = currentString.split("\\)");
-                        arrayList3.add(born + " - " + separated[0]);
+
+                        if(currentString.indexOf("d.") !=-1)
+                        {
+                            Log.i(TAG, "onResponse: here");
+                            separated = currentString.split("\\(d.");
+                            name = separated[0];
+                            Log.i(TAG, "onResponse: 1 " + name);
+                            currentString = separated[1];
+                            Log.i(TAG, "onResponse: 1 " + currentString);
+                            separated = currentString.split("\\)");
+                            arrayList3.add(born + " - " + separated[0]);
+                        }
+                        else
+                        {
+                            name = currentString;
+                            arrayList3.add(born + " - ");
+                        }
 
                         if(name.indexOf(",") !=-1)
                         {
@@ -170,9 +186,10 @@ public class BirthFragment extends Fragment {
                             arrayList2.add("");
                         }
                     }
+
+                    progressDialog.dismiss();
                     birthAdapter = new BirthAdapter(arrayList, arrayList2, arrayList3, getActivity());
                     recyclerView.setAdapter(birthAdapter); // set the Adapter to RecyclerView
-                    progressDialog.dismiss();
 
                     birthAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {

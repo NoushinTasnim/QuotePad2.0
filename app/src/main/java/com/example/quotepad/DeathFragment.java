@@ -29,7 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,26 +108,27 @@ public class DeathFragment extends Fragment {
         progressDialog.setTitle("Fetching Data...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://today.zenquotes.io/api/29/10";
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+        String currentDateTime = sdf.format(new Date());
+        Log.i(TAG, "PlayOn: " + currentDateTime);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "https://today.zenquotes.io/api/" + currentDateTime;
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
                 JSONArray jsonArray = null;
                 try {
-
                     JSONObject jsonObject = new JSONObject(response);
                     jsonObject = jsonObject.getJSONObject("data");
                     Log.i(TAG, "onResponse: " + jsonObject);
                     jsonArray = jsonObject.getJSONArray("Deaths");
-
+                    arrayList3.clear();
+                    arrayList2.clear();
+                    arrayList.clear();
                     int s = jsonArray.length();
-                    if(s>50)
-                    {
-                        s = 50;
-                    }
+
                     for(int n = 0; n < s; n++)
                     {
                         jsonObject = jsonArray.getJSONObject(n);
@@ -166,9 +170,9 @@ public class DeathFragment extends Fragment {
                             arrayList2.add("");
                         }
                     }
+                    progressDialog.dismiss();
                     birthAdapter = new BirthAdapter(arrayList, arrayList2, arrayList3, getActivity());
                     recyclerView.setAdapter(birthAdapter); // set the Adapter to RecyclerView
-                    progressDialog.dismiss();
 
                     birthAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {

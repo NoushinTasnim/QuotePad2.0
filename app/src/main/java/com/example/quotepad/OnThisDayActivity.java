@@ -15,6 +15,9 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.quotepad.adapter.BirthAdapter;
 import com.example.quotepad.nav_frags.RandomQuotesFragment;
@@ -32,6 +35,8 @@ public class OnThisDayActivity extends AppCompatActivity {
     private DeathFragment deathFragment;
     private EventsFragment eventsFragment;
 
+    ImageView btn;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -46,11 +51,21 @@ public class OnThisDayActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.on_this_day_view_pager);
         tabLayout = findViewById(R.id.on_this_day_tabs);
+        btn = findViewById(R.id.back_btn);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         tabLayout.setupWithViewPager(viewPager);
 
         // Prepare view pager
         prepareViewPager(viewPager);
+
+
     }
 
     private void prepareViewPager(ViewPager viewPager) {
