@@ -1,4 +1,4 @@
-package com.example.quotepad;
+package com.example.quotepad.nav_frags.today;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,12 +16,10 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.quotepad.adapter.BirthAdapter;
-import com.example.quotepad.nav_frags.RandomQuotesFragment;
-import com.example.quotepad.nav_frags.UploadQuoteFragment;
+import com.example.quotepad.QuoteActivity;
+import com.example.quotepad.R;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class OnThisDayActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(OnThisDayActivity.this,QuoteActivity.class));
+        startActivity(new Intent(OnThisDayActivity.this, QuoteActivity.class));
         finish();
     }
 

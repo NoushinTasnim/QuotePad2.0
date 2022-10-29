@@ -26,10 +26,11 @@ import android.widget.TextView;
 import com.example.quotepad.nav_frags.UploadedQuotesFragment;
 import com.example.quotepad.nav_frags.UploadQuoteFragment;
 import com.example.quotepad.nav_frags.profile.UserProfileActivity;
+import com.example.quotepad.nav_frags.today.OnThisDayActivity;
 import com.example.quotepad.user.UserActivity;
 import com.example.quotepad.nav_frags.contact.ContactUsFragment;
 import com.example.quotepad.nav_frags.FavouriteQuotesFragment;
-import com.example.quotepad.nav_frags.QuoteOfTheDayFragment;
+import com.example.quotepad.nav_frags.today.QuoteOfTheDayFragment;
 import com.example.quotepad.nav_frags.RandomQuotesFragment;
 import com.example.quotepad.nav_frags.contact.WhoAreWeFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -195,7 +196,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
 
                         case R.id.nav_on_this_day:
                             navigationView.setCheckedItem(R.id.nav_on_this_day);
-                            startActivity(new Intent(QuoteActivity.this,OnThisDayActivity.class));
+                            startActivity(new Intent(QuoteActivity.this, OnThisDayActivity.class));
                             break;
 
                         case R.id.nav_ran:

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".nav_frags.QuoteOfTheDayFragment">
+    tools:context=".nav_frags.today.QuoteOfTheDayFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.quotepad.nav_frags;
+package com.example.quotepad.nav_frags.today;
 
 import static android.content.ContentValues.TAG;
 

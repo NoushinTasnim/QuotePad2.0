@@ -16,7 +16,7 @@
             android:id="@+id/quote_from_firebase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text=""
             android:textStyle="italic"
             android:textColor="#000"
             android:textSize="20sp" />
@@ -25,19 +25,19 @@
             android:id="@+id/genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="genre"
+            android:text=""
             android:layout_gravity="right"
             android:textStyle="bold"
-            android:textColor="#000"
+            android:textColor="@color/dark_accent"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="date"
+            android:text=""
             android:layout_gravity="right"
-            android:textColor="#000"
+            android:textColor="@color/dark_accent"
             android:textSize="12sp" />
 
     </LinearLayout>

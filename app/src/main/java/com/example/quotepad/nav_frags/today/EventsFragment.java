@@ -1,4 +1,4 @@
-package com.example.quotepad;
+package com.example.quotepad.nav_frags.today;
 
 import static android.content.ContentValues.TAG;
 
@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.quotepad.R;
 import com.example.quotepad.adapter.BirthAdapter;
 
 import org.json.JSONArray;
@@ -36,10 +37,10 @@ import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DeathFragment#newInstance} factory method to
+ * Use the {@link EventsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeathFragment extends Fragment {
+public class EventsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,16 +50,14 @@ public class DeathFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    RecyclerView recyclerView;
     ArrayList arrayList = new ArrayList<>();
     ArrayList arrayList2 = new ArrayList<>();
     ArrayList arrayList3 = new ArrayList<>();
     BirthAdapter birthAdapter;
     String name;
 
-    RecyclerView recyclerView;
-
-    public DeathFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 
@@ -68,11 +67,11 @@ public class DeathFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DeathFragment.
+     * @return A new instance of fragment EventsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DeathFragment newInstance(String param1, String param2) {
-        DeathFragment fragment = new DeathFragment();
+    public static EventsFragment newInstance(String param1, String param2) {
+        EventsFragment fragment = new EventsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -90,10 +89,16 @@ public class DeathFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_events, container, false);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = getActivity().findViewById(R.id.death_rv);
+        recyclerView = getActivity().findViewById(R.id.events_rv);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -114,16 +119,18 @@ public class DeathFragment extends Fragment {
         Log.i(TAG, "PlayOn: " + currentDateTime);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://today.zenquotes.io/api/" + currentDateTime;
+
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override
             public void onResponse(String response) {
                 JSONArray jsonArray = null;
                 try {
+
                     JSONObject jsonObject = new JSONObject(response);
                     jsonObject = jsonObject.getJSONObject("data");
                     Log.i(TAG, "onResponse: " + jsonObject);
-                    jsonArray = jsonObject.getJSONArray("Deaths");
+                    jsonArray = jsonObject.getJSONArray("Events");
                     arrayList3.clear();
                     arrayList2.clear();
                     arrayList.clear();
@@ -135,44 +142,19 @@ public class DeathFragment extends Fragment {
                         String currentString = jsonObject.getString("text");
                         String[] separated = currentString.split("&");
                         Log.i(TAG, "onResponse: " + separated[0]);
-                        String death = separated[0];
+                        String year = separated[0];
+                        arrayList3.add(year);
                         currentString = separated[1];
                         separated = currentString.split("; ");
-                        Log.i(TAG, "onResponse: " +  separated[1]);
                         currentString = separated[1];
-
-                        if(currentString.indexOf("b.") !=-1)
-                        {
-                            Log.i(TAG, "onResponse: here");
-                            separated = currentString.split("\\(b.");
-                            name = separated[0];
-                            Log.i(TAG, "onResponse: 1 " + name);
-                            currentString = separated[1];
-                            Log.i(TAG, "onResponse: 1 " + currentString);
-                            separated = currentString.split("\\)");
-                            arrayList3.add(separated[0] + " - " + death);
-                        }
-                        else
-                        {
-                            name = currentString;
-                            arrayList3.add(" - " + death);
-                        }
-
-                        if(name.indexOf(",") !=-1)
-                        {
-                            separated = name.split(", ");
-                            arrayList.add(separated[0]);
-                            arrayList2.add(separated[1]);
-                        }
-                        else
-                        {
-                            arrayList.add(name);
-                            arrayList2.add("");
-                        }
+                        separated = currentString.split("& ");
+                        arrayList2.add(separated[0]);
+                        arrayList.add("");
                     }
                     progressDialog.dismiss();
                     birthAdapter = new BirthAdapter(arrayList, arrayList2, arrayList3, getActivity());
                     recyclerView.setAdapter(birthAdapter); // set the Adapter to RecyclerView
+
 
                     birthAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -188,13 +170,5 @@ public class DeathFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_death, container, false);
     }
 }
