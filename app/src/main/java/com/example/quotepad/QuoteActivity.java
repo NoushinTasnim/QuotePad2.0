@@ -193,6 +193,11 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                             loadFragment(new QuoteOfTheDayFragment());
                             break;
 
+                        case R.id.nav_on_this_day:
+                            navigationView.setCheckedItem(R.id.nav_on_this_day);
+                            startActivity(new Intent(QuoteActivity.this,OnThisDayActivity.class));
+                            break;
+
                         case R.id.nav_ran:
                             navigationView.setCheckedItem(R.id.nav_ran);
                             tv.setText("Random Quotes");
@@ -214,7 +219,7 @@ public class QuoteActivity extends AppCompatActivity implements NavigationView.O
                         case R.id.nav_up:
                             tv.setText("Upload Quote");
                             navigationView.setCheckedItem(R.id.nav_up);
-                            loadFragment(new BirthFragment());
+                            loadFragment(new UploadQuoteFragment());
                             break;
 
                         case R.id.nav_my_quotes:

@@ -8,6 +8,12 @@
             android:title="Quote Of The Day"
             android:icon="@drawable/ic_baseline_calendar_view_day_24"/>
 
+    <item
+        android:iconTint="@color/dark_shade"
+        android:id="@+id/nav_on_this_day"
+        android:title="On This Day"
+        android:icon="@drawable/ic_baseline_today_24"/>
+
     <group
         android:checkableBehavior="single">
         <item
