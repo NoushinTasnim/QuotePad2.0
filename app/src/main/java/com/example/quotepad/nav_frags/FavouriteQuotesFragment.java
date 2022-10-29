@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import static java.lang.Math.log;
 import static java.lang.Math.min;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -34,7 +35,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -106,6 +110,14 @@ public class FavouriteQuotesFragment extends Fragment {
 
         recyclerView = getActivity().findViewById(R.id.fav_rv);
         coordinatorLayout = getActivity().findViewById(R.id.coordinator);
+
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setTitle("Fetching Data...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
         adapter = new QuoteAdapter(getContext(),list);
 
         // To display the Recycler view linearly
@@ -128,19 +140,22 @@ public class FavouriteQuotesFragment extends Fragment {
                             list.add(notification);
                         }
                         adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 });
 
-        enableSwipeToDeleteAndUndo(array);
+
+        enableSwipeToDeleteAndUndo();
     }
 
 
-    private void enableSwipeToDeleteAndUndo(String[] array) {
+    private void enableSwipeToDeleteAndUndo() {
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -148,42 +163,9 @@ public class FavouriteQuotesFragment extends Fragment {
                 final RandomModel item = adapter.getQuotes().get(position);
                 Log.i(TAG, "onSwiped: " + item.getQuote());
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("fav")
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for(DataSnapshot dataSnapshot: snapshot.getChildren())
-                                {
-                                    if((item.getQuote().toString()).equals((dataSnapshot.child("quote").getValue().toString()))){
-                                        Log.i(TAG, "onDataChange: found ");
-                                        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .child("fav").child(dataSnapshot.getKey().toString()).removeValue();
-                                    }
-                                }
-                            }
+                adapter.removeItem(item, position);
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                adapter.removeItem(position);
-
-                Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-                /*snackbar.setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        adapter.restoreItem(item, position);
-                        recyclerView.scrollToPosition(position);
-                    }
-                });*/
-
-                snackbar.setActionTextColor(Color.YELLOW);
-                snackbar.show();
-
+                Toast.makeText(getActivity(), "Item was removed from the list.", Toast.LENGTH_SHORT).show();
             }
         };
 
