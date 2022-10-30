@@ -25,6 +25,16 @@
                     android:layout_height="40dp"
                     android:src="@drawable/logo_dark"/>
 
+                <TextView
+                    android:id="@+id/user_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:layout_marginHorizontal="25dp"
+                    android:textSize="18sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/light_accent"/>
+
             </Toolbar>
 
             <com.google.android.material.tabs.TabLayout

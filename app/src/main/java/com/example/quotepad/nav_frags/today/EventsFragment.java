@@ -24,7 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.quotepad.R;
-import com.example.quotepad.adapter.BirthAdapter;
+import com.example.quotepad.adapter.OnThisDayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +54,7 @@ public class EventsFragment extends Fragment {
     ArrayList arrayList = new ArrayList<>();
     ArrayList arrayList2 = new ArrayList<>();
     ArrayList arrayList3 = new ArrayList<>();
-    BirthAdapter birthAdapter;
+    OnThisDayAdapter onThisDayAdapter;
     String name;
 
     public EventsFragment() {
@@ -152,11 +152,11 @@ public class EventsFragment extends Fragment {
                         arrayList.add("");
                     }
                     progressDialog.dismiss();
-                    birthAdapter = new BirthAdapter(arrayList, arrayList2, arrayList3, getActivity());
-                    recyclerView.setAdapter(birthAdapter); // set the Adapter to RecyclerView
+                    onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());
+                    recyclerView.setAdapter(onThisDayAdapter); // set the Adapter to RecyclerView
 
 
-                    birthAdapter.notifyDataSetChanged();
+                    onThisDayAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

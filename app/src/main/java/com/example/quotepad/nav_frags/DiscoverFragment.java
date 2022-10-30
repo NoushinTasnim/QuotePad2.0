@@ -7,9 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,17 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.quotepad.model.DiscoverModel;
 import com.example.quotepad.R;
-import com.example.quotepad.adapter.QuoteAdapter;
-import com.example.quotepad.adapter.UploadedAdapter;
-import com.example.quotepad.model.QuotesModel;
-import com.example.quotepad.model.RandomModel;
-import com.example.quotepad.swipe.SwipeToDeleteCallback;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.quotepad.adapter.DiscoverAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -37,10 +29,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UploadedQuotesFragment#newInstance} factory method to
+ * Use the {@link DiscoverFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UploadedQuotesFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,10 +44,10 @@ public class UploadedQuotesFragment extends Fragment {
     private String mParam2;
 
     RecyclerView recyclerView;
-    UploadedAdapter adapter;
-    ArrayList<QuotesModel> list=new ArrayList<>();
+    DiscoverAdapter adapter;
+    ArrayList<DiscoverModel> list=new ArrayList<>();
 
-    public UploadedQuotesFragment() {
+    public DiscoverFragment() {
         // Required empty public constructor
     }
 
@@ -65,11 +57,11 @@ public class UploadedQuotesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Discover.
+     * @return A new instance of fragment DiscoverFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UploadedQuotesFragment newInstance(String param1, String param2) {
-        UploadedQuotesFragment fragment = new UploadedQuotesFragment();
+    public static DiscoverFragment newInstance(String param1, String param2) {
+        DiscoverFragment fragment = new DiscoverFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -90,14 +82,13 @@ public class UploadedQuotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_uploaded_quotes, container, false);
+        return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        recyclerView = getActivity().findViewById(R.id.uploaded_rv);
+        recyclerView = getActivity().findViewById(R.id.discover_rv);
 
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
 
@@ -106,26 +97,38 @@ public class UploadedQuotesFragment extends Fragment {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        adapter = new UploadedAdapter(getContext(),list);
+        adapter = new DiscoverAdapter(getContext(),list);
 
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("quote")
+        FirebaseDatabase.getInstance().getReference("quotes")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         list.clear();
-                        Log.i(TAG, "onDataChange: 1 " + snapshot);
+                        Log.i(TAG, "onDataChange: 1 " + snapshot + " " + snapshot.getKey());
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            Log.i(TAG, "onDataChange: " + dataSnapshot.getValue(QuotesModel.class));
-                            QuotesModel notification = dataSnapshot.getValue(QuotesModel.class);
+                            for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
+                            {
+                                Log.i(TAG, "onDataChange: " + dataSnapshot1.getValue());
+                                Log.i(TAG, "onDataChange: " + dataSnapshot1);
+                                DiscoverModel notification = dataSnapshot1.getValue(DiscoverModel.class);
 
-                            Log.i(TAG, "onDataChange: " + notification);
+                                Log.i(TAG, "onDataChange: " + notification);
 
-                            list.add(notification);
+                                list.add(notification);
+                            }
+                            //Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
+                            //dataSnapshot= (DataSnapshot) dataSnapshot.getValue();
+                            //Log.i(TAG, "onDataChange: " + dataSnapshot);
+                            //DiscoverModel notification = dataSnapshot.getValue(DiscoverModel.class);
+
+                            //Log.i(TAG, "onDataChange: " + notification);
+
+                            //list.add(notification);
                         }
                         adapter.notifyDataSetChanged();
                         progressDialog.dismiss();
@@ -137,25 +140,5 @@ public class UploadedQuotesFragment extends Fragment {
                         progressDialog.dismiss();
                     }
                 });
-
-        enableSwipeToDeleteAndUndo();
-    }
-
-    private void enableSwipeToDeleteAndUndo() {
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                final int position = viewHolder.getAdapterPosition();
-                final QuotesModel item = adapter.getQuotes().get(position);
-                Log.i(TAG, "onSwiped: " + item.getQuotes());
-
-                adapter.removeItem(item, position);
-
-                Toast.makeText(getActivity(), "Item was removed from the list.", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 }

@@ -22,6 +22,13 @@
             android:title="Home">
 
             <menu>
+
+                <item
+                    android:iconTint="@color/dark_shade"
+                    android:id="@+id/nav_discover"
+                    android:title="Discover"
+                    android:icon="@drawable/ic_baseline_group_work_24"/>
+
                 <item
                     android:iconTint="@color/dark_shade"
                     android:id="@+id/nav_ran"

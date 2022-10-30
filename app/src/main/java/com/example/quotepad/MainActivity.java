@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.quotepad.nav_frags.DiscoverFragment;
 import com.example.quotepad.nav_frags.UploadedQuotesFragment;
 import com.example.quotepad.nav_frags.UploadQuoteFragment;
 import com.example.quotepad.nav_frags.profile.UserProfileActivity;
@@ -198,6 +199,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         case R.id.nav_on_this_day:
                             navigationView.setCheckedItem(R.id.nav_on_this_day);
                             startActivity(new Intent(MainActivity.this, OnThisDayActivity.class));
+                            break;
+
+                        case R.id.nav_discover:
+                            navigationView.setCheckedItem(R.id.nav_discover);
+                            tv.setText("Discover Quotes");
+                            loadFragment(new DiscoverFragment());
                             break;
 
                         case R.id.nav_ran:

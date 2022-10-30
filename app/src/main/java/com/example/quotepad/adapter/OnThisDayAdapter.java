@@ -15,18 +15,18 @@ import com.example.quotepad.R;
 
 import java.util.ArrayList;
 
-public class BirthAdapter extends RecyclerView.Adapter<BirthAdapter.MyViewHolder> {
+public class OnThisDayAdapter extends RecyclerView.Adapter<OnThisDayAdapter.MyViewHolder> {
 
     ArrayList<String> man;
     ArrayList<String> job;
     ArrayList<String> date;
     Context context;
 
-    public BirthAdapter(Context context) {
+    public OnThisDayAdapter(Context context) {
         this.context = context;
     }
 
-    public BirthAdapter(ArrayList<String> man, ArrayList<String> job, ArrayList<String> date, Context context) {
+    public OnThisDayAdapter(ArrayList<String> man, ArrayList<String> job, ArrayList<String> date, Context context) {
         this.man = man;
         this.job = job;
         this.date = date;

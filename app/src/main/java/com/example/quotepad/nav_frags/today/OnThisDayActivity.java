@@ -17,17 +17,22 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class OnThisDayActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private TextView tv;
 
     private BirthFragment birthFragment;
     private DeathFragment deathFragment;
@@ -50,6 +55,12 @@ public class OnThisDayActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.on_this_day_view_pager);
         tabLayout = findViewById(R.id.on_this_day_tabs);
         btn = findViewById(R.id.back_btn);
+        tv = findViewById(R.id.user_tab);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+        String currentDateTime = sdf.format(new Date());
+
+        tv.setText("Today's Date: " + currentDateTime);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

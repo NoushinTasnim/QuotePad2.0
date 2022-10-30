@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
+import com.example.quotepad.model.DiscoverModel;
 import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.model.UserModel;
 import com.example.quotepad.nav_frags.today.QuoteOfTheDayFragment;
@@ -166,7 +167,9 @@ public class UploadQuoteFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
                                 String username = snapshot.child(currentuser).child("username").getValue(String.class);
-                                reference.child("quotes").child(currentDateTime + ";" + currentuser).setValue(type + " ; " + username + " ; " + quote);
+                                String new_id = currentDateTime + ";" + currentuser;
+                                DiscoverModel discoverModel = new DiscoverModel("\"" + quote + "\"",currentDateTime,type, username, new_id);
+                                reference.child("quotes").child(new_id).setValue(discoverModel);
                                 Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
                                 upload_quote.getEditText().setText("");
                                 autoCompleteTextView.setText("");
