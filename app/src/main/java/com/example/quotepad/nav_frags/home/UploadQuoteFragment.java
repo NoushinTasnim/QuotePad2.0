@@ -1,4 +1,4 @@
-package com.example.quotepad.nav_frags;
+package com.example.quotepad.nav_frags.home;
 
 import static android.content.ContentValues.TAG;
 
@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.quotepad.R;

@@ -23,37 +23,35 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class UploadedAdapter extends RecyclerView.Adapter<UploadedAdapter.DiscoverViewHolder> {
+public class FavouriteQuotesAdapter extends RecyclerView.Adapter<FavouriteQuotesAdapter.viewHolder>{
 
-        Context context;
-        ArrayList<QuotesModel> list;
+    Context context;
+    ArrayList<QuotesModel> list;
 
-    public UploadedAdapter(Context context, ArrayList<QuotesModel> list) {
+    public FavouriteQuotesAdapter(Context context, ArrayList<QuotesModel> list) {
         this.context = context;
         this.list = list;
     }
 
     @NonNull
     @Override
-    public DiscoverViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.quotes_fetched, parent, false);
-        return new DiscoverViewHolder(view);
+    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.row_layout,parent,false);
+        return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UploadedAdapter.DiscoverViewHolder holder, int position) {
-        QuotesModel model = list.get(position);
+    public void onBindViewHolder(@NonNull FavouriteQuotesAdapter.viewHolder holder, int position) {
+        QuotesModel model=list.get(position);
 
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("quote").addValueEventListener(new ValueEventListener() {
+                .child("fav").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         QuotesModel user=snapshot.getValue(QuotesModel.class);
-                        Log.i(TAG, "onDataChange:ggtghh " + user);
                         holder.quote.setText(model.getQuote());
-                        Log.i(TAG, "onDataChange:  tttt " + model.getQuote());
-                        holder.genre.setText("Genre: " + model.getType());
-                        holder.time.setText("Uploaded on: " + model.getTime());
+                        Log.i(TAG, "onDataChange: as" + model.getQuote());
+                        holder.author.setText(model.getAuthor());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -67,30 +65,27 @@ public class UploadedAdapter extends RecyclerView.Adapter<UploadedAdapter.Discov
         return list.size();
     }
 
-    public class DiscoverViewHolder extends RecyclerView.ViewHolder {
+    public class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView quote,time, genre;
-
-        public DiscoverViewHolder(@NonNull View itemView) {
+        TextView quote, author;
+        public viewHolder(@NonNull View itemView) {
             super(itemView);
-
-            quote = itemView.findViewById(R.id.quote_from_firebase);
-            time = itemView.findViewById(R.id.date);
-            genre = itemView.findViewById(R.id.genre);
+            quote = itemView.findViewById(R.id.random_quote);
+            author = itemView.findViewById(R.id.random_author);
         }
     }
 
     public void removeItem(QuotesModel item, int position) {
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("quote")
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("fav")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            if((item.getQuote().toString()).equals((dataSnapshot.child("quotes").getValue().toString()))){
+                            if((item.getQuote().toString()).equals((dataSnapshot.child("quote").getValue().toString()))){
                                 Log.i(TAG, "onDataChange: found ");
                                 FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .child("quote").child(dataSnapshot.getKey().toString()).removeValue();
+                                        .child("fav").child(dataSnapshot.getKey().toString()).removeValue();
                             }
                         }
                     }

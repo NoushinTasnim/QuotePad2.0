@@ -1,4 +1,4 @@
-package com.example.quotepad.nav_frags;
+package com.example.quotepad.nav_frags.home;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;

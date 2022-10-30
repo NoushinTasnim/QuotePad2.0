@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/swipeContainer"
     android:background="@color/white"
-    tools:context=".nav_frags.UploadedQuotesFragment">
+    tools:context=".nav_frags.home.UploadedQuotesFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

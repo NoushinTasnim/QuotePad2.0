@@ -1,7 +1,6 @@
-package com.example.quotepad.nav_frags;
+package com.example.quotepad.nav_frags.home;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Math.min;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
-import com.example.quotepad.adapter.QuoteAdapter;
+import com.example.quotepad.adapter.UploadedQuotesAdapter;
 import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.swipe.SwipeToDeleteCallback;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,10 +32,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FavouriteQuotesFragment#newInstance} factory method to
+ * Use the {@link UploadedQuotesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavouriteQuotesFragment extends Fragment {
+public class UploadedQuotesFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,11 +45,12 @@ public class FavouriteQuotesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
     RecyclerView recyclerView;
-    QuoteAdapter adapter;
+    UploadedQuotesAdapter adapter;
     ArrayList<QuotesModel> list=new ArrayList<>();
 
-    public FavouriteQuotesFragment() {
+    public UploadedQuotesFragment() {
         // Required empty public constructor
     }
 
@@ -60,11 +60,11 @@ public class FavouriteQuotesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FavouriteQuotesFragment.
+     * @return A new instance of fragment Discover.
      */
     // TODO: Rename and change types and number of parameters
-    public static FavouriteQuotesFragment newInstance(String param1, String param2) {
-        FavouriteQuotesFragment fragment = new FavouriteQuotesFragment();
+    public static UploadedQuotesFragment newInstance(String param1, String param2) {
+        UploadedQuotesFragment fragment = new UploadedQuotesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -85,13 +85,14 @@ public class FavouriteQuotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourite_quotes, container, false);
+        return inflater.inflate(R.layout.fragment_uploaded_quotes, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = getActivity().findViewById(R.id.fav_rv);
+
+        recyclerView = getActivity().findViewById(R.id.uploaded_rv);
 
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
 
@@ -100,24 +101,24 @@ public class FavouriteQuotesFragment extends Fragment {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        adapter = new QuoteAdapter(getContext(),list);
+        adapter = new UploadedQuotesAdapter(getContext(),list);
 
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        // It is a class provide by the FirebaseUI to make a
-        // query in the database to fetch appropriate data
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("fav")
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("quote")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         list.clear();
-                        //Log.i(TAG, "onDataChange: 1 " + snapshot);
+                        Log.i(TAG, "onDataChange: 1 " + snapshot);
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            Log.i(TAG, "onDataChange: " + dataSnapshot);
-                            QuotesModel notification=dataSnapshot.getValue(QuotesModel.class);
+                            Log.i(TAG, "onDataChange: " + dataSnapshot.getValue(QuotesModel.class));
+                            QuotesModel notification = dataSnapshot.getValue(QuotesModel.class);
+
+                            Log.i(TAG, "onDataChange: " + notification);
 
                             list.add(notification);
                         }
@@ -132,10 +133,8 @@ public class FavouriteQuotesFragment extends Fragment {
                     }
                 });
 
-
         enableSwipeToDeleteAndUndo();
     }
-
 
     private void enableSwipeToDeleteAndUndo() {
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
