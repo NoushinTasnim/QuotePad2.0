@@ -1,16 +1,45 @@
 package com.example.quotepad.model;
 
 public class QuotesModel {
-    private String quotes, time, type;
+    private String quote, time, type, author, id;
 
     QuotesModel(){
 
     }
 
-    public QuotesModel(String quotes, String type, String time) {
-        this.quotes = quotes;
+    public QuotesModel(String quote, String author) {
+        this.quote = quote;
+        this.author = author;
+    }
+
+    public QuotesModel(String quote, String time, String type, String author, String id) {
+        this.quote = quote;
         this.time = time;
         this.type = type;
+        this.author = author;
+        this.id = id;
+    }
+
+    public QuotesModel(String quote, String type, String time) {
+        this.quote = quote;
+        this.time = time;
+        this.type = type;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getType() {
@@ -21,12 +50,12 @@ public class QuotesModel {
         this.type = type;
     }
 
-    public String getQuotes() {
-        return quotes;
+    public String getQuote() {
+        return quote;
     }
 
-    public void setQuotes(String quotes) {
-        this.quotes = quotes;
+    public void setQuote(String quote) {
+        this.quote = quote;
     }
 
     public String getTime() {

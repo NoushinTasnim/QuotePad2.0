@@ -10,21 +10,18 @@ import androidx.fragment.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
-import com.example.quotepad.model.DiscoverModel;
 import com.example.quotepad.model.QuotesModel;
-import com.example.quotepad.model.UserModel;
-import com.example.quotepad.nav_frags.today.QuoteOfTheDayFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +54,7 @@ public class UploadQuoteFragment extends Fragment {
     private TextInputLayout upload_quote;
     private Button upload_btn;
     private AutoCompleteTextView autoCompleteTextView;
+    private CheckBox publicity;
 
     private String type;
 
@@ -109,6 +107,7 @@ public class UploadQuoteFragment extends Fragment {
         upload_quote = getActivity().findViewById(R.id.upload_quote);
 
         autoCompleteTextView = getActivity().findViewById(R.id.quoteType);
+        publicity = getActivity().findViewById(R.id.upload_publicity);
 
         //We will use this data to inflate the drop-down items
         String[] Subjects = new String[]{   "Happy", "Gloomy", "Romantic", "Inspiring",
@@ -168,9 +167,15 @@ public class UploadQuoteFragment extends Fragment {
                             if(snapshot.exists()){
                                 String username = snapshot.child(currentuser).child("username").getValue(String.class);
                                 String new_id = currentDateTime + ";" + currentuser;
-                                DiscoverModel discoverModel = new DiscoverModel("\"" + quote + "\"",currentDateTime,type, username, new_id);
-                                reference.child("quotes").child(new_id).setValue(discoverModel);
-                                Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+
+                                if(publicity.isChecked())
+                                {
+                                    QuotesModel discoverModel = new QuotesModel("\"" + quote + "\"",currentDateTime,type, username, new_id);
+                                    reference.child("quotes").child(new_id).setValue(discoverModel);
+                                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                }
+
+                                publicity.setChecked(false);
                                 upload_quote.getEditText().setText("");
                                 autoCompleteTextView.setText("");
 

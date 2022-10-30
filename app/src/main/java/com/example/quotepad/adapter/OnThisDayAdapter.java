@@ -17,19 +17,19 @@ import java.util.ArrayList;
 
 public class OnThisDayAdapter extends RecyclerView.Adapter<OnThisDayAdapter.MyViewHolder> {
 
-    ArrayList<String> man;
-    ArrayList<String> job;
-    ArrayList<String> date;
+    ArrayList<String> list;
+    ArrayList<String> list2;
+    ArrayList<String> list3;
     Context context;
 
     public OnThisDayAdapter(Context context) {
         this.context = context;
     }
 
-    public OnThisDayAdapter(ArrayList<String> man, ArrayList<String> job, ArrayList<String> date, Context context) {
-        this.man = man;
-        this.job = job;
-        this.date = date;
+    public OnThisDayAdapter(ArrayList<String> list, ArrayList<String> list2, ArrayList<String> list3, Context context) {
+        this.list = list;
+        this.list2 = list2;
+        this.list3 = list3;
         this.context = context;
     }
 
@@ -43,11 +43,11 @@ public class OnThisDayAdapter extends RecyclerView.Adapter<OnThisDayAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.person.setText(man.get(position));
-        holder.job.setText(job.get(position));
-        holder.year.setText(date.get(position));
+        holder.person.setText(list.get(position));
+        holder.job.setText(list2.get(position));
+        holder.year.setText(list3.get(position));
 
-        String p = job.get(position);
+        String p = list2.get(position);
 
         Log.i("hey", p);
 
@@ -63,7 +63,7 @@ public class OnThisDayAdapter extends RecyclerView.Adapter<OnThisDayAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return man.size();
+        return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

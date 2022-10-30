@@ -17,9 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.quotepad.model.DiscoverModel;
 import com.example.quotepad.R;
 import com.example.quotepad.adapter.DiscoverAdapter;
+import com.example.quotepad.model.QuotesModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,7 +45,7 @@ public class DiscoverFragment extends Fragment {
 
     RecyclerView recyclerView;
     DiscoverAdapter adapter;
-    ArrayList<DiscoverModel> list=new ArrayList<>();
+    ArrayList<QuotesModel> list=new ArrayList<>();
 
     public DiscoverFragment() {
         // Required empty public constructor
@@ -111,24 +111,13 @@ public class DiscoverFragment extends Fragment {
                         Log.i(TAG, "onDataChange: 1 " + snapshot + " " + snapshot.getKey());
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                            {
-                                Log.i(TAG, "onDataChange: " + dataSnapshot1.getValue());
-                                Log.i(TAG, "onDataChange: " + dataSnapshot1);
-                                DiscoverModel notification = dataSnapshot1.getValue(DiscoverModel.class);
+                            Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
+                            Log.i(TAG, "onDataChange: " + dataSnapshot);
+                            QuotesModel notification = dataSnapshot.getValue(QuotesModel.class);
 
-                                Log.i(TAG, "onDataChange: " + notification);
+                            Log.i(TAG, "onDataChange: " + notification);
 
-                                list.add(notification);
-                            }
-                            //Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
-                            //dataSnapshot= (DataSnapshot) dataSnapshot.getValue();
-                            //Log.i(TAG, "onDataChange: " + dataSnapshot);
-                            //DiscoverModel notification = dataSnapshot.getValue(DiscoverModel.class);
-
-                            //Log.i(TAG, "onDataChange: " + notification);
-
-                            //list.add(notification);
+                            list.add(notification);
                         }
                         adapter.notifyDataSetChanged();
                         progressDialog.dismiss();

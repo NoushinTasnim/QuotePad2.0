@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,16 +19,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
-import com.example.quotepad.adapter.QuoteAdapter;
 import com.example.quotepad.adapter.UploadedAdapter;
 import com.example.quotepad.model.QuotesModel;
-import com.example.quotepad.model.RandomModel;
 import com.example.quotepad.swipe.SwipeToDeleteCallback;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -147,7 +142,7 @@ public class UploadedQuotesFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 final int position = viewHolder.getAdapterPosition();
                 final QuotesModel item = adapter.getQuotes().get(position);
-                Log.i(TAG, "onSwiped: " + item.getQuotes());
+                Log.i(TAG, "onSwiped: " + item.getQuote());
 
                 adapter.removeItem(item, position);
 

@@ -12,8 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.quotepad.model.DiscoverModel;
 import com.example.quotepad.R;
+import com.example.quotepad.model.QuotesModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,10 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder> {
-    Context context;
-    ArrayList<DiscoverModel> list;
 
-    public DiscoverAdapter(Context context, ArrayList<DiscoverModel> list) {
+    Context context;
+    ArrayList<QuotesModel> list;
+
+    public DiscoverAdapter(Context context, ArrayList<QuotesModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,7 +40,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
 
     @Override
     public void onBindViewHolder(@NonNull DiscoverViewHolder holder, int position) {
-        DiscoverModel model = list.get(position);
+        QuotesModel model = list.get(position);
 
         FirebaseDatabase.getInstance().getReference().child("quotes").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -47,11 +48,11 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
                         //DiscoverModel user = snapshot.getValue(DiscoverModel.class);
                         //Log.i(TAG, "onDataChange:ggtghh " + user);
                         holder.quote.setText(model.getQuote());
-                        Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getQuote() + model.getDate());
+                        Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getQuote() + model.getTime());
                         Log.i(TAG, "onDataChange:  tttt " + model.getQuote());
-                        holder.genre.setText(model.getType());
-                        holder.time.setText(model.getDate());
-                        holder.author.setText(model.getAuthor());
+                        holder.genre.setText("Genre: " + model.getType());
+                        holder.time.setText("Uploaded on: " + model.getTime());
+                        holder.author.setText(" Uploaded by: " + model.getAuthor());
                     }
 
                     @Override

@@ -2,10 +2,7 @@ package com.example.quotepad.adapter;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.Notification;
 import android.content.Context;
-import android.graphics.Color;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,25 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quotepad.R;
-import com.example.quotepad.model.RandomModel;
+import com.example.quotepad.model.QuotesModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.auth.User;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.viewHolder>{
 
     Context context;
-    ArrayList<RandomModel> list;
+    ArrayList<QuotesModel> list;
 
-    public QuoteAdapter(Context context, ArrayList<RandomModel> list) {
+    public QuoteAdapter(Context context, ArrayList<QuotesModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -49,13 +42,13 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.viewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull QuoteAdapter.viewHolder holder, int position) {
-        RandomModel model=list.get(position);
+        QuotesModel model=list.get(position);
 
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("fav").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        RandomModel user=snapshot.getValue(RandomModel.class);
+                        QuotesModel user=snapshot.getValue(QuotesModel.class);
                         holder.quote.setText(model.getQuote());
                         Log.i(TAG, "onDataChange: as" + model.getQuote());
                         holder.author.setText(model.getAuthor());
@@ -82,7 +75,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.viewHolder>{
         }
     }
 
-    public void removeItem(RandomModel item, int position) {
+    public void removeItem(QuotesModel item, int position) {
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("fav")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -106,7 +99,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.viewHolder>{
         notifyItemRemoved(position);
     }
 
-    public ArrayList<RandomModel> getQuotes() {
+    public ArrayList<QuotesModel> getQuotes() {
         return list;
     }
 }

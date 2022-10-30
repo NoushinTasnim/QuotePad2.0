@@ -15,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quotepad.R;
 import com.example.quotepad.model.QuotesModel;
-import com.example.quotepad.model.RandomModel;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class UploadedAdapter extends RecyclerView.Adapter<UploadedAdapter.DiscoverViewHolder> {
+
         Context context;
         ArrayList<QuotesModel> list;
 
@@ -52,10 +50,10 @@ public class UploadedAdapter extends RecyclerView.Adapter<UploadedAdapter.Discov
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         QuotesModel user=snapshot.getValue(QuotesModel.class);
                         Log.i(TAG, "onDataChange:ggtghh " + user);
-                        holder.quote.setText(model.getQuotes());
-                        Log.i(TAG, "onDataChange:  tttt " + model.getQuotes());
-                        holder.genre.setText(model.getType());
-                        holder.time.setText(model.getTime());
+                        holder.quote.setText(model.getQuote());
+                        Log.i(TAG, "onDataChange:  tttt " + model.getQuote());
+                        holder.genre.setText("Genre: " + model.getType());
+                        holder.time.setText("Uploaded on: " + model.getTime());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -89,7 +87,7 @@ public class UploadedAdapter extends RecyclerView.Adapter<UploadedAdapter.Discov
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            if((item.getQuotes().toString()).equals((dataSnapshot.child("quotes").getValue().toString()))){
+                            if((item.getQuote().toString()).equals((dataSnapshot.child("quotes").getValue().toString()))){
                                 Log.i(TAG, "onDataChange: found ");
                                 FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         .child("quote").child(dataSnapshot.getKey().toString()).removeValue();

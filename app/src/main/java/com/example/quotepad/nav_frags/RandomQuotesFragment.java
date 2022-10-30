@@ -25,10 +25,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.quotepad.R;
+import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.swipe.SwipeToDeleteCallback;
 import com.example.quotepad.swipe.SwipeToFav;
 import com.example.quotepad.adapter.RandomQuotesAdapter;
-import com.example.quotepad.model.RandomModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -187,7 +187,7 @@ public class RandomQuotesFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                 String currentDateTime = sdf.format(new Date());
 
-                RandomModel helperClass = new RandomModel(item,item2);
+                QuotesModel helperClass = new QuotesModel(item,item2);
                 reference.child("users").child(currentuser).child("fav").child(currentDateTime).setValue(helperClass);
 
                 randomQuotesAdapter.removeItem(position);

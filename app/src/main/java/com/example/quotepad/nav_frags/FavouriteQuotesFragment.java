@@ -1,16 +1,13 @@
 package com.example.quotepad.nav_frags;
 
 import static android.content.ContentValues.TAG;
-import static java.lang.Math.log;
 import static java.lang.Math.min;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,21 +21,15 @@ import android.widget.Toast;
 
 import com.example.quotepad.R;
 import com.example.quotepad.adapter.QuoteAdapter;
-import com.example.quotepad.model.RandomModel;
+import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.swipe.SwipeToDeleteCallback;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +48,7 @@ public class FavouriteQuotesFragment extends Fragment {
     private String mParam2;
     RecyclerView recyclerView;
     QuoteAdapter adapter;
-    ArrayList<RandomModel> list=new ArrayList<>();
+    ArrayList<QuotesModel> list=new ArrayList<>();
 
     public FavouriteQuotesFragment() {
         // Required empty public constructor
@@ -126,7 +117,7 @@ public class FavouriteQuotesFragment extends Fragment {
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
                             Log.i(TAG, "onDataChange: " + dataSnapshot);
-                            RandomModel notification=dataSnapshot.getValue(RandomModel.class);
+                            QuotesModel notification=dataSnapshot.getValue(QuotesModel.class);
 
                             list.add(notification);
                         }
@@ -151,7 +142,7 @@ public class FavouriteQuotesFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 final int position = viewHolder.getAdapterPosition();
-                final RandomModel item = adapter.getQuotes().get(position);
+                final QuotesModel item = adapter.getQuotes().get(position);
                 Log.i(TAG, "onSwiped: " + item.getQuote());
 
                 adapter.removeItem(item, position);
