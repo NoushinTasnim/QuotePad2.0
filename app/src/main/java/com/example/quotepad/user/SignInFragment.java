@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.quotepad.QuoteActivity;
+import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
 import com.example.quotepad.forgot_pass.ForgetPasswordActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -132,7 +132,7 @@ public class SignInFragment extends Fragment {
         });
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            startActivity(new Intent(getActivity(), QuoteActivity.class));
+            startActivity(new Intent(getActivity(), MainActivity.class));
         }
         else
         {
@@ -189,7 +189,7 @@ public class SignInFragment extends Fragment {
                                 {
                                     Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                 }*/
-                                            startActivity(new Intent(getActivity(),QuoteActivity.class));
+                                            startActivity(new Intent(getActivity(), MainActivity.class));
 
                                         } else {
                                             password.setError("Wrong password");

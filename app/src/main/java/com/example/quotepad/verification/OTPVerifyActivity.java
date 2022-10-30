@@ -176,7 +176,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             rootNode = FirebaseDatabase.getInstance();
-                            reference = rootNode.getReference("users");
+                            reference = rootNode.getReference("emails");
 
                             Query checkUser = reference.orderByChild("username").equalTo(user);
 
@@ -203,7 +203,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                                 String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                                                                 UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo,currentuser);
-                                                                reference.child(currentuser).setValue(helperClass);
+                                                                rootNode.getReference("users").child(currentuser).setValue(helperClass);
 
                                                                 UserModel helperClass2 = new UserModel(mail, pass, user);
                                                                 rootNode.getReference("emails").child(user).setValue(helperClass2);

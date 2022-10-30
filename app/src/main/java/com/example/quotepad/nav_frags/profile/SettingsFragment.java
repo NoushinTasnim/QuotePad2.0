@@ -3,6 +3,7 @@ package com.example.quotepad.nav_frags.profile;
 import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quotepad.R;
 import com.example.quotepad.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -309,10 +312,20 @@ public class SettingsFragment extends Fragment {
                         throw task.getException();
                     } catch (Exception e) {
                         Toast.makeText(getActivity(), "Sorry, Could not change." + e.toString(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity(),UserProfileActivity.class));
                     }
                 }
             }
         });
         Toast.makeText(getActivity(), "Changed Profile", Toast.LENGTH_SHORT).show();
+        //startActivity(new Intent(getActivity(),UserProfileActivity.class));
+        NavigationView navigationView = getActivity().findViewById(R.id.prof_navigation_view);
+
+        View headerView = navigationView.getHeaderView(0);
+
+        TextView nav_user_name = headerView.findViewById(R.id.nav_header_user_name);
+        TextView nav_name = headerView.findViewById(R.id.nav_header_name);
+        nav_user_name.setText(user );
+        nav_name.setText(pname);
     }
 }

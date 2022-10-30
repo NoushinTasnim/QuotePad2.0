@@ -97,7 +97,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                 else
                 {
                     rootNode = FirebaseDatabase.getInstance();
-                    reference = rootNode.getReference("users");
+                    reference = rootNode.getReference("emails");
 
                     Query checkUser = reference.orderByChild("username").equalTo(user);
 
@@ -120,8 +120,8 @@ public class ForgotPassResetActivity extends AppCompatActivity {
 
                                             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                                            reference.child(currentUser.getUid()).child("password").setValue(res_pass);
-                                            rootNode.getReference("emails").child(user).child("password").setValue(res_pass);
+                                            rootNode.getReference("users").child(currentUser.getUid()).child("password").setValue(res_pass);
+                                            reference.child(user).child("password").setValue(res_pass);
 
                                             currentUser.updatePassword(res_pass)
                                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -134,7 +134,8 @@ public class ForgotPassResetActivity extends AppCompatActivity {
                                                     });
                                             Toast.makeText(ForgotPassResetActivity.this, "Done", Toast.LENGTH_SHORT).show();
 
-                                        } else {
+                                        }
+                                        else {
                                             try {
                                                 throw task.getException();
                                             } catch (Exception e) {
@@ -149,9 +150,7 @@ public class ForgotPassResetActivity extends AppCompatActivity {
 
                             }
                             else{
-
                                 Toast.makeText(ForgotPassResetActivity.this, "Could Not Process your request", Toast.LENGTH_SHORT).show();
-
                             }
                         }
 

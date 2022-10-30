@@ -7,7 +7,7 @@
     tools:openDrawer="start"
     android:background="@color/white"
     android:id="@+id/prof_drawer"
-    tools:context=".QuoteActivity">
+    tools:context=".MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/prof_coordinator"

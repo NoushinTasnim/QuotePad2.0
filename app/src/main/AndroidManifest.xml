@@ -24,7 +24,7 @@
             android:name=".forgot_pass.ForgotPassResetActivity"
             android:exported="false" />
         <activity
-            android:name=".QuoteActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".nav_frags.profile.UserProfileActivity"
@@ -43,7 +43,7 @@
             android:name=".user.UserActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>

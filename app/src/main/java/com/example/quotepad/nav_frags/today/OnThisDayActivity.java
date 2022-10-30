@@ -18,7 +18,7 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.quotepad.QuoteActivity;
+import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -38,7 +38,7 @@ public class OnThisDayActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(OnThisDayActivity.this, QuoteActivity.class));
+        startActivity(new Intent(OnThisDayActivity.this, MainActivity.class));
         finish();
     }
 

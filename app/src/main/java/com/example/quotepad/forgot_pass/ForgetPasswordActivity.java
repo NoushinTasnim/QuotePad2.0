@@ -12,9 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.example.quotepad.QuoteActivity;
 import com.example.quotepad.verification.OTPVerifyActivity;
 import com.example.quotepad.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,10 +50,8 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("users");
 
                 progressDialog.setMessage("Please wait while we get your information");
-                progressDialog.setTitle("Log In");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 //Get all the values
@@ -70,7 +66,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    reference = FirebaseDatabase.getInstance().getReference("emails");
+                    reference = rootNode.getReference("emails");
                     Query checkUser = reference.orderByChild("username").equalTo(user);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {

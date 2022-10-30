@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.quotepad.QuoteActivity;
+import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
 import com.example.quotepad.user.UserActivity;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
@@ -187,7 +187,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
                         case R.id.nav_user_home:
                             navigationView.setCheckedItem(R.id.nav_user_home);
-                            startActivity(new Intent(UserProfileActivity.this, QuoteActivity.class));
+                            startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
                             break;
 
 
@@ -240,7 +240,9 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else
+        {
             super.onBackPressed();
+        }
 
         moveTaskToBack(true);
     }

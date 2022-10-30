@@ -106,7 +106,7 @@ public class SignUpFragment extends Fragment {
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("users");
+                reference = rootNode.getReference("emails");
                 //Get all the values
                 String pname = name.getEditText().getText().toString().trim();
                 String user = username.getEditText().getText().toString().trim();

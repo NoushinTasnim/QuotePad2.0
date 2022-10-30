@@ -117,6 +117,7 @@ public class BirthFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
         String currentDateTime = sdf.format(new Date());
         Log.i(TAG, "PlayOn: " + currentDateTime);
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://today.zenquotes.io/api/" + currentDateTime;
 
