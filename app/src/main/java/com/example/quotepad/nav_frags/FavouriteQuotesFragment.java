@@ -56,14 +56,8 @@ public class FavouriteQuotesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     RecyclerView recyclerView;
-    DatabaseReference reference;
     QuoteAdapter adapter;
-    CoordinatorLayout coordinatorLayout;
     ArrayList<RandomModel> list=new ArrayList<>();
-    String[] array = new String[10000];
-    int i = 0;
-    int x = 0;
-    int min = 0;
 
     public FavouriteQuotesFragment() {
         // Required empty public constructor
@@ -106,10 +100,7 @@ public class FavouriteQuotesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        reference = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("fav");
-
         recyclerView = getActivity().findViewById(R.id.fav_rv);
-        coordinatorLayout = getActivity().findViewById(R.id.coordinator);
 
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
 
@@ -134,7 +125,7 @@ public class FavouriteQuotesFragment extends Fragment {
                         //Log.i(TAG, "onDataChange: 1 " + snapshot);
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            //Log.i(TAG, "onDataChange: " + dataSnapshot);
+                            Log.i(TAG, "onDataChange: " + dataSnapshot);
                             RandomModel notification=dataSnapshot.getValue(RandomModel.class);
 
                             list.add(notification);
@@ -172,5 +163,4 @@ public class FavouriteQuotesFragment extends Fragment {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
-
 }

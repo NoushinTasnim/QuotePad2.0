@@ -51,12 +51,13 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.viewHolder>{
     public void onBindViewHolder(@NonNull QuoteAdapter.viewHolder holder, int position) {
         RandomModel model=list.get(position);
 
-        FirebaseDatabase.getInstance().getReference().child("User").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("fav").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         RandomModel user=snapshot.getValue(RandomModel.class);
                         holder.quote.setText(model.getQuote());
+                        Log.i(TAG, "onDataChange: as" + model.getQuote());
                         holder.author.setText(model.getAuthor());
                     }
                     @Override

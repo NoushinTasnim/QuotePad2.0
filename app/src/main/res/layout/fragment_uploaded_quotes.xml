@@ -14,7 +14,7 @@
         android:id="@+id/coordinatorLayout">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/discover_rv"
+            android:id="@+id/uploaded_rv"
             android:layout_marginTop="50dp"
             android:background="@color/white"
             android:layout_width="match_parent"

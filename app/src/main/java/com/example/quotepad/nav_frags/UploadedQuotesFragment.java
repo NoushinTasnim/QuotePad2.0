@@ -1,24 +1,39 @@
 package com.example.quotepad.nav_frags;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.quotepad.R;
+import com.example.quotepad.adapter.QuoteAdapter;
 import com.example.quotepad.adapter.UploadedAdapter;
 import com.example.quotepad.model.QuotesModel;
+import com.example.quotepad.model.RandomModel;
+import com.example.quotepad.swipe.SwipeToDeleteCallback;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,9 +51,9 @@ public class UploadedQuotesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RecyclerView rv;
-    UploadedAdapter uploadedAdapter;
-    DatabaseReference reference;
+    RecyclerView recyclerView;
+    UploadedAdapter adapter;
+    ArrayList<QuotesModel> list=new ArrayList<>();
 
     public UploadedQuotesFragment() {
         // Required empty public constructor
@@ -82,35 +97,65 @@ public class UploadedQuotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        reference = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("quote");
+        recyclerView = getActivity().findViewById(R.id.uploaded_rv);
 
-        rv = getActivity().findViewById(R.id.discover_rv);
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setTitle("Fetching Data...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        adapter = new UploadedAdapter(getContext(),list);
 
         // To display the Recycler view linearly
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
 
-        // It is a class provide by the FirebaseUI to make a
-        // query in the database to fetch appropriate data
-        FirebaseRecyclerOptions<QuotesModel> options
-                = new FirebaseRecyclerOptions.Builder<QuotesModel>()
-                .setQuery(reference, QuotesModel.class)
-                .build();
-        // Connecting object of required Adapter class to
-        // the Adapter class itself
-        uploadedAdapter = new UploadedAdapter(options);
-        // Connecting Adapter class with the Recycler view*/
-        rv.setAdapter(uploadedAdapter);
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("quote")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        list.clear();
+                        Log.i(TAG, "onDataChange: 1 " + snapshot);
+                        for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                        {
+                            Log.i(TAG, "onDataChange: " + dataSnapshot);
+                            QuotesModel notification = dataSnapshot.getValue(QuotesModel.class);
+
+                            Log.i(TAG, "onDataChange: " + notification);
+
+                            list.add(notification);
+                        }
+                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
+
+        enableSwipeToDeleteAndUndo();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        uploadedAdapter.startListening();
-    }
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                final QuotesModel item = adapter.getQuotes().get(position);
+                Log.i(TAG, "onSwiped: " + item.getQuotes());
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        uploadedAdapter.stopListening();
+                adapter.removeItem(item, position);
+
+                Toast.makeText(getActivity(), "Item was removed from the list.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 }

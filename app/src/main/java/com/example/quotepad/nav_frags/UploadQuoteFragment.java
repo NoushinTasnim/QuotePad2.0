@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.example.quotepad.R;
 import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.model.UserModel;
+import com.example.quotepad.nav_frags.today.QuoteOfTheDayFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -156,7 +159,27 @@ public class UploadQuoteFragment extends Fragment {
 
                     QuotesModel helperClass = new QuotesModel("\"" + quote + "\"",type,currentDateTime);
                     reference.child("users").child(currentuser).child("quote").child(currentDateTime).setValue(helperClass);
-                    Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                    Query checkUser = reference.child("users").orderByChild("id").equalTo(currentuser);
+
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String username = snapshot.child(currentuser).child("username").getValue(String.class);
+                                reference.child("quotes").child(currentDateTime + ";" + currentuser).setValue(type + " ; " + username + " ; " + quote);
+                                Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
+                                upload_quote.getEditText().setText("");
+                                autoCompleteTextView.setText("");
+
+                                Log.i(TAG, "onDataChange: " + username);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         });//Register Button method end

@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="#000"
+            android:textColor="@color/dark_shade"
             android:textSize="20sp" />
 
         <TextView
@@ -30,4 +30,5 @@
             android:textSize="15sp" />
 
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
