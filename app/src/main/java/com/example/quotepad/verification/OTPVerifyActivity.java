@@ -19,6 +19,7 @@ import com.example.quotepad.model.UserModel;
 import com.example.quotepad.forgot_pass.ForgotPassResetActivity;
 import com.example.quotepad.user.UserActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
@@ -209,12 +210,12 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                                 rootNode.getReference("emails").child(user).setValue(helperClass2);
                                                                 progressBar.setVisibility(View.GONE);
 
-                                                                /*FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
                                                                     public void onSuccess(Void unused) {
                                                                         Toast.makeText(OTPVerifyActivity.this, "Email sent", Toast.LENGTH_SHORT).show();
                                                                     }
-                                                                });*/
+                                                                });
                                                             } else {
                                                                 progressBar.setVisibility(View.GONE);
                                                                 try {

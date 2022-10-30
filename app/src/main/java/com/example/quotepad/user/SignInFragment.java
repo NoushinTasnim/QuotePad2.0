@@ -113,6 +113,13 @@ public class SignInFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null)
+            FirebaseAuth.getInstance().signOut();
+    }
+
     public void onStart(){
         super.onStart();
 
@@ -189,7 +196,14 @@ public class SignInFragment extends Fragment {
                                 {
                                     Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                 }*/
-                                            startActivity(new Intent(getActivity(), MainActivity.class));
+                                            if(mAuth.getCurrentUser().isEmailVerified())
+                                            {
+                                                startActivity(new Intent(getActivity(), MainActivity.class));
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(getActivity(), "Please verify your email from the link we've sent", Toast.LENGTH_SHORT).show();
+                                            }
 
                                         } else {
                                             password.setError("Wrong password");
@@ -202,6 +216,9 @@ public class SignInFragment extends Fragment {
                                         }
                                     }
                                 });
+
+                                if(mAuth.getCurrentUser()!=null)
+                                    FirebaseAuth.getInstance().signOut();
                             }
                             else{
                                 progressBar.setVisibility(View.GONE);
