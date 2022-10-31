@@ -107,6 +107,7 @@ public class SignInFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if(hj==1){
+            Log.i(TAG, "onStop: signout");
             FirebaseAuth.getInstance().signOut();
         }
     }

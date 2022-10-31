@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -193,23 +195,47 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
                         case R.id.delete_user:
                             navigationView.setCheckedItem(R.id.delete_user);
-                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
-                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                            user.delete()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "User account deleted.");
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(UserProfileActivity.this);
+                            builder1.setMessage("You won't be able to retrieve your account. Are you sure you want to delete your account?");
+                            builder1.setCancelable(true);
+
+                            builder1.setPositiveButton(
+                                    "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
+                                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                            user.delete()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d(TAG, "User account deleted.");
+                                                            }
+                                                        }
+                                                    });
+                                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                                                FirebaseAuth.getInstance().signOut();
                                             }
+                                            startActivity(new Intent(UserProfileActivity.this, UserActivity.class));
+                                            dialog.cancel();
                                         }
                                     });
-                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
-                                FirebaseAuth.getInstance().signOut();
-                            }
-                            startActivity(new Intent(UserProfileActivity.this, UserActivity.class));
+
+                            builder1.setNegativeButton(
+                                    "No",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                            AlertDialog alert11 = builder1.create();
+                            alert11.show();
+
                             break;
 
                         default:
