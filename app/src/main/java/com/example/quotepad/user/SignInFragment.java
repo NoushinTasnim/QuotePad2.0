@@ -187,24 +187,17 @@ public class SignInFragment extends Fragment {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             progressBar.setVisibility(View.GONE);
-                                /*if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
-                                {
-                                    Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getActivity(),QuoteActivity.class));
-                                }
-                                else
-                                {
-                                    Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
-                                }*/
-                                            if(mAuth.getCurrentUser().isEmailVerified())
+
+                                            if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
                                             {
-                                                startActivity(new Intent(getActivity(), MainActivity.class));
+                                                Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(getActivity(),MainActivity.class));
                                             }
                                             else
                                             {
-                                                Toast.makeText(getActivity(), "Please verify your email from the link we've sent", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                             }
-
+                                        
                                         } else {
                                             password.setError("Wrong password");
                                             Toast.makeText(getActivity(), "Incorrect Password", Toast.LENGTH_SHORT).show();

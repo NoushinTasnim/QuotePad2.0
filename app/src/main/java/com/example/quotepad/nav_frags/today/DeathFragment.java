@@ -110,7 +110,7 @@ public class DeathFragment extends Fragment {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd", Locale.getDefault());
         String currentDateTime = sdf.format(new Date());
         Log.i(TAG, "PlayOn: " + currentDateTime);
         RequestQueue queue = Volley.newRequestQueue(getActivity());
