@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="@color/bg_color"
         android:padding="10dp">
 
         <TextView
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/dark_shade"
+            android:textColor="@color/text_color"
             android:textSize="20sp" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:layout_gravity="right"
-            android:textColor="@color/dark_accent"
+            android:textColor="@color/text_color2"
             android:textSize="15sp" />
 
     </LinearLayout>

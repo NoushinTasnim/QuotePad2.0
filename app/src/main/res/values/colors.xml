@@ -13,4 +13,9 @@
     <color name="dark_accent">#ee4266</color>
     <color name="light_shade">#ede7e3</color>
     <color name="light_accent">#9ad1d4</color>
+
+    <color name="text_color">#003249</color>
+    <color name="bg_color">#ede7e3</color>
+    <color name="text_color2">#ee4266</color>
+
 </resources>
