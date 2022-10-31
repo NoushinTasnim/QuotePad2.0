@@ -113,6 +113,13 @@ public class SignInFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null)
+            FirebaseAuth.getInstance().signOut();
+    }
+
     public void onStart(){
         super.onStart();
 
@@ -180,6 +187,7 @@ public class SignInFragment extends Fragment {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             progressBar.setVisibility(View.GONE);
+
                                             if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
                                             {
                                                 Toast.makeText(getActivity(), "Signed in", Toast.LENGTH_SHORT).show();
@@ -189,8 +197,7 @@ public class SignInFragment extends Fragment {
                                             {
                                                 Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                             }
-                                            //startActivity(new Intent(getActivity(), MainActivity.class));
-
+                                        
                                         } else {
                                             password.setError("Wrong password");
                                             Toast.makeText(getActivity(), "Incorrect Password", Toast.LENGTH_SHORT).show();
@@ -202,6 +209,9 @@ public class SignInFragment extends Fragment {
                                         }
                                     }
                                 });
+
+                                if(mAuth.getCurrentUser()!=null)
+                                    FirebaseAuth.getInstance().signOut();
                             }
                             else{
                                 progressBar.setVisibility(View.GONE);
