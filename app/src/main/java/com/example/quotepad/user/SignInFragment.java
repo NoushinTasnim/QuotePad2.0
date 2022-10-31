@@ -70,6 +70,7 @@ public class SignInFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    int hj = 0;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -102,7 +103,13 @@ public class SignInFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(hj==1){
+            FirebaseAuth.getInstance().signOut();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,13 +118,6 @@ public class SignInFragment extends Fragment {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (FirebaseAuth.getInstance().getCurrentUser()!=null)
-            FirebaseAuth.getInstance().signOut();
     }
 
     public void onStart(){
@@ -186,6 +186,7 @@ public class SignInFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
+                                            hj = 0;
                                             progressBar.setVisibility(View.GONE);
 
                                             if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
@@ -195,10 +196,12 @@ public class SignInFragment extends Fragment {
                                             }
                                             else
                                             {
+                                                hj = 1;
                                                 Toast.makeText(getActivity(), "Please check your spam folder in your mail and verify your email address to sign in.", Toast.LENGTH_LONG).show();
                                             }
                                         
                                         } else {
+                                            hj = 1;
                                             password.setError("Wrong password");
                                             Toast.makeText(getActivity(), "Incorrect Password", Toast.LENGTH_SHORT).show();
                                             progressBar.setVisibility(View.GONE);
@@ -211,7 +214,10 @@ public class SignInFragment extends Fragment {
                                 });
 
                                 if(mAuth.getCurrentUser()!=null)
+                                {
                                     FirebaseAuth.getInstance().signOut();
+                                    hj = 0;
+                                }
                             }
                             else{
                                 progressBar.setVisibility(View.GONE);
