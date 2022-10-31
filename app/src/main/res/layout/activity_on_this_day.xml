@@ -23,7 +23,8 @@
                     android:id="@+id/back_btn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/logo_dark"/>
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    app:tint="@color/light_accent" />
 
                 <TextView
                     android:id="@+id/user_tab"

@@ -1,5 +1,7 @@
 package com.example.quotepad.user;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,16 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.quotepad.model.UserModel;
+import com.example.quotepad.verification.OTPVerifyActivity;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.example.quotepad.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -177,30 +188,69 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("username").equalTo(user);
-
-                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(mail, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                username.setError("Username already in use");
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.i(TAG, "onComplete: no email found");
                                 progressBar.setVisibility(View.GONE);
+
+                                Query checkUser = reference.orderByChild("username").equalTo(user);
+
+                                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()){
+                                            username.setError("Username already in use");
+                                            progressBar.setVisibility(View.GONE);
+                                        }
+                                        else{
+                                            FirebaseAuth.getInstance().getCurrentUser().delete()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d(TAG, "User account deleted.");
+                                                            }
+                                                        }
+                                                    });
+                                            Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
+                                            intent.putExtra("pname", pname);
+                                            intent.putExtra("user", user);
+                                            intent.putExtra("mail", mail);
+                                            intent.putExtra("pass", pass);
+                                            intent.putExtra("set", "sign");
+
+                                            startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "User account deleted.");
+                                                }
+                                            }
+                                        });
+                            } else {
+                                email.setError("Email already in use");
+
+                                progressBar.setVisibility(View.GONE);
+                                try {
+                                    throw task.getException();
+                                } catch (Exception e) {
+                                    Log.i(TAG, "onComplete: " + e);
+                                    //Toast.makeText(OTPVerifyActivity.this, "Sorry, Could not sign up.", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else{
-                                Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                intent.putExtra("pname", pname);
-                                intent.putExtra("user", user);
-                                intent.putExtra("mail", mail);
-                                intent.putExtra("pass", pass);
-                                intent.putExtra("set", "sign");
-
-                                startActivity(intent);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                 }
