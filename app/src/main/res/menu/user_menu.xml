@@ -15,19 +15,19 @@
                     android:iconTint="@color/dark_shade"
                     android:id="@+id/settings_nav"
                     android:title="User Profile"
-                    android:icon="@drawable/ic_outline_person_24" />
+                    android:icon="@drawable/ic_baseline_person_24" />
 
                 <item
                     android:id="@+id/change_pass"
-                    android:icon="@drawable/ic_outline_lock_24"
+                    android:icon="@drawable/ic_baseline_lock_24"
                     android:iconTint="@color/dark_shade"
                     android:title="Change Password"/>
 
                 <item
                     android:iconTint="@color/dark_shade"
-                    android:id="@+id/nav_phone"
-                    android:title="Change Phone Number"
-                    android:icon="@drawable/ic_baseline_local_phone_24" />
+                    android:id="@+id/nav_mail"
+                    android:title="Change Email Address"
+                    android:icon="@drawable/ic_baseline_mail_24" />
 
 
                 <item

@@ -172,10 +172,10 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             loadFragment(new SettingsFragment());
                             break;
 
-                        case R.id.nav_phone:
-                            navigationView.setCheckedItem(R.id.nav_phone);
+                        case R.id.nav_mail:
+                            navigationView.setCheckedItem(R.id.nav_mail);
 
-                            Intent intent  = new Intent(UserProfileActivity.this, PhoneNumberVerifyActivity.class);
+                            /*Intent intent  = new Intent(UserProfileActivity.this, UpdateEmailAddress.class);
                             intent.putExtra("pname",name);
                             intent.putExtra("mail",em);
                             intent.putExtra("user",username);
@@ -183,7 +183,9 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             intent.putExtra("set","settings");
 
                             Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
-                            startActivity(intent);
+
+                            startActivity(intent);*/
+                            loadFragment(new UpdateEmailAddress());
 
                             break;
 

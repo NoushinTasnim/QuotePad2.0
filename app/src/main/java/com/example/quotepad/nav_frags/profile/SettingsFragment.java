@@ -48,7 +48,7 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    TextInputLayout name,username, email;
+    TextInputLayout name,username;
     Button btn;
     String na, em, us, ph, pass;
 
@@ -103,7 +103,6 @@ public class SettingsFragment extends Fragment {
         btn = getActivity().findViewById(R.id.up_btn);
 
         name = getActivity().findViewById(R.id.up_name);
-        email = getActivity().findViewById(R.id.up_mail);
         username = getActivity().findViewById(R.id.up_username);
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -117,11 +116,8 @@ public class SettingsFragment extends Fragment {
                     na = snapshot.child(uid).child("name").getValue(String.class);
                     em = snapshot.child(uid).child("email").getValue(String.class);
                     us = snapshot.child(uid).child("username").getValue(String.class);
-                    ph = snapshot.child(uid).child("phone").getValue(String.class);
-                    pass = snapshot.child(uid).child("password").getValue(String.class);
 
                     name.getEditText().setText(na);
-                    email.getEditText().setText(em);
                     username.getEditText().setText(us);
                     progressDialog.dismiss();
                 }
@@ -149,8 +145,6 @@ public class SettingsFragment extends Fragment {
                             na = snapshot.child(uid).child("name").getValue(String.class);
                             em = snapshot.child(uid).child("email").getValue(String.class);
                             us = snapshot.child(uid).child("username").getValue(String.class);
-                            ph = snapshot.child(uid).child("phone").getValue(String.class);
-                            pass = snapshot.child(uid).child("password").getValue(String.class);
                         }
                     }
 
@@ -162,19 +156,16 @@ public class SettingsFragment extends Fragment {
 
                 String pname = name.getEditText().getText().toString().trim();
                 String user = username.getEditText().getText().toString().trim();
-                String mail = email.getEditText().getText().toString().trim();
 
                 Log.i(TAG, "onClick: " + na + " " + us + " " + em);
-                Log.i(TAG, "onClick: " + pname + " " + user + " " + mail);
+                Log.i(TAG, "onClick: " + pname + " " + user);
 
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
                 String noWhiteSpace = "\\A\\w{4,15}\\z";
-                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
                 name.setErrorEnabled(false);
                 username.setErrorEnabled(false);
-                email.setErrorEnabled(false);
 
                 if(TextUtils.isEmpty(pname))
                 {
@@ -184,17 +175,10 @@ public class SettingsFragment extends Fragment {
                 {
                     username.setError("Username field cannot be empty");
                 }
-                else if(TextUtils.isEmpty(mail))
-                {
-                    email.setError("Email field cannot be empty");
-                }
                 else if (!user.matches(noWhiteSpace)) {
                     username.setError("Remove white spaces, length (4-15)");
                 }
-                else if (!mail.matches(emailPattern)) {
-                    email.setError("Not valid mail address");
-                }
-                else if(pname.equals(na) && user.equals(us) && mail.equals(em))
+                else if(pname.equals(na) && user.equals(us))
                 {
                     Toast.makeText(getActivity(), "Nothing to Change", Toast.LENGTH_SHORT).show();
                 }
@@ -209,7 +193,7 @@ public class SettingsFragment extends Fragment {
                                 if(user.equals(us))
                                 {
                                     Log.i(TAG, "onDataChange: exists");
-                                    changeUser(pname,user,mail);
+                                    changeUser(pname,user);
                                 }
                                 else
                                 {
@@ -219,7 +203,7 @@ public class SettingsFragment extends Fragment {
                             else
                             {
                                 FirebaseDatabase.getInstance().getReference("emails").child(us).removeValue();
-                                changeUser(pname,user,mail);
+                                changeUser(pname,user);
                             }
                         }
 
@@ -234,89 +218,21 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    private void getData(ProgressDialog progressDialog) {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private void changeUser(String pname, String user) {
 
-        Query check = FirebaseDatabase.getInstance().getReference("users").orderByChild("id").equalTo(uid);
+        Log.i(TAG, "onComplete: " + pname + " " + user + " " + em);
 
-        check.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    na = snapshot.child(uid).child("name").getValue(String.class);
-                    em = snapshot.child(uid).child("email").getValue(String.class);
-                    us = snapshot.child(uid).child("username").getValue(String.class);
-                    ph = snapshot.child(uid).child("phone").getValue(String.class);
-                    pass = snapshot.child(uid).child("password").getValue(String.class);
-                }
-            }
+        String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                progressDialog.dismiss();
-            }
-        });
-    }
+        UserModel helperClass = new UserModel(pname, user, em, pass,currentuser);
+        FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
 
-    private void changeUser(String pname, String user, String mail) {
+        us = user;
+        na = pname;
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseAuth.getInstance().signOut();
-        mAuth.signInWithEmailAndPassword(em, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    //Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
-                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        UserModel helperClass2 = new UserModel(em, pass, user);
+        FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
 
-                    if(!mail.equals(em))
-                    {
-                        FirebaseAuth.getInstance().getCurrentUser().updateEmail(mail)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "User mail updated.");
-                                            UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
-                                            FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
-
-                                            us = user;
-                                            na = pname;
-                                            em = mail;
-
-                                            UserModel helperClass2 = new UserModel(mail, pass, user);
-                                            FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
-                                        }
-                                        else{
-                                            Log.i(TAG, "onComplete: " + task.getException().toString());
-                                        }
-                                    }
-                                });
-                    }
-                    else
-                    {
-                        Log.i(TAG, "onComplete: " + pname + " " + user + " " + mail);
-                        UserModel helperClass = new UserModel(pname, user, mail, pass,ph,currentuser);
-                        FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
-
-                        us = user;
-                        na = pname;
-                        em = mail;
-
-                        UserModel helperClass2 = new UserModel(mail, pass, user);
-                        FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
-                    }
-                }
-                else {
-                    try {
-                        throw task.getException();
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "Sorry, Could not change." + e.toString(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getActivity(),UserProfileActivity.class));
-                    }
-                }
-            }
-        });
         Toast.makeText(getActivity(), "Changed Profile", Toast.LENGTH_SHORT).show();
         //startActivity(new Intent(getActivity(),UserProfileActivity.class));
         NavigationView navigationView = getActivity().findViewById(R.id.prof_navigation_view);

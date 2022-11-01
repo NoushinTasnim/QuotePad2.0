@@ -140,7 +140,11 @@ public class EventsFragment extends Fragment {
                     {
                         jsonObject = jsonArray.getJSONObject(n);
                         String currentString = jsonObject.getString("text");
-                        String[] separated = currentString.split("&");
+                        if(currentString.indexOf("d.") !=-1)
+                        {
+                            String[] separated = currentString.split("&");
+                        }
+
                         Log.i(TAG, "onResponse: " + separated[0]);
                         String year = separated[0];
                         arrayList3.add(year);

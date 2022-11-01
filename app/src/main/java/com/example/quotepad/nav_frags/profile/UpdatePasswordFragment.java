@@ -15,10 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.quotepad.R;
 import com.example.quotepad.forgot_pass.ForgetPasswordActivity;
 import com.example.quotepad.forgot_pass.ForgotPassResetActivity;
+import com.example.quotepad.user.UserActivity;
+import com.example.quotepad.verification.OTPVerifyActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +48,7 @@ public class UpdatePasswordFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    TextInputLayout textInputLayout;
-    Button btn, btn2;
+    Button btn;
 
     FirebaseDatabase root;
     DatabaseReference reference;
@@ -91,30 +95,34 @@ public class UpdatePasswordFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textInputLayout = getActivity().findViewById(R.id.old_pass);
-        btn = getActivity().findViewById(R.id.change_pass_btn);
-        btn2 = getActivity().findViewById(R.id.forgot_old_pass);
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(), ForgetPasswordActivity.class));
-            }
-        });
+        //btn = getActivity().findViewById(R.id.change_pass_btn);
+        btn = getActivity().findViewById(R.id.send_via_mail);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Email sent.");
+                                    Toast.makeText(getActivity(), "We've sent a password reset email to " + FirebaseAuth.getInstance().getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    Log.i(TAG, "onComplete: " + task.getException().toString());
+                                    Toast.makeText(getActivity(), task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
 
-                String oldie = textInputLayout.getEditText().getText().toString().trim();
+        /*btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                textInputLayout.setErrorEnabled(false);
-
-                if (TextUtils.isEmpty(oldie)) {
-                    textInputLayout.setError("Enter Password");
-                }
-                else {
                     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     reference = FirebaseDatabase.getInstance().getReference("users");
                     Query checkUser = reference.orderByChild("id").equalTo(uid);
@@ -123,52 +131,25 @@ public class UpdatePasswordFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                String username = snapshot.child(uid).child("username").getValue(String.class);
+                                String phone = snapshot.child(uid).child("phone").getValue(String.class);
+                                String mail = snapshot.child(uid).child("email").getValue(String.class);
 
-                                Log.i(TAG, "onDataChange: " + username);
+                                Log.i(TAG, "onDataChange: " + phone);
 
-                                DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("emails");
-                                Query checkUser1 = reference1.orderByChild("username").equalTo(username);
-
-                                checkUser1.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                                        if(snapshot1.exists()){
-                                            String pass = snapshot1.child(username).child("password").getValue(String.class);
-                                            String mail = snapshot1.child(username).child("email").getValue(String.class);
-
-                                            Log.i(TAG, "onDataChange: " + pass);
-
-                                            if(oldie.equals(pass)){
-                                                Log.i(TAG, "onDataChange: " + username + " " + mail + " " + pass);
-                                                Intent intent = new Intent(getActivity(),ForgotPassResetActivity.class);
-                                                intent.putExtra("user",username);
-                                                intent.putExtra("mail",mail);
-                                                intent.putExtra("pass",pass);
-                                                startActivity(intent);
-                                            }
-                                            else
-                                            {
-                                                textInputLayout.setError("Wrong Password");
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
+                                Intent intent = new Intent(getActivity(), OTPVerifyActivity.class);
+                                intent.putExtra("phone",phone);
+                                intent.putExtra("mail",mail);
+                                intent.putExtra("from","reset");
+                                startActivity(intent);
                             }
                         }
 
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
-                }
             }
-        });
+        });*/
     }
 }
