@@ -140,20 +140,29 @@ public class EventsFragment extends Fragment {
                     {
                         jsonObject = jsonArray.getJSONObject(n);
                         String currentString = jsonObject.getString("text");
-                        if(currentString.indexOf("d.") !=-1)
-                        {
-                            String[] separated = currentString.split("&");
-                        }
-
+                        String[] separated = currentString.split("&");
                         Log.i(TAG, "onResponse: " + separated[0]);
                         String year = separated[0];
                         arrayList3.add(year);
                         currentString = separated[1];
-                        separated = currentString.split("; ");
-                        currentString = separated[1];
-                        separated = currentString.split("& ");
-                        arrayList2.add(separated[0]);
+
+                        if(currentString.indexOf("; ") !=-1)
+                        {
+                            separated = currentString.split("; ");
+                            currentString = separated[1];
+                        }
+                        if(currentString.indexOf("&") !=-1)
+                        {
+                            separated = currentString.split("& ");
+                            arrayList2.add(separated[0]);
+                        }
+                        else
+                        {
+                            arrayList2.add(currentString);
+                        }
                         arrayList.add("");
+
+
                     }
                     progressDialog.dismiss();
                     onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());

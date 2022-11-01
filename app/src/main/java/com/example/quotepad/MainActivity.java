@@ -53,16 +53,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     TextView nav_user_name, nav_name;
     ImageView menuIcon;
-    LinearLayout contentView;
     TextView tv;
 
-    FirebaseAuth mAuth;
     DatabaseReference reference;
     Query checkUser;
 
     String name, em, username, ph, pass, uid;
-
-    static final float END_SCALE = 0.7f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

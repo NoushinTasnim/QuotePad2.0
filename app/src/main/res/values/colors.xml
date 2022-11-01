@@ -15,7 +15,10 @@
     <color name="light_accent">#9ad1d4</color>
 
     <color name="text_color">#003249</color>
-    <color name="bg_color">#ede7e3</color>
     <color name="text_color2">#ee4266</color>
+    <color name="text_color3">#000000</color>
+    <color name="bg_color">#ede7e3</color>
+    <color name="bg_color2">#ede7e3</color>
+    <color name="bg_color3">#9ad1d4</color>
 
 </resources>
