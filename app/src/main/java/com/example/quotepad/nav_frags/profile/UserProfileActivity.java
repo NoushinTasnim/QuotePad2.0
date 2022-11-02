@@ -27,9 +27,7 @@ import android.widget.TextView;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
-import com.example.quotepad.SearchFragment;
 import com.example.quotepad.user.UserActivity;
-import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -85,7 +83,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         loadFragment(new SettingsFragment());
         Menu menu = navigationView.getMenu();
-        MenuItem item1 = menu.getItem(2);
+        MenuItem item1 = menu.getItem(0);
         tv.setText("User Profile");
         item1.setChecked(true);
 

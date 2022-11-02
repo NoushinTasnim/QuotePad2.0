@@ -1,6 +1,7 @@
 package com.example.quotepad.nav_frags.today;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -27,6 +28,13 @@ import com.example.quotepad.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,6 +106,8 @@ public class QuoteOfTheDayFragment extends Fragment {
         quote = getActivity().findViewById(R.id.today_quote);
         author =  getActivity().findViewById(R.id.today_author);
 
+        loadData();
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "https://zenquotes.io/api/today";
 
@@ -117,10 +127,12 @@ public class QuoteOfTheDayFragment extends Fragment {
 
                             quo =  "\"" + quo +  "\"" ;
 
-                            Log.i(TAG, "onResponse:  "+quo + " " + aut);
+                            //Log.i(TAG, "onResponse:  "+quo + " " + aut);
+                            setTextToTextView(quo," - " + aut);
                             quote.setText(quo);
                             author.setText("-"+aut);
                             progressDialog.dismiss();
+                            btnSaveData(quo,aut);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -134,4 +146,55 @@ public class QuoteOfTheDayFragment extends Fragment {
         });
         queue.add(stringRequest);
     }
+
+    public void loadData() {
+        File file = getActivity()
+                .getFileStreamPath("QuoteOfTheDay.txt");
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().openFileInput("Data.txt")));
+
+                String st, qu = "";
+
+                while ((st = reader.readLine()) != null){
+                    qu = qu + st;
+                }
+                String[] separated = qu.split("\"");
+                Log.i(TAG, "loadData: " + separated[1]);
+                String separated2[] = qu.split("; ");
+                    // Print the string
+                Log.i(TAG, "loadData: " + separated2[1]);
+                reader.close();
+                setTextToTextView(separated2[0],separated2[1]);
+            } catch (IOException e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+    private void setTextToTextView(String quotes, String auths) {
+        quote.setText(quotes);
+        author.setText("-"+ auths);
+    }
+
+    public void btnSaveData(String quotes, String author) {
+        try {
+            FileOutputStream file = getActivity().openFileOutput("QuoteOfTheDay.txt", MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+
+            outputStreamWriter.write(quotes + "; " + author);
+
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+            Toast.makeText(getActivity(), "Successfully saved", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
 }

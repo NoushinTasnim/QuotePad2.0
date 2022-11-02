@@ -7,6 +7,12 @@
 
         <item
             android:iconTint="@color/text_color"
+            android:id="@+id/settings_nav"
+            android:title="My Profile"
+            android:icon="@drawable/ic_baseline_person_24" />
+
+        <item
+            android:iconTint="@color/text_color"
             android:id="@+id/nav_user_home"
             android:title="Home"
             android:icon="@drawable/ic_baseline_home_24" />
@@ -17,11 +23,6 @@
             android:iconTint="@color/text_color"
             android:title="Search Users"/>
 
-                <item
-                    android:iconTint="@color/text_color"
-                    android:id="@+id/settings_nav"
-                    android:title="My Profile"
-                    android:icon="@drawable/ic_baseline_person_24" />
 
                 <item
                     android:id="@+id/change_pass"

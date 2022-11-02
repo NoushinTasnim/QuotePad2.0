@@ -1,4 +1,4 @@
-package com.example.quotepad;
+package com.example.quotepad.nav_frags.profile;
 
 import static android.content.ContentValues.TAG;
 
@@ -15,14 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.quotepad.adapter.DiscoverAdapter;
+import com.example.quotepad.R;
 import com.example.quotepad.adapter.UserListAdapter;
-import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.model.UserModel;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,20 +97,13 @@ public class SearchFragment extends Fragment {
         btn = getActivity().findViewById(R.id.img_btn);
         recyclerView = getView().findViewById(R.id.recycler_user);
 
-        ProgressDialog progressDialog = new ProgressDialog(getActivity());
-
-        progressDialog.setMessage("Please Wait");
-        progressDialog.setTitle("Fetching Data...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
         adapter = new UserListAdapter(getContext(),list);
 
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        FirebaseDatabase.getInstance().getReference("users")
+        /*FirebaseDatabase.getInstance().getReference("users")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -122,7 +111,7 @@ public class SearchFragment extends Fragment {
                         Log.i(TAG, "onDataChange: 1 " + snapshot + " " + snapshot.getKey());
                         for(DataSnapshot dataSnapshot: snapshot.getChildren())
                         {
-                            Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
+                            Log.i(TAG, "onDataChange:child " + dataSnapshot.getValue());
                             Log.i(TAG, "onDataChange: " + dataSnapshot);
                             UserModel notification = dataSnapshot.getValue(UserModel.class);
 
@@ -139,6 +128,72 @@ public class SearchFragment extends Fragment {
                         Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
-                });
+                });*/
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setTitle("Fetching Data...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
+                String username = til.getEditText().getText().toString().trim();
+                if(!username.isEmpty())
+                {
+                    list.clear();
+                    FirebaseDatabase.getInstance().getReference("emails").orderByChild("username").startAt(username).endAt(username + "\uf8ff")
+                            .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                    if(snapshot.exists())
+                                    {
+                                        for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                                        {
+                                            Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
+                                            String id = dataSnapshot.child("id").getValue(String.class);
+                                            Log.i(TAG, "onDataChange:id " + id);
+
+                                            FirebaseDatabase.getInstance().getReference("users").orderByChild("id").equalTo(id)
+                                                    .addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                                                            if(snapshot1.exists()){
+                                                                Log.i(TAG, "onDataChangeval: " + snapshot1.child(id).getValue());
+                                                                Log.i(TAG, "onDataChangevchill: " + snapshot1.getChildren());
+                                                                //Log.i(TAG, "onDataChange: " + snapshot1);
+                                                                UserModel notification = snapshot1.child(id).getValue(UserModel.class);
+
+                                                                //Log.i(TAG, "onDataChange: " + notification);
+
+                                                                list.add(notification);
+                                                            }
+                                                            adapter.notifyDataSetChanged();
+                                                            progressDialog.dismiss();
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+                                                            Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                                                            progressDialog.dismiss();
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+                            });
+                }
+            }
+        });
     }
 }
