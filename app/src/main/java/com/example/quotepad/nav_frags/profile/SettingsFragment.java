@@ -33,6 +33,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
@@ -244,4 +249,33 @@ public class SettingsFragment extends Fragment {
         nav_user_name.setText(user );
         nav_name.setText(pname);
     }
+
+    public void loadData() {
+        File file = getActivity().getFileStreamPath("CurrentUser.txt");
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader( getActivity().openFileInput("CurrentUser.txt")));
+
+                String st, qu = "";
+
+                while ((st = reader.readLine()) != null){
+                    qu = qu + st;
+                }
+                String[] separated = qu.split(" ; ");
+                Log.i(TAG, "loadData: " + separated[1]);
+                String separated2[] = qu.split(" ; ");
+                // Print the string
+                Log.i(TAG, "loadData: " + separated2[1]);
+                name.getEditText().setText(separated[0]);
+                username.getEditText().setText(separated2[0]);
+                reader.close();
+
+            } catch (IOException e) {
+                Toast.makeText( getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
 }

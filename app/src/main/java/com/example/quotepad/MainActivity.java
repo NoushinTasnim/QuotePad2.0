@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quotepad.nav_frags.home.DiscoverFragment;
 import com.example.quotepad.nav_frags.home.UploadedQuotesFragment;
@@ -45,6 +46,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -86,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         aniFade = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
         aniFade2 = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_out);
 
+        loadData();
+
         loadFragment(new QuoteOfTheDayFragment());
         Menu menu = navigationView.getMenu();
         MenuItem item1 = menu.getItem(0);
@@ -101,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     em = snapshot.child(uid).child("email").getValue(String.class);
                     ph = snapshot.child(uid).child("phone").getValue(String.class);
                     pass = snapshot.child(uid).child("password").getValue(String.class);
+
+                    btnSaveData(name,username,em);
+
                     nav_user_name.setText(username );
                     nav_name.setText(name);
                     Log.i(TAG, "onDataChange: " + username);
@@ -308,5 +321,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    public void loadData() {
+        File file = MainActivity.this
+                .getFileStreamPath("CurrentUser.txt");
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader( MainActivity.this.openFileInput("CurrentUser.txt")));
+
+                String st, qu = "";
+
+                while ((st = reader.readLine()) != null){
+                    qu = qu + st;
+                }
+                String[] separated = qu.split(" ; ");
+                Log.i(TAG, "loadData: " + separated[1]);
+                String separated2[] = qu.split(" ; ");
+                // Print the string
+                Log.i(TAG, "loadData: " + separated2[1]);
+                nav_name.setText(separated[0]);
+                nav_user_name.setText(separated2[0]);
+                reader.close();
+
+            } catch (IOException e) {
+                Toast.makeText( MainActivity.this, e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+    public void btnSaveData(String name, String username, String email) {
+        try {
+            FileOutputStream file = openFileOutput("CurrentUser.txt", MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+
+            outputStreamWriter.write(name + " ; " + username + " ; " + email);
+
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+            Toast.makeText(MainActivity.this, "Successfully saved", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (IOException e) {
+            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }

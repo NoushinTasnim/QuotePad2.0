@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
@@ -40,6 +41,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -86,6 +92,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         MenuItem item1 = menu.getItem(0);
         tv.setText("User Profile");
         item1.setChecked(true);
+
+        loadData();
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -296,5 +304,34 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    public void loadData() {
+        File file = UserProfileActivity.this
+                .getFileStreamPath("CurrentUser.txt");
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader( UserProfileActivity.this.openFileInput("CurrentUser.txt")));
+
+                String st, qu = "";
+
+                while ((st = reader.readLine()) != null){
+                    qu = qu + st;
+                }
+                String[] separated = qu.split(" ; ");
+                Log.i(TAG, "loadData: " + separated[1]);
+                String separated2[] = qu.split(" ; ");
+                // Print the string
+                Log.i(TAG, "loadData: " + separated2[1]);
+                nav_name.setText(separated[0]);
+                nav_user_name.setText(separated2[0]);
+                reader.close();
+
+            } catch (IOException e) {
+                Toast.makeText( UserProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 }

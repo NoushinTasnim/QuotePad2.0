@@ -153,7 +153,7 @@ public class QuoteOfTheDayFragment extends Fragment {
 
         if (file.exists()) {
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().openFileInput("Data.txt")));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().openFileInput("QuoteOfTheDay.txt")));
 
                 String st, qu = "";
 
