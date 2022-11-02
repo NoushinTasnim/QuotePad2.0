@@ -120,7 +120,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+               <!-- <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/up_mail"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -149,7 +149,7 @@
                         android:textColor="@color/dark_shade" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+-->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/up_btn"
                     android:layout_width="match_parent"

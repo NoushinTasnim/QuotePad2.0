@@ -1,5 +1,7 @@
 package com.example.quotepad.user;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,16 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.quotepad.model.UserModel;
+import com.example.quotepad.verification.OTPVerifyActivity;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.example.quotepad.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -122,7 +133,6 @@ public class SignUpFragment extends Fragment {
                         "(?=.*[0-9])" +         //at least 1 digit
                         "(?=.*[a-z])" +         //at least 1 lower case letter
                         "(?=.*[A-Z])" +         //at least 1 upper case letter
-                        "(?=.*[@#$%^&+=])" +    //at least 1 special character
                         "(?=\\S+$)" +           //no white spaces
                         ".{6,}" +               //at least 6 characters
                         "$";
@@ -167,7 +177,7 @@ public class SignUpFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 }
                 else if (!pass.matches(passwordVal)) {
-                    password.setError("Password should contain at least 1 digit, 1 upper case letter, 1 lower case letter, 1 special character, no white spaces and at least 6 characters");
+                    password.setError("Password should contain at least 1 digit, 1 upper case letter, 1 lower case letter, no white spaces and at least 6 characters");
                     progressBar.setVisibility(View.GONE);
                 }
                 else if(!pass.equals(con_pass))
@@ -177,30 +187,144 @@ public class SignUpFragment extends Fragment {
                 }
                 else
                 {
-                    Query checkUser = reference.orderByChild("username").equalTo(user);
-
-                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(mail, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                username.setError("Username already in use");
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.i(TAG, "onComplete: no email found");
                                 progressBar.setVisibility(View.GONE);
+
+                                Query checkUser = reference.orderByChild("username").equalTo(user);
+
+                                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()){
+                                            username.setError("Username already in use");
+                                            progressBar.setVisibility(View.GONE);
+
+                                            if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                                            {
+                                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Log.d(TAG, "User account deleted.");
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                        else{
+                                            if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                                            {
+                                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Log.d(TAG, "User account deleted.");
+                                                                }
+                                                            }
+                                                        });
+                                            }
+
+                                            /*Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
+                                            intent.putExtra("pname", pname);
+                                            intent.putExtra("user", user);
+                                            intent.putExtra("mail", mail);
+                                            intent.putExtra("pass", pass);
+                                            intent.putExtra("set", "sign");
+*/
+                                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                                    if (task.isSuccessful()) {
+
+                                                        mAuth.signInWithEmailAndPassword(mail, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                                                    UserModel helperClass = new UserModel(pname, user, mail, pass,currentuser);
+                                                                    rootNode.getReference("users").child(currentuser).setValue(helperClass);
+
+                                                                    UserModel helperClass2 = new UserModel(mail, pass, user);
+                                                                    rootNode.getReference("emails").child(user).setValue(helperClass2);
+                                                                    progressBar.setVisibility(View.GONE);
+
+                                                                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void unused) {
+                                                                            Toast.makeText(getActivity(), "Verification Email sent", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    try {
+                                                                        throw task.getException();
+                                                                    } catch (Exception e) {
+                                                                        Toast.makeText(getActivity(), "Sorry, Could not sign up.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+
+                                                        //Toast.makeText(getActivity(), "Registration successfull", Toast.LENGTH_SHORT).show();
+                                                        progressBar.setVisibility(View.GONE);
+
+                                                        FirebaseAuth.getInstance().signOut();
+
+                                                        Toast.makeText(getActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(getActivity(), UserActivity.class);
+                                                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        startActivity(intent);
+                                                    }
+                                                    else {
+                                                        try {
+                                                            throw task.getException();
+                                                        } catch (Exception e) {
+                                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            progressBar.setVisibility(View.GONE);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                            //startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "User account deleted.");
+                                                }
+                                            }
+                                        });
+                            } else {
+                                email.setError("Email already in use");
+
+                                progressBar.setVisibility(View.GONE);
+                                try {
+                                    throw task.getException();
+                                } catch (Exception e) {
+                                    Log.i(TAG, "onComplete: " + e);
+                                    //Toast.makeText(OTPVerifyActivity.this, "Sorry, Could not sign up.", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else{
-                                Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                intent.putExtra("pname", pname);
-                                intent.putExtra("user", user);
-                                intent.putExtra("mail", mail);
-                                intent.putExtra("pass", pass);
-                                intent.putExtra("set", "sign");
-
-                                startActivity(intent);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                 }

@@ -6,35 +6,40 @@
         android:checkableBehavior="single">
 
         <item
-            android:iconTint="@color/dark_shade"
+            android:iconTint="@color/text_color"
             android:id="@+id/nav_user_home"
             android:title="Home"
             android:icon="@drawable/ic_baseline_home_24" />
 
+        <item
+            android:id="@+id/search_user"
+            android:icon="@drawable/ic_baseline_person_pin_circle_24"
+            android:iconTint="@color/text_color"
+            android:title="Search Users"/>
+
                 <item
-                    android:iconTint="@color/dark_shade"
+                    android:iconTint="@color/text_color"
                     android:id="@+id/settings_nav"
-                    android:title="User Profile"
-                    android:icon="@drawable/ic_outline_person_24" />
+                    android:title="My Profile"
+                    android:icon="@drawable/ic_baseline_person_24" />
 
                 <item
                     android:id="@+id/change_pass"
-                    android:icon="@drawable/ic_outline_lock_24"
-                    android:iconTint="@color/dark_shade"
+                    android:icon="@drawable/ic_baseline_lock_24"
+                    android:iconTint="@color/text_color"
                     android:title="Change Password"/>
 
                 <item
-                    android:iconTint="@color/dark_shade"
-                    android:id="@+id/nav_phone"
-                    android:title="Change Phone Number"
-                    android:icon="@drawable/ic_baseline_local_phone_24" />
+                    android:iconTint="@color/text_color"
+                    android:id="@+id/nav_mail"
+                    android:title="Change Email Address"
+                    android:icon="@drawable/ic_baseline_mail_24" />
 
 
                 <item
                     android:id="@+id/delete_user"
                     android:icon="@drawable/ic_baseline_delete_24"
-                    android:iconTint="@color/dark_shade"
+                    android:iconTint="@color/text_color"
                     android:title="Delete Account"/>
-
     </group>
 </menu>

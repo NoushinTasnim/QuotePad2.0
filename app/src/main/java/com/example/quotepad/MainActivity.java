@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,16 +55,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     TextView nav_user_name, nav_name;
     ImageView menuIcon;
-    LinearLayout contentView;
     TextView tv;
+    Animation aniFade, aniFade2;
 
-    FirebaseAuth mAuth;
     DatabaseReference reference;
     Query checkUser;
 
     String name, em, username, ph, pass, uid;
-
-    static final float END_SCALE = 0.7f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("id").equalTo(uid);
+
+        aniFade = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
+        aniFade2 = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_out);
 
         loadFragment(new QuoteOfTheDayFragment());
         Menu menu = navigationView.getMenu();
@@ -297,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fm.beginTransaction().remove(getCurrentFragment()).commit();
             }
 
-            ft.replace(R.id.frag_container, fragment);
+            ft.setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.frag_container, fragment);
             //ft.commit();
             ft.commitNow();
         }

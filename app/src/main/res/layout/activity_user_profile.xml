@@ -27,7 +27,7 @@
                     android:id="@+id/prof_menu_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:src="@drawable/logo_dark"
                     app:tint="@color/light_accent" />
 
                 <TextView

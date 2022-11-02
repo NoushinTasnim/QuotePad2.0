@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
+import com.example.quotepad.SearchFragment;
 import com.example.quotepad.user.UserActivity;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,7 +85,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         loadFragment(new SettingsFragment());
         Menu menu = navigationView.getMenu();
-        MenuItem item1 = menu.getItem(1);
+        MenuItem item1 = menu.getItem(2);
         tv.setText("User Profile");
         item1.setChecked(true);
 
@@ -157,6 +160,11 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 {
                     switch (id) {
 
+                        case R.id.search_user:
+                            navigationView.setCheckedItem(R.id.search_user);
+                            loadFragment(new SearchFragment());
+                            break;
+
                         case R.id.change_pass:
                             tv.setText("");
                             navigationView.setCheckedItem(R.id.change_pass);
@@ -170,10 +178,10 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             loadFragment(new SettingsFragment());
                             break;
 
-                        case R.id.nav_phone:
-                            navigationView.setCheckedItem(R.id.nav_phone);
+                        case R.id.nav_mail:
+                            navigationView.setCheckedItem(R.id.nav_mail);
 
-                            Intent intent  = new Intent(UserProfileActivity.this, PhoneNumberVerifyActivity.class);
+                            /*Intent intent  = new Intent(UserProfileActivity.this, UpdateEmailAddress.class);
                             intent.putExtra("pname",name);
                             intent.putExtra("mail",em);
                             intent.putExtra("user",username);
@@ -181,7 +189,9 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             intent.putExtra("set","settings");
 
                             Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
-                            startActivity(intent);
+
+                            startActivity(intent);*/
+                            loadFragment(new UpdateEmailAddress());
 
                             break;
 
@@ -190,26 +200,49 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
                             break;
 
-
                         case R.id.delete_user:
                             navigationView.setCheckedItem(R.id.delete_user);
-                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
-                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                            user.delete()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "User account deleted.");
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(UserProfileActivity.this);
+                            builder1.setMessage("You won't be able to retrieve your account. Are you sure you want to delete your account?");
+                            builder1.setCancelable(true);
+
+                            builder1.setPositiveButton(
+                                    "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
+                                            FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                            user.delete()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d(TAG, "User account deleted.");
+                                                            }
+                                                        }
+                                                    });
+                                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                                                FirebaseAuth.getInstance().signOut();
                                             }
+                                            startActivity(new Intent(UserProfileActivity.this, UserActivity.class));
+                                            dialog.cancel();
                                         }
                                     });
-                            if(FirebaseAuth.getInstance().getCurrentUser() != null){
-                                FirebaseAuth.getInstance().signOut();
-                            }
-                            startActivity(new Intent(UserProfileActivity.this, UserActivity.class));
+
+                            builder1.setNegativeButton(
+                                    "No",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                            AlertDialog alert11 = builder1.create();
+                            alert11.show();
+
                             break;
 
                         default:

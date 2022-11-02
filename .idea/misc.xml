@@ -16,6 +16,7 @@
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_phone_number_verify.xml" value="0.2359375" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_quote.xml" value="0.264" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_quote_of_the_day.xml" value="0.25" />
+        <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_tab.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_update_profile.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/activity_update_profile2.xml" value="0.25" />
@@ -42,11 +43,13 @@
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_my_quotes_tab.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_quote_of_the_day.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_random_quotes.xml" value="0.25" />
+        <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_sign_in.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_tab.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_tune_feed.xml" value="0.25" />
+        <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_update_email_address.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_update_password.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_upload_quote.xml" value="0.2359375" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/fragment_uploaded_quotes.xml" value="0.25" />
@@ -56,6 +59,7 @@
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/quotes_fetched.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/row_layout.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/user_layout.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/layout/user_search.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/menu/menu_scrolling.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/menu/nav_menu.xml" value="0.25" />
         <entry key="..\:/Users/noush/AndroidStudioProjects/QuotePad/app/src/main/res/menu/navigation_items.xml" value="0.24895833333333334" />

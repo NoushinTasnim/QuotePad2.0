@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start"
-    android:background="@color/white"
+    android:background="@color/bg_color"
     android:id="@+id/quote_drawer_layout"
     tools:context=".MainActivity">
 
@@ -21,7 +21,7 @@
             <Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dark_shade">
+                android:background="@color/text_color">
 
                 <ImageView
                     android:id="@+id/quote_menu_icon"
@@ -34,7 +34,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/bg_color"
                     android:textSize="20sp"/>
 
             </Toolbar>
@@ -53,10 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="always"
-        android:background="@color/light_accent"
+        android:background="@color/bg_color3"
         app:menu="@menu/nav_menu"
         android:theme="@style/NavTheme"
-        app:subheaderColor="@color/dark_accent"
+        app:subheaderColor="@color/text_color2"
         app:headerLayout="@layout/menu_header"
         android:layout_gravity="start"/>
 

@@ -203,7 +203,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                                 progressBar.setVisibility(View.GONE);
                                                                 String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                                                UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo,currentuser);
+                                                                UserModel helperClass = new UserModel(pname, user, mail, pass,currentuser);
                                                                 rootNode.getReference("users").child(currentuser).setValue(helperClass);
 
                                                                 UserModel helperClass2 = new UserModel(mail, pass, user);
@@ -272,7 +272,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                     progressBar.setVisibility(View.GONE);
                                                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                                    UserModel helperClass = new UserModel(pname, user, mail, pass,phoneNo,currentuser);
+                                                    UserModel helperClass =new UserModel(pname, user, mail, pass,currentuser);
                                                     reference.child(currentuser).setValue(helperClass);
 
                                                     UserModel helperClass2 = new UserModel(mail, pass, user);
@@ -297,6 +297,10 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                         Intent intent = new Intent(OTPVerifyActivity.this, UserActivity.class);
                                         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
+                                        finish();
+                                    }
+                                    else if(from.equals("reset")){
+                                        startActivity(new Intent(OTPVerifyActivity.this,ForgotPassResetActivity.class));
                                         finish();
                                     }
                                     else {
