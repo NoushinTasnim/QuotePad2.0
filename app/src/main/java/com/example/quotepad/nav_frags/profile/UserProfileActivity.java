@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
+import com.example.quotepad.SearchFragment;
 import com.example.quotepad.user.UserActivity;
 import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,7 +85,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         loadFragment(new SettingsFragment());
         Menu menu = navigationView.getMenu();
-        MenuItem item1 = menu.getItem(1);
+        MenuItem item1 = menu.getItem(2);
         tv.setText("User Profile");
         item1.setChecked(true);
 
@@ -159,6 +160,11 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 {
                     switch (id) {
 
+                        case R.id.search_user:
+                            navigationView.setCheckedItem(R.id.search_user);
+                            loadFragment(new SearchFragment());
+                            break;
+
                         case R.id.change_pass:
                             tv.setText("");
                             navigationView.setCheckedItem(R.id.change_pass);
@@ -193,7 +199,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             navigationView.setCheckedItem(R.id.nav_user_home);
                             startActivity(new Intent(UserProfileActivity.this, MainActivity.class));
                             break;
-
 
                         case R.id.delete_user:
                             navigationView.setCheckedItem(R.id.delete_user);
