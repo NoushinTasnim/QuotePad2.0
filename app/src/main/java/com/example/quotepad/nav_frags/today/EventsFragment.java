@@ -1,6 +1,9 @@
 package com.example.quotepad.nav_frags.today;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
 import com.example.quotepad.adapter.OnThisDayAdapter;
 
@@ -30,10 +34,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,6 +114,10 @@ public class EventsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        loadData();
+        onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());
+        recyclerView.setAdapter(onThisDayAdapter);
+        onThisDayAdapter.notifyDataSetChanged();
         PlayOn();
     }
 
@@ -129,7 +144,7 @@ public class EventsFragment extends Fragment {
 
                     JSONObject jsonObject = new JSONObject(response);
                     jsonObject = jsonObject.getJSONObject("data");
-                    Log.i(TAG, "onResponse: " + jsonObject);
+                    //Log.i(TAG, "onResponse: " + jsonObject);
                     jsonArray = jsonObject.getJSONArray("Events");
                     arrayList3.clear();
                     arrayList2.clear();
@@ -141,7 +156,7 @@ public class EventsFragment extends Fragment {
                         jsonObject = jsonArray.getJSONObject(n);
                         String currentString = jsonObject.getString("text");
                         String[] separated = currentString.split("&");
-                        Log.i(TAG, "onResponse: " + separated[0]);
+                        //Log.i(TAG, "onResponse: " + separated[0]);
                         String year = separated[0];
                         arrayList3.add(year);
                         currentString = separated[1];
@@ -165,6 +180,7 @@ public class EventsFragment extends Fragment {
 
                     }
                     progressDialog.dismiss();
+                    btnSaveData();
                     onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());
                     recyclerView.setAdapter(onThisDayAdapter); // set the Adapter to RecyclerView
 
@@ -183,5 +199,57 @@ public class EventsFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+    }
+
+    public void loadData() {
+        arrayList.clear();
+        arrayList2.clear();
+        arrayList3.clear();
+
+        File file = getActivity()
+                .getFileStreamPath("Events.txt");
+        String lineFromfile;
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().openFileInput("Events.txt")));
+
+                while ((lineFromfile = reader.readLine()) != null) {
+                    Log.i(TAG, "loadData: " + lineFromfile);
+                    String[] separated = lineFromfile.split(" dkjv ");
+                    arrayList.add("");
+
+                    Log.i(TAG, "loadData: " + separated[1] + separated[2]);
+
+                    arrayList2.add(separated[1]);
+                    arrayList3.add(separated[2]);
+                }
+                reader.close();
+            } catch (IOException e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+    public void btnSaveData() {
+        try {
+            FileOutputStream file = getActivity().openFileOutput("Events.txt", MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                outputStreamWriter.write(arrayList.get(i) + " dkjv " + arrayList2.get(i) + " dkjv " + arrayList3.get(i) + "\n");
+                Log.i(TAG, "btnSaveData: " + arrayList.get(i) + " dkjv " + arrayList2.get(i) + " dkjv " + arrayList3.get(i));
+            }
+
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+            Toast.makeText(getActivity(), "Successfully saved", Toast.LENGTH_LONG)
+                    .show();
+
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }

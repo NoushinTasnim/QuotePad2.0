@@ -6,10 +6,11 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String email, String password, String username) {
+    public UserModel(String email, String password, String username, String id) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.id = id;
     }
 
     public UserModel(String name, String username, String email, String password,String id) {

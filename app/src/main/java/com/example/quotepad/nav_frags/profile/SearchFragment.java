@@ -103,33 +103,6 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        /*FirebaseDatabase.getInstance().getReference("users")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        list.clear();
-                        Log.i(TAG, "onDataChange: 1 " + snapshot + " " + snapshot.getKey());
-                        for(DataSnapshot dataSnapshot: snapshot.getChildren())
-                        {
-                            Log.i(TAG, "onDataChange:child " + dataSnapshot.getValue());
-                            Log.i(TAG, "onDataChange: " + dataSnapshot);
-                            UserModel notification = dataSnapshot.getValue(UserModel.class);
-
-                            Log.i(TAG, "onDataChange: " + notification);
-
-                            list.add(notification);
-                        }
-                        adapter.notifyDataSetChanged();
-                        progressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                });*/
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

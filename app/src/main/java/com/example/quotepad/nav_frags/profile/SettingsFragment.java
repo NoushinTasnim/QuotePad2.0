@@ -235,7 +235,7 @@ public class SettingsFragment extends Fragment {
         us = user;
         na = pname;
 
-        UserModel helperClass2 = new UserModel(em, pass, user);
+        UserModel helperClass2 = new UserModel(em, pass, user,currentuser);
         FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
 
         Toast.makeText(getActivity(), "Changed Profile", Toast.LENGTH_SHORT).show();

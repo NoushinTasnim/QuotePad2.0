@@ -275,7 +275,7 @@ public class OTPVerifyActivity extends AppCompatActivity {
                                                     UserModel helperClass =new UserModel(pname, user, mail, pass,currentuser);
                                                     reference.child(currentuser).setValue(helperClass);
 
-                                                    UserModel helperClass2 = new UserModel(mail, pass, user);
+                                                    UserModel helperClass2 = new UserModel(mail, pass, user, currentuser);
                                                     rootNode.getReference("emails").child(user).setValue(helperClass2);
                                                     progressBar.setVisibility(View.GONE);
                                                 }
