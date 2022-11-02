@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_margin="5dp"
+    android:elevation="20dp"
+    app:cardCornerRadius="20dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -10,13 +13,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white"
-        android:padding="10dp">
+        android:elevation="20dp"
+        android:layout_gravity="center"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/birth_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:textColor="@color/dark_accent"
             android:textStyle="bold"
             android:textSize="20sp" />

@@ -3,6 +3,7 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_margin="5dp"
+    android:elevation="20dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -10,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/bg_color"
-        android:padding="10dp">
+        android:background="@color/white"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/quote_from_firebase"

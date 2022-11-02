@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.QuotePad" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/light_shade</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -12,5 +12,26 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.QuotePad.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Theme.QuotePad.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Theme.QuotePad.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NavTheme">
+        <item name="colorPrimary">@color/dark_accent</item>
+        <item name="colorControlHighlight">@color/dark_shade</item>
+    </style>
+
+    <style name="AppTheme">AppTheme
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>
