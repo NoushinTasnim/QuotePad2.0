@@ -24,12 +24,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quotepad.MainActivity;
 import com.example.quotepad.R;
-import com.example.quotepad.SearchFragment;
 import com.example.quotepad.user.UserActivity;
-import com.example.quotepad.verification.PhoneNumberVerifyActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -42,6 +41,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -85,9 +89,11 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         loadFragment(new SettingsFragment());
         Menu menu = navigationView.getMenu();
-        MenuItem item1 = menu.getItem(2);
+        MenuItem item1 = menu.getItem(0);
         tv.setText("User Profile");
         item1.setChecked(true);
+
+        loadData();
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -160,11 +166,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 {
                     switch (id) {
 
-                        case R.id.search_user:
-                            navigationView.setCheckedItem(R.id.search_user);
-                            loadFragment(new SearchFragment());
-                            break;
-
                         case R.id.change_pass:
                             tv.setText("");
                             navigationView.setCheckedItem(R.id.change_pass);
@@ -179,18 +180,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             break;
 
                         case R.id.nav_mail:
+                            tv.setText("Update Email");
                             navigationView.setCheckedItem(R.id.nav_mail);
-
-                            /*Intent intent  = new Intent(UserProfileActivity.this, UpdateEmailAddress.class);
-                            intent.putExtra("pname",name);
-                            intent.putExtra("mail",em);
-                            intent.putExtra("user",username);
-                            intent.putExtra("pass",pass);
-                            intent.putExtra("set","settings");
-
-                            Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
-
-                            startActivity(intent);*/
                             loadFragment(new UpdateEmailAddress());
 
                             break;
@@ -213,6 +204,28 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                                         public void onClick(DialogInterface dialog, int id) {
                                             FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
                                             FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+
+                                            FirebaseDatabase.getInstance().getReference("quotes")
+                                                    .addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                                                            {
+                                                                Log.i(TAG, "onDataChange: xcvbn "+dataSnapshot.getValue());
+                                                                Log.i(TAG, "onDataChange: jhb "+dataSnapshot.child("quote").getValue());
+                                                                if(username.equals((dataSnapshot.child("author").getValue().toString()))){
+                                                                    Log.i(TAG, "onDataChange: found ");
+                                                                    FirebaseDatabase.getInstance().getReference("quotes").child(dataSnapshot.getKey()).removeValue();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+                                                            Toast.makeText(UserProfileActivity.this, error.getMessage(),Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                             user.delete()
@@ -275,6 +288,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         } else
         {
             super.onBackPressed();
+            startActivity(new Intent(UserProfileActivity.this,MainActivity.class));
+            finish();
         }
 
         moveTaskToBack(true);
@@ -298,5 +313,34 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    public void loadData() {
+        File file = UserProfileActivity.this
+                .getFileStreamPath("CurrentUser.txt");
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader( UserProfileActivity.this.openFileInput("CurrentUser.txt")));
+
+                String st, qu = "";
+
+                while ((st = reader.readLine()) != null){
+                    qu = qu + st;
+                }
+                String[] separated = qu.split(" ; ");
+                Log.i(TAG, "loadData: " + separated[1]);
+                String separated2[] = qu.split(" ; ");
+                // Print the string
+                Log.i(TAG, "loadData: " + separated2[1]);
+                nav_name.setText(separated[0]);
+                nav_user_name.setText(separated2[0]);
+                reader.close();
+
+            } catch (IOException e) {
+                Toast.makeText( UserProfileActivity.this, e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 }

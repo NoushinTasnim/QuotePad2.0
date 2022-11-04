@@ -144,7 +144,7 @@ public class UploadQuoteFragment extends Fragment {
                 else if(TextUtils.isEmpty(type)){
                     autoCompleteTextView.setError("Please select a genre for your quote");
                 }
-                else if(quote.length() < 15){
+                else if(quote.length() < 12){
                     upload_quote.setError("Too Short");
                 }
                 else
@@ -156,7 +156,7 @@ public class UploadQuoteFragment extends Fragment {
                     reference = rootNode.getReference();
                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                    QuotesModel helperClass = new QuotesModel("\"" + quote + "\"",type,currentDateTime);
+                    QuotesModel helperClass = new QuotesModel("\"" + quote + "\"",type,currentDateTime,"0");
                     reference.child("users").child(currentuser).child("quote").child(currentDateTime).setValue(helperClass);
                     Query checkUser = reference.child("users").orderByChild("id").equalTo(currentuser);
 
@@ -170,7 +170,9 @@ public class UploadQuoteFragment extends Fragment {
                                 if(publicity.isChecked())
                                 {
                                     QuotesModel discoverModel = new QuotesModel("\"" + quote + "\"",currentDateTime,type, username, new_id);
-                                    reference.child("quotes").child(new_id).setValue(discoverModel);
+                                    rootNode.getReference("quotes").child(new_id).setValue(discoverModel);
+                                    reference.child("users").child(currentuser).child("quote").child(currentDateTime).child("publicity").setValue("1");
+
                                     Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
                                 }
 

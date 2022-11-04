@@ -90,35 +90,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/up_username"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Username"
-                    android:paddingBottom="10dp"
-                    android:textColorHint="@color/dark_shade"
-                    app:boxCornerRadiusBottomEnd="100dp"
-                    app:boxCornerRadiusBottomStart="100dp"
-                    app:boxCornerRadiusTopEnd="100dp"
-                    app:boxCornerRadiusTopStart="100dp"
-                    app:boxStrokeColor="@color/dark_shade"
-                    app:boxStrokeWidth="3dp"
-                    app:boxStrokeWidthFocused="4dp"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="@color/dark_shade"
-                    app:hintTextColor="@color/dark_shade"
-                    app:startIconDrawable="@drawable/ic_baseline_person_pin_24"
-                    app:startIconTint="@color/dark_shade">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_shade" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                <!-- <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/up_mail"

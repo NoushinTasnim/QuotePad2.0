@@ -43,7 +43,7 @@ public class RandomQuotesAdapter extends RecyclerView.Adapter<RandomQuotesAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
-        holder.quo.setText(random_quote.get(position));
+        holder.quo.setText("\"" + random_quote.get(position) + "\"");
         holder.aut.setText(random_author.get(position));
 
         String p = random_quote.get(position);

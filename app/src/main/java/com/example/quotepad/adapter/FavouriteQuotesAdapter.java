@@ -44,20 +44,9 @@ public class FavouriteQuotesAdapter extends RecyclerView.Adapter<FavouriteQuotes
     public void onBindViewHolder(@NonNull FavouriteQuotesAdapter.viewHolder holder, int position) {
         QuotesModel model=list.get(position);
 
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("fav").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        QuotesModel user=snapshot.getValue(QuotesModel.class);
-                        holder.quote.setText(model.getQuote());
-                        Log.i(TAG, "onDataChange: as" + model.getQuote());
-                        holder.author.setText(model.getAuthor());
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+        holder.quote.setText("\"" + model.getQuote() + "\"");
+        Log.i(TAG, "onDataChange: as" + model.getQuote());
+        holder.author.setText(model.getAuthor());
     }
 
     @Override

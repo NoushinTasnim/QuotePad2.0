@@ -1,6 +1,7 @@
 package com.example.quotepad.nav_frags.today;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -30,6 +31,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,6 +109,11 @@ public class BirthFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        loadData();
+
+        onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());
+        recyclerView.setAdapter(onThisDayAdapter); // set the Adapter to RecyclerView
 
         PlayOn();
     }
@@ -183,6 +195,7 @@ public class BirthFragment extends Fragment {
                     onThisDayAdapter = new OnThisDayAdapter(arrayList, arrayList2, arrayList3, getActivity());
                     recyclerView.setAdapter(onThisDayAdapter); // set the Adapter to RecyclerView
 
+                    btnSaveData();
                     onThisDayAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -197,5 +210,56 @@ public class BirthFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+    }
+
+    public void loadData() {
+        arrayList.clear();
+        arrayList2.clear();
+        arrayList3.clear();
+
+        File file = getActivity()
+                .getFileStreamPath("Births.txt");
+        String lineFromfile;
+
+        if (file.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().openFileInput("Births.txt")));
+
+                while ((lineFromfile = reader.readLine()) != null) {
+                    Log.i(TAG, "loadData: " + lineFromfile);
+                    String[] separated = lineFromfile.split(" dkjv ");
+                    arrayList.add(separated[0]);
+
+                    Log.i(TAG, "loadData: " + separated[1] + separated[2]);
+
+                    arrayList2.add(separated[1]);
+                    arrayList3.add(separated[2]);
+                }
+                reader.close();
+            } catch (IOException e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+    public void btnSaveData() {
+        try {
+            FileOutputStream file = getActivity().openFileOutput("Births.txt", MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(file);
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                outputStreamWriter.write(arrayList.get(i) + " dkjv " + arrayList2.get(i) + " dkjv " + arrayList3.get(i) + "\n");
+                Log.i(TAG, "btnSaveData: " + arrayList.get(i) + " dkjv " + arrayList2.get(i) + " dkjv " + arrayList3.get(i));
+            }
+
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+            //Toast.makeText(getActivity(), "Successfully saved", Toast.LENGTH_LONG).show();
+
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 }
