@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_margin="5dp"
     android:elevation="20dp"
+    app:cardCornerRadius="20dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -18,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:textStyle="italic"
             android:textColor="@color/text_color"
             android:textSize="20sp" />
 

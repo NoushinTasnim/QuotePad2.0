@@ -1,7 +1,7 @@
 package com.example.quotepad.model;
 
 public class QuotesModel {
-    private String quote, time, type, author, id;
+    private String quote, time, type, author, id, publicity;
 
     QuotesModel(){
 
@@ -20,10 +20,19 @@ public class QuotesModel {
         this.id = id;
     }
 
-    public QuotesModel(String quote, String type, String time) {
+    public QuotesModel(String quote, String type, String time, String publicity) {
         this.quote = quote;
         this.time = time;
         this.type = type;
+        this.publicity = publicity;
+    }
+
+    public String getPublicity() {
+        return publicity;
+    }
+
+    public void setPublicity(String publicity) {
+        this.publicity = publicity;
     }
 
     public String getAuthor() {

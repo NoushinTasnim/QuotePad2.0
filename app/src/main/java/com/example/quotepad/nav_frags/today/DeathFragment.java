@@ -254,8 +254,7 @@ public class DeathFragment extends Fragment {
 
             outputStreamWriter.flush();
             outputStreamWriter.close();
-            Toast.makeText(getActivity(), "Successfully saved", Toast.LENGTH_LONG)
-                    .show();
+            //Toast.makeText(getActivity(), "Successfully saved", Toast.LENGTH_LONG).show();
 
         } catch (IOException e) {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)

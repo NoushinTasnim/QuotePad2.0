@@ -98,7 +98,6 @@ public class SignUpFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
 
-
     public void onStart(){
         super.onStart();
 
@@ -132,7 +131,6 @@ public class SignUpFragment extends Fragment {
                 String passwordVal = "^" +
                         "(?=.*[0-9])" +         //at least 1 digit
                         "(?=.*[a-z])" +         //at least 1 lower case letter
-                        "(?=.*[A-Z])" +         //at least 1 upper case letter
                         "(?=\\S+$)" +           //no white spaces
                         ".{6,}" +               //at least 6 characters
                         "$";
@@ -177,7 +175,7 @@ public class SignUpFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 }
                 else if (!pass.matches(passwordVal)) {
-                    password.setError("Password should contain at least 1 digit, 1 upper case letter, 1 lower case letter, no white spaces and at least 6 characters");
+                    password.setError("Password should contain at least 1 digit, 1 lower case letter, no white spaces and at least 6 characters");
                     progressBar.setVisibility(View.GONE);
                 }
                 else if(!pass.equals(con_pass))
@@ -229,14 +227,7 @@ public class SignUpFragment extends Fragment {
                                                             }
                                                         });
                                             }
-
-                                            /*Intent intent = new Intent(getActivity(), PhoneNumberVerifyActivity.class);
-                                            intent.putExtra("pname", pname);
-                                            intent.putExtra("user", user);
-                                            intent.putExtra("mail", mail);
-                                            intent.putExtra("pass", pass);
-                                            intent.putExtra("set", "sign");
-*/
+                                            Toast.makeText(getActivity(), "Wait for a few seconds...", Toast.LENGTH_SHORT).show();
                                             FirebaseAuth.getInstance().createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -251,10 +242,10 @@ public class SignUpFragment extends Fragment {
                                                                     progressBar.setVisibility(View.GONE);
                                                                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                                                    UserModel helperClass = new UserModel(pname, user, mail, pass, currentuser);
+                                                                    UserModel helperClass = new UserModel(pname, user, mail, currentuser);
                                                                     rootNode.getReference("users").child(currentuser).setValue(helperClass);
 
-                                                                    UserModel helperClass2 = new UserModel(mail, pass, user, currentuser);
+                                                                    UserModel helperClass2 = new UserModel(mail, user, currentuser);
                                                                     rootNode.getReference("emails").child(user).setValue(helperClass2);
                                                                     progressBar.setVisibility(View.GONE);
 

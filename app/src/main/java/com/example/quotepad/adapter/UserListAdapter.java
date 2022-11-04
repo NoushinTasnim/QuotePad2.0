@@ -3,15 +3,18 @@ package com.example.quotepad.adapter;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quotepad.OtherUserActivity;
 import com.example.quotepad.R;
 import com.example.quotepad.model.QuotesModel;
 import com.example.quotepad.model.UserModel;
@@ -43,19 +46,20 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         UserModel model = list.get(position);
 
-        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //DiscoverModel user = snapshot.getValue(DiscoverModel.class);
-                //Log.i(TAG, "onDataChange:ggtghh " + user);
-                holder.name.setText(model.getName());
-                Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getName() + model.getUsername());
-                holder.username.setText(model.getUsername());
-            }
+        holder.name.setText(model.getName());
+        Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getName() + model.getUsername());
+        holder.username.setText(model.getUsername());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View view) {
+                // display a toast with person name on item click
+                Intent intent = new Intent(view.getContext(), OtherUserActivity.class);
+                intent.putExtra("name",model.getName());
+                intent.putExtra("username",model.getUsername());
+                intent.putExtra("id", model.getId());
+                view.getContext().startActivity(intent);
+                //Toast.makeText(context, p, Toast.LENGTH_SHORT).show();
             }
         });
     }

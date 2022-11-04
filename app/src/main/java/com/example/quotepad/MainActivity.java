@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.quotepad.nav_frags.home.DiscoverFragment;
 import com.example.quotepad.nav_frags.home.UploadedQuotesFragment;
 import com.example.quotepad.nav_frags.home.UploadQuoteFragment;
+import com.example.quotepad.nav_frags.profile.SearchFragment;
 import com.example.quotepad.nav_frags.profile.UserProfileActivity;
 import com.example.quotepad.nav_frags.today.OnThisDayActivity;
 import com.example.quotepad.user.UserActivity;
@@ -258,6 +259,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                              finish();
                              break;
 
+                        case R.id.search_user:
+                            tv.setText("Search Users");
+                            navigationView.setCheckedItem(R.id.search_user);
+                            loadFragment(new SearchFragment());
+                            break;
+
                         case R.id.sign_out:
                             navigationView.setCheckedItem(R.id.sign_out);
                             FirebaseAuth.getInstance().signOut();
@@ -361,8 +368,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             outputStreamWriter.flush();
             outputStreamWriter.close();
-            Toast.makeText(MainActivity.this, "Successfully saved", Toast.LENGTH_LONG)
-                    .show();
+            //Toast.makeText(MainActivity.this, "Successfully saved", Toast.LENGTH_LONG).show();
 
         } catch (IOException e) {
             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG)

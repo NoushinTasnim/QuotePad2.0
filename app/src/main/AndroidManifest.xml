@@ -18,6 +18,9 @@
         android:theme="@style/Theme.QuotePad"
         tools:targetApi="31">
         <activity
+            android:name=".OtherUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".nav_frags.today.OnThisDayActivity"
             android:exported="false" />
         <activity

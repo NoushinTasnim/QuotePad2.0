@@ -166,11 +166,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 {
                     switch (id) {
 
-                        case R.id.search_user:
-                            navigationView.setCheckedItem(R.id.search_user);
-                            loadFragment(new SearchFragment());
-                            break;
-
                         case R.id.change_pass:
                             tv.setText("");
                             navigationView.setCheckedItem(R.id.change_pass);
@@ -185,18 +180,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             break;
 
                         case R.id.nav_mail:
+                            tv.setText("Update Email");
                             navigationView.setCheckedItem(R.id.nav_mail);
-
-                            /*Intent intent  = new Intent(UserProfileActivity.this, UpdateEmailAddress.class);
-                            intent.putExtra("pname",name);
-                            intent.putExtra("mail",em);
-                            intent.putExtra("user",username);
-                            intent.putExtra("pass",pass);
-                            intent.putExtra("set","settings");
-
-                            Log.i(TAG, "onClick: " + name + " " + em + " " + username + " " + ph);
-
-                            startActivity(intent);*/
                             loadFragment(new UpdateEmailAddress());
 
                             break;
@@ -219,6 +204,28 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                                         public void onClick(DialogInterface dialog, int id) {
                                             FirebaseDatabase.getInstance().getReference("emails").child(username).removeValue();
                                             FirebaseDatabase.getInstance().getReference("users").child(uid).removeValue();
+
+                                            FirebaseDatabase.getInstance().getReference("quotes")
+                                                    .addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                                                            {
+                                                                Log.i(TAG, "onDataChange: xcvbn "+dataSnapshot.getValue());
+                                                                Log.i(TAG, "onDataChange: jhb "+dataSnapshot.child("quote").getValue());
+                                                                if(username.equals((dataSnapshot.child("author").getValue().toString()))){
+                                                                    Log.i(TAG, "onDataChange: found ");
+                                                                    FirebaseDatabase.getInstance().getReference("quotes").child(dataSnapshot.getKey()).removeValue();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+                                                            Toast.makeText(UserProfileActivity.this, error.getMessage(),Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
                                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                             user.delete()
@@ -281,6 +288,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         } else
         {
             super.onBackPressed();
+            startActivity(new Intent(UserProfileActivity.this,MainActivity.class));
+            finish();
         }
 
         moveTaskToBack(true);

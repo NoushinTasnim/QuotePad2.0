@@ -42,24 +42,12 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
     public void onBindViewHolder(@NonNull DiscoverViewHolder holder, int position) {
         QuotesModel model = list.get(position);
 
-        FirebaseDatabase.getInstance().getReference().child("quotes").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //DiscoverModel user = snapshot.getValue(DiscoverModel.class);
-                        //Log.i(TAG, "onDataChange:ggtghh " + user);
-                        holder.quote.setText(model.getQuote());
-                        Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getQuote() + model.getTime());
-                        Log.i(TAG, "onDataChange:  tttt " + model.getQuote());
-                        holder.genre.setText("Genre: " + model.getType());
-                        holder.time.setText("Uploaded on: " + model.getTime());
-                        holder.author.setText(" Uploaded by: " + model.getAuthor());
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+        holder.quote.setText(model.getQuote());
+        Log.i(TAG, "onDataChangedfsdfdsfdsfd: " + model.getQuote() + model.getTime());
+        Log.i(TAG, "onDataChange:  tttt " + model.getQuote());
+        holder.genre.setText("Genre: " + model.getType());
+        holder.time.setText("Uploaded on: " + model.getTime());
+        holder.author.setText(" Uploaded by: " + model.getAuthor());
     }
 
     @Override

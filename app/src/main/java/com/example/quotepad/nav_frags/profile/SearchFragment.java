@@ -166,6 +166,10 @@ public class SearchFragment extends Fragment {
                                 }
                             });
                 }
+                else
+                {
+                    progressDialog.dismiss();
+                }
             }
         });
     }

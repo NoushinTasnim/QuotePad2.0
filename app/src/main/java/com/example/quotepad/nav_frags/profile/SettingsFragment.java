@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    TextInputLayout name,username;
+    TextInputLayout name;
     Button btn;
     String na, em, us, ph, pass;
 
@@ -105,10 +105,11 @@ public class SettingsFragment extends Fragment {
         progressDialog.setCanceledOnTouchOutside(false);
         //progressDialog.show();
 
+        loadData();
+
         btn = getActivity().findViewById(R.id.up_btn);
 
         name = getActivity().findViewById(R.id.up_name);
-        username = getActivity().findViewById(R.id.up_username);
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -119,11 +120,8 @@ public class SettingsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     na = snapshot.child(uid).child("name").getValue(String.class);
-                    em = snapshot.child(uid).child("email").getValue(String.class);
-                    us = snapshot.child(uid).child("username").getValue(String.class);
 
                     name.getEditText().setText(na);
-                    username.getEditText().setText(us);
                     progressDialog.dismiss();
                 }
             }
@@ -160,55 +158,29 @@ public class SettingsFragment extends Fragment {
                 });
 
                 String pname = name.getEditText().getText().toString().trim();
-                String user = username.getEditText().getText().toString().trim();
 
                 Log.i(TAG, "onClick: " + na + " " + us + " " + em);
-                Log.i(TAG, "onClick: " + pname + " " + user);
-
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-                String noWhiteSpace = "\\A\\w{4,15}\\z";
 
                 name.setErrorEnabled(false);
-                username.setErrorEnabled(false);
 
                 if(TextUtils.isEmpty(pname))
                 {
                     name.setError("Name field cannot be empty");
                 }
-                else if(TextUtils.isEmpty(user))
-                {
-                    username.setError("Username field cannot be empty");
-                }
-                else if (!user.matches(noWhiteSpace)) {
-                    username.setError("Remove white spaces, length (4-15)");
-                }
-                else if(pname.equals(na) && user.equals(us))
+                else if(pname.equals(na))
                 {
                     Toast.makeText(getActivity(), "Nothing to Change", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Query checkUser = FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(user);
+                    Query checkUser = FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(us);
 
                     checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
-                                if(user.equals(us))
-                                {
-                                    Log.i(TAG, "onDataChange: exists");
-                                    changeUser(pname,user);
-                                }
-                                else
-                                {
-                                    username.setError("Username already in use");
-                                }
-                            }
-                            else
-                            {
-                                FirebaseDatabase.getInstance().getReference("emails").child(us).removeValue();
-                                changeUser(pname,user);
+                                Log.i(TAG, "onDataChange: exists");
+                                changeUser(pname,us);
                             }
                         }
 
@@ -229,13 +201,12 @@ public class SettingsFragment extends Fragment {
 
         String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        UserModel helperClass = new UserModel(pname, user, em, pass,currentuser);
+        UserModel helperClass = new UserModel(pname, user, em,currentuser);
         FirebaseDatabase.getInstance().getReference("users").child(currentuser).setValue(helperClass);
 
-        us = user;
         na = pname;
 
-        UserModel helperClass2 = new UserModel(em, pass, user,currentuser);
+        UserModel helperClass2 = new UserModel(em, user,currentuser);
         FirebaseDatabase.getInstance().getReference("emails").child(user).setValue(helperClass2);
 
         Toast.makeText(getActivity(), "Changed Profile", Toast.LENGTH_SHORT).show();
@@ -244,9 +215,7 @@ public class SettingsFragment extends Fragment {
 
         View headerView = navigationView.getHeaderView(0);
 
-        TextView nav_user_name = headerView.findViewById(R.id.nav_header_user_name);
         TextView nav_name = headerView.findViewById(R.id.nav_header_name);
-        nav_user_name.setText(user );
         nav_name.setText(pname);
     }
 
@@ -262,13 +231,13 @@ public class SettingsFragment extends Fragment {
                 while ((st = reader.readLine()) != null){
                     qu = qu + st;
                 }
+                Log.i(TAG, "loadData: " + qu);
                 String[] separated = qu.split(" ; ");
                 Log.i(TAG, "loadData: " + separated[1]);
                 String separated2[] = qu.split(" ; ");
                 // Print the string
                 Log.i(TAG, "loadData: " + separated2[1]);
-                name.getEditText().setText(separated[0]);
-                username.getEditText().setText(separated2[0]);
+                //name.getEditText().setText(separated[0]);
                 reader.close();
 
             } catch (IOException e) {

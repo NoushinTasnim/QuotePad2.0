@@ -17,12 +17,6 @@
             android:title="Home"
             android:icon="@drawable/ic_baseline_home_24" />
 
-        <item
-            android:id="@+id/search_user"
-            android:icon="@drawable/ic_baseline_person_pin_circle_24"
-            android:iconTint="@color/text_color"
-            android:title="Search Users"/>
-
 
                 <item
                     android:id="@+id/change_pass"
