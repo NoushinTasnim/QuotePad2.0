@@ -3,9 +3,9 @@ https://drive.google.com/file/d/1irwGqfOY5okGvjHkGAmOXUO2W9My5fi2/view?usp=share
 
 Login
 <p align="center">
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539609426_100.PNG" width="400"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539605465_100.PNG" width="400"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539585594_100.PNG" width="400"/>
+<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539609426_100.PNG" width="300"/>
+<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539605465_100.PNG" width="300"/>
+<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539585594_100.PNG" width="300"/>
 </p>
 Sign Up
 <p align="center">
