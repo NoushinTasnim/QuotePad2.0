@@ -1,36 +1,36 @@
 # QuotePad2.0
-App video:
+<h1>App video:</h1>
 https://drive.google.com/file/d/1irwGqfOY5okGvjHkGAmOXUO2W9My5fi2/view?usp=share_link
 
-Login UI
+<h1>Login UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539609426_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539605465_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539585594_100.PNG" width="250"/>
 </p>
-Sign Up UI
+<h1>Sign Up UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539601726_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539597726_100.PNG" width="250"/>
 </p>
-Verfify Email
+<h1>Verfify Email UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539617957_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539613681_100.PNG" width="250"/>
 </p>
-Quote of The Day
+<h1>Quote of The Day UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539621391_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536130795_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667539621391_100.PNG" width="250"/>
 </p>
-Events, Births & Deaths
+<h1>Events, Births & Deaths UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536113106_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536119399_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536124736_100.PNG" width="250"/>
 </p>
-Random Quotes
+<h1>Random Quotes UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536139647_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536146936_100.PNG" width="250"/>
@@ -39,31 +39,26 @@ Random Quotes
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536171815_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536177275_100.PNG" width="250"/>
 </p>
-Discover Quotes
+<h1>Discover Quotes UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536190528_100.PNG" width="250"/>
 </p>
-Upload Quotes
+<h1>Upload Quotes UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536159020_100.PNG" width="250"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536146936_100.PNG" width="250"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536153607_100.PNG" width="250"/>
 </p>
-Search 
+<h1>Search User UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536199145_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536194691_100.PNG" width="250"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536153607_100.PNG" width="250"/>
 </p>
-User Profile
+<h1>User Profile UI</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536222301_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536210757_100.PNG" width="250"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536153607_100.PNG" width="250"/>
 </p>
-Contact Us
+<h1>Contact Us</h1>
 <p align="center">
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536227547_100.PNG" width="250"/>
 <img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536225171_100.PNG" width="250"/>
-<img src="https://github.com/NoushinTasnim/QuotePad2.0/blob/main/1667536153607_100.PNG" width="250"/>
 </p>
