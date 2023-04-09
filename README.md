@@ -1,5 +1,8 @@
 # QuotePad2.0
 <h1>App video:</h1>
+https://www.youtube.com/watch?v=JN9kmqCRrMw
+
+<h1>Apk File</h1>
 https://drive.google.com/file/d/1irwGqfOY5okGvjHkGAmOXUO2W9My5fi2/view?usp=share_link
 <h1>APP UI</h1>
 <h2>Login UI</h2>
